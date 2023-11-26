@@ -1,5 +1,5 @@
-#include "../include/rose-common/Profiling.h"
-#include "../include/rose-common/Profiling_Formatting.h"
+#include "../include/rose-common/Profiling.hpp"
+#include "../include/rose-common/Profiling_Formatting.hpp"
 
 #include <algorithm>
 #include <functional>
