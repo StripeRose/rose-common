@@ -6,16 +6,16 @@
 
 namespace RoseCommon::Math
 {
-	template <std::size_t NRows, std::size_t NColumns, typename T>
+	template <std::size_t Width, std::size_t Height, typename T>
 	class Matrix
 	{
 	public:
-		static constexpr Matrix Identity() requires(NRows == NColumns)
+		static constexpr Matrix Identity() requires(Width == Height)
 		{
 			Matrix identityMatrix;
 
-			for (std::size_t i = 0; i < NRows; ++i)
-				identityMatrix.myCells[(i * NColumns) + i] = static_cast<T>(1.f);
+			for (std::size_t i = 0; i < Width; ++i)
+				identityMatrix.GetCell(i, i) = static_cast<T>(1.f);
 
 			return identityMatrix;
 		}
@@ -23,13 +23,13 @@ namespace RoseCommon::Math
 	public:
 		constexpr Matrix()
 		{
-			for (std::size_t i = 0; i < NRows * NColumns; ++i)
+			for (std::size_t i = 0; i < (Width * Height); ++i)
 				myCells[i] = static_cast<T>(0);
 		}
 
-		constexpr Matrix(const std::array<T, NRows * NColumns>& someCells)
+		constexpr Matrix(const std::array<T, Width * Height>& someCells)
 		{
-			for (std::size_t i = 0; i < NRows * NColumns; ++i)
+			for (std::size_t i = 0; i < (Width * Height); ++i)
 				myCells[i] = someCells[i];
 		}
 
@@ -38,18 +38,18 @@ namespace RoseCommon::Math
 		/// Calculates the matrix cofactor.
 		/// </summary>
 		/// <returns>A square matrix consisting of the determinants of its submatrices, alternatingly inverted.</returns>
-		constexpr Matrix Cofactor() const requires(NRows > 0 && NRows == NColumns)
+		constexpr Matrix Cofactor() const requires(Width == Height && Width > 0)
 		{
 			Matrix solution;
 			
 			bool isPositive = true;
-			for (std::size_t rowIndex = 0; rowIndex < NRows; ++rowIndex)
+			for (std::size_t rowIndex = 0; rowIndex < Height; ++rowIndex)
 			{
-				for (std::size_t columnIndex = 0; columnIndex < NColumns; ++columnIndex)
+				for (std::size_t columnIndex = 0; columnIndex < Width; ++columnIndex)
 				{
-					const auto subMatrix = SubMatrix(rowIndex, columnIndex);
+					const auto subMatrix = SubMatrix(columnIndex, rowIndex);
 					
-					solution.GetCell(rowIndex, columnIndex) =
+					solution.GetCell(columnIndex, rowIndex) =
 						static_cast<T>(isPositive ? 1 : -1) *
 						subMatrix.Determinant()
 						;
@@ -65,23 +65,23 @@ namespace RoseCommon::Math
 		/// </summary>
 		/// <remarks>This uses the Laplace expansion method currently.</remarks>
 		/// <returns>The Matrix determinant.</returns>
-		constexpr T Determinant() const requires(NRows > 0 && NRows == NColumns)
+		constexpr T Determinant() const requires(Width == Height && Width > 0)
 		{
-			if constexpr (NRows == 1)
+			if constexpr (Width == 1)
 			{
 				return GetCell(0, 0);
 			}
-			else if constexpr (NRows == 2)
+			else if constexpr (Width == 2)
 			{
 				return GetCell(0, 0) * GetCell(1, 1) - GetCell(0, 1) * GetCell(1, 0);
 			}
-			else if constexpr (NRows != 0)
+			else if constexpr (Width != 0)
 			{
 				T determinant = 0;
-				for (std::size_t i = 0; i < NColumns; ++i)
+				for (std::size_t i = 0; i < Width; ++i)
 				{
-					const T factor = GetCell(0, i);
-					const Matrix<NRows - 1, NColumns - 1, T> subMatrix = SubMatrix(0, i);
+					const T factor = GetCell(i, 0);
+					const Matrix<Width - 1, Height - 1, T> subMatrix = SubMatrix(i, 0);
 
 					determinant +=
 						static_cast<T>((i % 2 == 0) ? 1 : -1) *
@@ -96,23 +96,23 @@ namespace RoseCommon::Math
 		/// <summary>
 		/// Get a specific cell value.
 		/// </summary>
-		/// <param name="aRow">The zero-based row index.</param>
 		/// <param name="aColumn">The zero-based column index.</param>
+		/// <param name="aRow">The zero-based row index.</param>
 		/// <returns>A reference to the cell value.</returns>
-		constexpr T& GetCell(std::size_t aRow, std::size_t aColumn)
+		constexpr T& GetCell(std::size_t aColumn, std::size_t aRow)
 		{
-			return myCells[(aRow * NColumns) + aColumn];
+			return myCells[(aRow * Width) + aColumn];
 		}
 
 		/// <summary>
 		/// Get a specific cell value.
 		/// </summary>
-		/// <param name="aRow">The zero-based row index.</param>
 		/// <param name="aColumn">The zero-based column index.</param>
+		/// <param name="aRow">The zero-based row index.</param>
 		/// <returns>A constant reference to the cell value.</returns>
-		constexpr T GetCell(std::size_t aRow, std::size_t aColumn) const
+		constexpr T GetCell(std::size_t aColumn, std::size_t aRow) const
 		{
-			return myCells[(aRow * NColumns) + aColumn];
+			return myCells[(aRow * Width) + aColumn];
 		}
 
 		/// <summary>
@@ -120,7 +120,7 @@ namespace RoseCommon::Math
 		/// </summary>
 		/// <param name="aMatrix">The source matrix.</param>
 		/// <returns>The inverse of the Matrix.</returns>
-		constexpr std::optional<Matrix> Invert() const requires(std::is_floating_point_v<T>&& NRows > 0 && NRows == NColumns)
+		constexpr std::optional<Matrix> Invert() const requires(std::is_floating_point_v<T> && Width == Height && Width > 0)
 		{
 			const T determinant = Determinant();
 			if (determinant == static_cast<T>(0))
@@ -128,12 +128,12 @@ namespace RoseCommon::Math
 
 			const T reciprocalDeterminant = static_cast<T>(1) / determinant;
 
-			if constexpr (NRows == 2)
+			if constexpr (Width == 2)
 			{
 				return Matrix({
 					reciprocalDeterminant * GetCell(1, 1),
-					reciprocalDeterminant * -GetCell(0, 1),
 					reciprocalDeterminant * -GetCell(1, 0),
+					reciprocalDeterminant * -GetCell(0, 1),
 					reciprocalDeterminant * GetCell(0, 0)
 					});
 			}
@@ -147,16 +147,16 @@ namespace RoseCommon::Math
 		/// Calculates the matrix minor.
 		/// </summary>
 		/// <returns>A square matrix consisting of the determinants of its submatrices.</returns>
-		constexpr Matrix Minor() const requires(NRows > 0 && NRows == NColumns)
+		constexpr Matrix Minor() const requires(std::is_floating_point_v<T>&& Width == Height && Width > 0)
 		{
 			Matrix solution;
 
-			for (std::size_t rowIndex = 0; rowIndex < NRows; ++rowIndex)
+			for (std::size_t rowIndex = 0; rowIndex < Height; ++rowIndex)
 			{
-				for (std::size_t columnIndex = 0; columnIndex < NColumns; ++columnIndex)
+				for (std::size_t columnIndex = 0; columnIndex < Width; ++columnIndex)
 				{
-					const auto subMatrix = SubMatrix(rowIndex, columnIndex);
-					solution.GetCell(rowIndex, columnIndex) = subMatrix.Determinant();
+					const auto subMatrix = SubMatrix(columnIndex, rowIndex);
+					solution.GetCell(columnIndex, rowIndex) = subMatrix.Determinant();
 				}
 			}
 
@@ -168,15 +168,15 @@ namespace RoseCommon::Math
 		/// </summary>
 		/// <param name="aMatrix">The source matrix.</param>
 		/// <returns>The transposed matrix.</returns>
-		constexpr Matrix Transpose() const requires(NRows == NColumns)
+		constexpr Matrix Transpose() const requires(Width == Height)
 		{
 			Matrix transposedMatrix;
 
-			for (std::size_t rowIndex = 0; rowIndex < NRows; ++rowIndex)
+			for (std::size_t rowIndex = 0; rowIndex < Height; ++rowIndex)
 			{
-				for (std::size_t columnIndex = 0; columnIndex < NColumns; ++columnIndex)
+				for (std::size_t columnIndex = 0; columnIndex < Width; ++columnIndex)
 				{
-					transposedMatrix.GetCell(rowIndex, columnIndex) = GetCell(columnIndex, rowIndex);
+					transposedMatrix.GetCell(columnIndex, rowIndex) = GetCell(rowIndex, columnIndex);
 				}
 			}
 
@@ -184,20 +184,20 @@ namespace RoseCommon::Math
 		}
 
 	public:
-		template <std::size_t _NColumns>
-		constexpr Matrix<NRows, _NColumns, T> operator*(const Matrix<NColumns, _NColumns, T>& aMatrix) const
+		template <std::size_t _Width>
+		constexpr Matrix<Height, _Width, T> operator*(const Matrix<Width, _Width, T>& aMatrix) const
 		{
-			Matrix<NRows, _NColumns, T> result;
+			Matrix<Height, _Width, T> result;
 
-			for (std::size_t rowIndex = 0; rowIndex < NRows; ++rowIndex)
+			for (std::size_t rowIndex = 0; rowIndex < Height; ++rowIndex)
 			{
-				for (std::size_t columnIndex = 0; columnIndex < _NColumns; ++columnIndex)
+				for (std::size_t columnIndex = 0; columnIndex < _Width; ++columnIndex)
 				{
-					for (std::size_t memberIndex = 0; memberIndex < NColumns; ++memberIndex)
+					for (std::size_t memberIndex = 0; memberIndex < Width; ++memberIndex)
 					{
-						T& resultCell = result.GetCell(rowIndex, columnIndex);
-						const T& lhvCell = GetCell(rowIndex, memberIndex);
-						const T& rhvCell = aMatrix.GetCell(memberIndex, columnIndex);
+						T& resultCell = result.GetCell(columnIndex, rowIndex);
+						const T& lhvCell = GetCell(memberIndex, rowIndex);
+						const T& rhvCell = aMatrix.GetCell(columnIndex, memberIndex);
 
 						resultCell += lhvCell * rhvCell;
 					}
@@ -216,7 +216,7 @@ namespace RoseCommon::Math
 
 		constexpr bool operator==(const Matrix& aMatrix) const
 		{
-			for (std::size_t i = 0; i < (NRows * NColumns); ++i)
+			for (std::size_t i = 0; i < (Width * Height); ++i)
 			{
 				if (myCells[i] != aMatrix.myCells[i])
 					return false;
@@ -231,17 +231,17 @@ namespace RoseCommon::Math
 		}
 
 	private:
-		constexpr Matrix<NRows - 1, NColumns - 1, T> SubMatrix(std::size_t aRow, std::size_t aColumn) const
+		constexpr Matrix<Width - 1, Height - 1, T> SubMatrix(std::size_t aColumn, std::size_t aRow) const
 		{
-			Matrix<NRows - 1, NColumns - 1, T> subMatrix;
-			for (std::size_t rowIndex = 0; rowIndex < NRows - 1; ++rowIndex)
+			Matrix<Width - 1, Height - 1, T> subMatrix;
+			for (std::size_t rowIndex = 0; rowIndex < Height - 1; ++rowIndex)
 			{
-				for (std::size_t columnIndex = 0; columnIndex < NColumns - 1; ++columnIndex)
+				for (std::size_t columnIndex = 0; columnIndex < Width - 1; ++columnIndex)
 				{
-					subMatrix.GetCell(rowIndex, columnIndex) =
+					subMatrix.GetCell(columnIndex, rowIndex) =
 						GetCell(
-							rowIndex >= aRow ? rowIndex + 1 : rowIndex,
-							columnIndex >= aColumn ? columnIndex + 1 : columnIndex
+							columnIndex >= aColumn ? columnIndex + 1 : columnIndex,
+							rowIndex >= aRow ? rowIndex + 1 : rowIndex
 						);
 				}
 			}
@@ -249,7 +249,7 @@ namespace RoseCommon::Math
 		};
 
 	private:
-		T myCells[NRows * NColumns];
+		T myCells[Width * Height];
 	};
 
 	template <typename T>
