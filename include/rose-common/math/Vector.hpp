@@ -681,7 +681,7 @@ namespace RoseCommon::Math
 			order = std::strong_order(Y, b.Y);
 			if (order != std::strong_ordering::equal)
 				return order;
-			return std::strong_order(Y, b.Y);
+			return std::strong_order(Z, b.Z);
 		}
 
 		/// <summary>The X-component of the vector.</summary>
@@ -1018,26 +1018,18 @@ namespace RoseCommon::Math
 			return !operator==(b);
 		}
 
-		constexpr bool operator<(const Vector4& b) const
+		constexpr std::strong_ordering operator<=>(const Vector3& b) const
 		{
-			if (X < b.X)
-				return true;
-			else if (b.X < X)
-				return false;
-			else if (Y < b.Y)
-				return true;
-			else if (b.Y < Y)
-				return false;
-			else if (Z < b.Z)
-				return true;
-			else if (b.Z < Z)
-				return false;
-			else if (W < b.W)
-				return true;
-			else if (b.W < W)
-				return false;
-			else
-				return false;
+			std::strong_ordering order = std::strong_order(X, b.X);
+			if (order != std::strong_ordering::equal)
+				return order;
+			order = std::strong_order(Y, b.Y);
+			if (order != std::strong_ordering::equal)
+				return order;
+			order = std::strong_order(Z, b.Z);
+			if (order != std::strong_ordering::equal)
+				return order;
+			return std::strong_order(W, b.W);
 		}
 
 		/// <summary>The X-component of the vector.</summary>
