@@ -101,7 +101,10 @@ namespace RoseCommon::Math
 		/// <returns>A reference to the cell value.</returns>
 		constexpr T& GetCell(std::size_t aColumn, std::size_t aRow)
 		{
-			return myCells[(aRow * Width) + aColumn];
+			if (aColumn < Width && aRow < Height)
+				return myCells[(aRow * Width) + aColumn];
+			else
+				throw std::out_of_range("Row or column indices out of range.");
 		}
 
 		/// <summary>
@@ -112,7 +115,10 @@ namespace RoseCommon::Math
 		/// <returns>A constant reference to the cell value.</returns>
 		constexpr T GetCell(std::size_t aColumn, std::size_t aRow) const
 		{
-			return myCells[(aRow * Width) + aColumn];
+			if (aColumn < Width && aRow < Height)
+				return myCells[(aRow * Width) + aColumn];
+			else
+				throw std::out_of_range("Row or column indices out of range.");
 		}
 
 		/// <summary>
