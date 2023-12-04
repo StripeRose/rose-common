@@ -56,38 +56,38 @@ namespace RoseCommon::Math
 		/// <summary>
 		/// Restricts a value to be within the specified range.
 		/// </summary>
-		/// <param name="aVector">The vector to clamp.</param>
+		/// <param name="aValue">The vector to clamp.</param>
 		/// <param name="aMinimum">The minimum clamp value.</param>
 		/// <param name="aMaximum">The maximum clamp value.</param>
 		/// <returns>The clamped vector.</returns>
-		static constexpr Vector2 Clamp(const Vector2& aVector, const Vector2& aMinimum, const Vector2& aMaximum)
+		static constexpr Vector2 Clamp(const Vector2& aValue, const Vector2& aMinimum, const Vector2& aMaximum)
 		{
 			return Vector2(
-				Math::Clamp<T>(aVector.X, aMinimum.X, aMaximum.X),
-				Math::Clamp<T>(aVector.Y, aMinimum.Y, aMaximum.Y)
+				Math::Clamp<T>(aValue.X, aMinimum.X, aMaximum.X),
+				Math::Clamp<T>(aValue.Y, aMinimum.Y, aMaximum.Y)
 			);
 		}
 
 		/// <summary>
 		/// Calculates the distance between two points.
 		/// </summary>
-		/// <param name="a">Source vector.</param>
-		/// <param name="b">Source vector.</param>
+		/// <param name="aValue1">Source vector.</param>
+		/// <param name="aValue2">Source vector.</param>
 		/// <returns>The distance between the points.</returns>
-		static constexpr T Distance(const Vector2& a, const Vector2& b)
+		static constexpr T Distance(const Vector2& aValue1, const Vector2& aValue2)
 		{
-			return (a - b).Length();
+			return (aValue1 - aValue2).Length();
 		}
 
 		/// <summary>
 		/// Calculates the distance between two points squared.
 		/// </summary>
-		/// <param name="a">Source vector.</param>
-		/// <param name="b">Source vector.</param>
+		/// <param name="aValue1">Source vector.</param>
+		/// <param name="aValue2">Source vector.</param>
 		/// <returns>The squared distance between the points.</returns>
-		static constexpr T DistanceSquared(const Vector2& a, const Vector2& b)
+		static constexpr T DistanceSquared(const Vector2& aValue1, const Vector2& aValue2)
 		{
-			return (a - b).LengthSquared();
+			return (aValue1 - aValue2).LengthSquared();
 		}
 
 		/// <summary>
@@ -96,45 +96,47 @@ namespace RoseCommon::Math
 		/// determine some properties of the angle between two vectors.For example, it can show
 		/// whether the vectors are orthogonal, parallel, or have an acute or obtuse angle between them.
 		/// </summary>
-		/// <param name="a">The first vector.</param>
-		/// <param name="b">The second vector.</param>
+		/// <param name="aValue1">The first vector.</param>
+		/// <param name="aValue2">The second vector.</param>
 		/// <returns>The dot product of the two vectors.</returns>
-		static constexpr T Dot(const Vector2& a, const Vector2& b)
+		static constexpr T Dot(const Vector2& aValue1, const Vector2& aValue2)
 		{
-			return (a.X * b.X) + (a.Y * b.Y);
+			return
+				(aValue1.X * aValue2.X) +
+				(aValue1.Y * aValue2.Y);
 		}
 
 		/// <summary>
 		/// Performs a linear interpolation between two vectors.
 		/// </summary>
-		/// <param name="a">Source vector.</param>
-		/// <param name="b">Source vector.</param>
+		/// <param name="aValue1">Source vector.</param>
+		/// <param name="aValue2">Source vector.</param>
 		/// <param name="anAmount">Value between 0 and 1 indicating the weight of the second vector.</param>
 		/// <returns>The linear interpolation of the two vectors.</returns>
-		static constexpr Vector2 Lerp(const Vector2& a, const Vector2& b, const T& anAmount)
+		static constexpr Vector2 Lerp(const Vector2& aValue1, const Vector2& aValue2, const T& anAmount)
 		{
-			return (a + ((b - a) * anAmount));
+			return (aValue1 + ((aValue2 - aValue1) * anAmount));
 		}
 
 		/// <summary>
 		/// Returns a vector that contains the highest value from each matching pair of components.
 		/// </summary>
-		static constexpr Vector2 Max(const Vector2& a, const Vector2& b)
+		static constexpr Vector2 Max(const Vector2& aValue1, const Vector2& aValue2)
 		{
 			return Vector2(
-				Math::Max<T>(a.X, b.X),
-				Math::Max<T>(a.Y, b.Y)
+				Math::Max<T>(aValue1.X, aValue2.X),
+				Math::Max<T>(aValue1.Y, aValue2.Y)
 			);
 		}
 
 		/// <summary>
 		/// Returns a vector that contains the lowest value from each matching pair of components.
 		/// </summary>
-		static constexpr Vector2 Min(const Vector2& a, const Vector2& b)
+		static constexpr Vector2 Min(const Vector2& aValue1, const Vector2& aValue2)
 		{
 			return Vector2(
-				Math::Min<T>(a.X, b.X),
-				Math::Min<T>(a.Y, b.Y)
+				Math::Min<T>(aValue1.X, aValue2.X),
+				Math::Min<T>(aValue1.Y, aValue2.Y)
 			);
 		}
 
@@ -154,11 +156,11 @@ namespace RoseCommon::Math
 		/// <summary>
 		/// Returns a vector that contains cubic interpolation of the specified vectors.
 		/// </summary>
-		static constexpr Vector2 SmoothStep(const Vector2& a, const Vector2& b, const T& anAmount)
+		static constexpr Vector2 SmoothStep(const Vector2& aValue1, const Vector2& aValue2, const T& anAmount)
 		{
 			return Vector2(
-				Math::SmoothStep<T>(a.X, b.X, anAmount),
-				Math::SmoothStep<T>(a.Y, b.Y, anAmount)
+				Math::SmoothStep<T>(aValue1.X, aValue2.X, anAmount),
+				Math::SmoothStep<T>(aValue1.Y, aValue2.Y, anAmount)
 			);
 		}
 
@@ -292,23 +294,23 @@ namespace RoseCommon::Math
 			Y /= aVector.Y;
 		}
 
-		constexpr bool operator==(const Vector2& b) const
+		constexpr bool operator==(const Vector2& aVector) const
 		{
-			return Math::Equals(X, b.X)
-				&& Math::Equals(Y, b.Y);
+			return Math::Equals(X, aVector.X)
+				&& Math::Equals(Y, aVector.Y);
 		}
 
-		constexpr bool operator!=(const Vector2& b) const
+		constexpr bool operator!=(const Vector2& aVector) const
 		{
-			return !operator==(b);
+			return !operator==(aVector);
 		}
 
-		constexpr std::strong_ordering operator<=>(const Vector2& b) const
+		constexpr std::strong_ordering operator<=>(const Vector2& aVector) const
 		{
-			std::strong_ordering order = std::strong_order(X, b.X);
+			std::strong_ordering order = std::strong_order(X, aVector.X);
 			if (order != std::strong_ordering::equal)
 				return order;
-			return std::strong_order(Y, b.Y);
+			return std::strong_order(Y, aVector.Y);
 		}
 
 		/// <summary>The X-component of the vector.</summary>
@@ -378,38 +380,38 @@ namespace RoseCommon::Math
 		/// <summary>
 		/// Calculates the cross product of two vectors.
 		/// </summary>
-		/// <param name="a">Source vector.</param>
-		/// <param name="b">Source vector.</param>
+		/// <param name="aValue1">Source vector.</param>
+		/// <param name="aValue2">Source vector.</param>
 		/// <returns>Cross product of the source vectors.</returns>
-		static constexpr Vector3 Cross(const Vector3& a, const Vector3& b)
+		static constexpr Vector3 Cross(const Vector3& aValue1, const Vector3& aValue2)
 		{
 			return Vector3(
-				a.Y * b.Z - a.Z * b.Y,
-				a.Z * b.X - a.X * b.Z,
-				a.X * b.Y - a.Y * b.X
+				aValue1.Y * aValue2.Z - aValue1.Z * aValue2.Y,
+				aValue1.Z * aValue2.X - aValue1.X * aValue2.Z,
+				aValue1.X * aValue2.Y - aValue1.Y * aValue2.X
 			);
 		}
 
 		/// <summary>
 		/// Calculates the distance between two points.
 		/// </summary>
-		/// <param name="a">Source vector.</param>
-		/// <param name="b">Source vector.</param>
+		/// <param name="aValue1">Source vector.</param>
+		/// <param name="aValue2">Source vector.</param>
 		/// <returns>The distance between the points.</returns>
-		static constexpr T Distance(const Vector3& a, const Vector3& b)
+		static constexpr T Distance(const Vector3& aValue1, const Vector3& aValue2)
 		{
-			return (a - b).Length();
+			return (aValue1 - aValue2).Length();
 		}
 
 		/// <summary>
 		/// Calculates the distance between two points squared.
 		/// </summary>
-		/// <param name="a">Source vector.</param>
-		/// <param name="b">Source vector.</param>
+		/// <param name="aValue1">Source vector.</param>
+		/// <param name="aValue2">Source vector.</param>
 		/// <returns>The squared distance between the points.</returns>
-		static constexpr T DistanceSquared(const Vector3& a, const Vector3& b)
+		static constexpr T DistanceSquared(const Vector3& aValue1, const Vector3& aValue2)
 		{
-			return (a - b).LengthSquared();
+			return (aValue1 - aValue2).LengthSquared();
 		}
 
 		/// <summary>
@@ -418,66 +420,69 @@ namespace RoseCommon::Math
 		/// determine some properties of the angle between two vectors.For example, it can show
 		/// whether the vectors are orthogonal, parallel, or have an acute or obtuse angle between them.
 		/// </summary>
-		/// <param name="a">The first vector.</param>
-		/// <param name="b">The second vector.</param>
+		/// <param name="aValue1">The first vector.</param>
+		/// <param name="aValue2">The second vector.</param>
 		/// <returns>The dot product of the two vectors.</returns>
-		static constexpr T Dot(const Vector3& a, const Vector3& b)
+		static constexpr T Dot(const Vector3& aValue1, const Vector3& aValue2)
 		{
-			return (a.X * b.X) + (a.Y * b.Y) + (a.Z * b.Z);
+			return
+				(aValue1.X * aValue2.X) +
+				(aValue1.Y * aValue2.Y) +
+				(aValue1.Z * aValue2.Z);
 		}
 
 		/// <summary>
 		/// Performs a linear interpolation between two vectors.
 		/// </summary>
-		/// <param name="a">Source vector.</param>
-		/// <param name="b">Source vector.</param>
+		/// <param name="aValue1">Source vector.</param>
+		/// <param name="aValue2">Source vector.</param>
 		/// <param name="anAmount">Value between 0 and 1 indicating the weight of the second vector.</param>
 		/// <returns>The linear interpolation of the two vectors.</returns>
-		static constexpr Vector3 Lerp(const Vector3& a, const Vector3& b, const T& anAmount)
+		static constexpr Vector3 Lerp(const Vector3& aValue1, const Vector3& aValue2, const T& anAmount)
 		{
-			return (a + ((b - a) * anAmount));
+			return (aValue1 + ((aValue2 - aValue1) * anAmount));
 		}
 
 		/// <summary>
 		/// Performs a spherical interpolation between two vectors.
 		/// </summary>
-		/// <param name="a">Source vector.</param>
-		/// <param name="b">Source vector.</param>
+		/// <param name="aValue1">Source vector.</param>
+		/// <param name="aValue2">Source vector.</param>
 		/// <param name="anAmount">Value between 0 and 1 indicating the weight of the second vector.</param>
 		/// <returns>The spherical interpolation of the two vectors.</returns>
-		/*static constexpr Vector3 Slerp(const Vector3& a, const Vector3& b, const T& anAmount)
+		/*static constexpr Vector3 Slerp(const Vector3& aValue1, const Vector3& aValue2, const T& anAmount)
 		{
-			if (a == b)
-				return a;
+			if (aValue1 == aValue2)
+				return aValue1;
 
-			const T dot = Math::Clamp(Dot(a, b), -1.f, 1.f);
+			const T dot = Math::Clamp(Dot(aValue1, aValue2), -1.f, 1.f);
 			const T theta = Math::ArcCosine(dot) * anAmount;
-			Vector3 relativeVector = b - (a * dot);
+			Vector3 relativeVector = aValue2 - (aValue1 * dot);
 			relativeVector.Normalize();
-			return ((a * Math::Cosine(theta)) + (relativeVector * Math::Sine(theta)));
+			return ((aValue1 * Math::Cosine(theta)) + (relativeVector * Math::Sine(theta)));
 		}*/
 
 		/// <summary>
 		/// Returns a vector that contains the highest value from each matching pair of components.
 		/// </summary>
-		static constexpr Vector3 Max(const Vector3& a, const Vector3& b)
+		static constexpr Vector3 Max(const Vector3& aValue1, const Vector3& aValue2)
 		{
 			return Vector3(
-				Math::Max<T>(a.X, b.X),
-				Math::Max<T>(a.Y, b.Y),
-				Math::Max<T>(a.Z, b.Z)
+				Math::Max<T>(aValue1.X, aValue2.X),
+				Math::Max<T>(aValue1.Y, aValue2.Y),
+				Math::Max<T>(aValue1.Z, aValue2.Z)
 			);
 		}
 
 		/// <summary>
 		/// Returns a vector that contains the lowest value from each matching pair of components.
 		/// </summary>
-		static constexpr Vector3 Min(const Vector3& a, const Vector3& b)
+		static constexpr Vector3 Min(const Vector3& aValue1, const Vector3& aValue2)
 		{
 			return Vector3(
-				Math::Min<T>(a.X, b.X),
-				Math::Min<T>(a.Y, b.Y),
-				Math::Min<T>(a.Z, b.Z)
+				Math::Min<T>(aValue1.X, aValue2.X),
+				Math::Min<T>(aValue1.Y, aValue2.Y),
+				Math::Min<T>(aValue1.Z, aValue2.Z)
 			);
 		}
 
@@ -497,12 +502,12 @@ namespace RoseCommon::Math
 		/// <summary>
 		/// Returns a vector that contains cubic interpolation of the specified vectors.
 		/// </summary>
-		static constexpr Vector3 SmoothStep(const Vector3& a, const Vector3& b, const T& anAmount)
+		static constexpr Vector3 SmoothStep(const Vector3& aValue1, const Vector3& aValue2, const T& anAmount)
 		{
 			return Vector3(
-				Math::SmoothStep<T>(a.X, b.X, anAmount),
-				Math::SmoothStep<T>(a.Y, b.Y, anAmount),
-				Math::SmoothStep<T>(a.Z, b.Z, anAmount)
+				Math::SmoothStep<T>(aValue1.X, aValue2.X, anAmount),
+				Math::SmoothStep<T>(aValue1.Y, aValue2.Y, anAmount),
+				Math::SmoothStep<T>(aValue1.Z, aValue2.Z, anAmount)
 			);
 		}
 
@@ -661,27 +666,27 @@ namespace RoseCommon::Math
 			Z /= aVector.Z;
 		}
 
-		constexpr bool operator==(const Vector3& b) const
+		constexpr bool operator==(const Vector3& aVector) const
 		{
-			return Math::Equals(X, b.X)
-				&& Math::Equals(Y, b.Y)
-				&& Math::Equals(Z, b.Z);
+			return Math::Equals(X, aVector.X)
+				&& Math::Equals(Y, aVector.Y)
+				&& Math::Equals(Z, aVector.Z);
 		}
 
-		constexpr bool operator!=(const Vector3& b) const
+		constexpr bool operator!=(const Vector3& aVector) const
 		{
-			return !operator==(b);
+			return !operator==(aVector);
 		}
 
-		constexpr std::strong_ordering operator<=>(const Vector3& b) const
+		constexpr std::strong_ordering operator<=>(const Vector3& aVector) const
 		{
-			std::strong_ordering order = std::strong_order(X, b.X);
+			std::strong_ordering order = std::strong_order(X, aVector.X);
 			if (order != std::strong_ordering::equal)
 				return order;
-			order = std::strong_order(Y, b.Y);
+			order = std::strong_order(Y, aVector.Y);
 			if (order != std::strong_ordering::equal)
 				return order;
-			return std::strong_order(Z, b.Z);
+			return std::strong_order(Z, aVector.Z);
 		}
 
 		/// <summary>The X-component of the vector.</summary>
@@ -740,23 +745,23 @@ namespace RoseCommon::Math
 		/// <summary>
 		/// Calculates the distance between two points.
 		/// </summary>
-		/// <param name="a">Source vector.</param>
-		/// <param name="b">Source vector.</param>
+		/// <param name="aValue1">Source vector.</param>
+		/// <param name="aValue2">Source vector.</param>
 		/// <returns>The distance between the points.</returns>
-		static constexpr T Distance(const Vector4& a, const Vector4& b)
+		static constexpr T Distance(const Vector4& aValue1, const Vector4& aValue2)
 		{
-			return (a - b).Length();
+			return (aValue1 - aValue2).Length();
 		}
 
 		/// <summary>
 		/// Calculates the distance between two points squared.
 		/// </summary>
-		/// <param name="a">Source vector.</param>
-		/// <param name="b">Source vector.</param>
+		/// <param name="aValue1">Source vector.</param>
+		/// <param name="aValue2">Source vector.</param>
 		/// <returns>The squared distance between the points.</returns>
-		static constexpr T DistanceSquared(const Vector4& a, const Vector4& b)
+		static constexpr T DistanceSquared(const Vector4& aValue1, const Vector4& aValue2)
 		{
-			return (a - b).LengthSquared();
+			return (aValue1 - aValue2).LengthSquared();
 		}
 
 		/// <summary>
@@ -765,62 +770,66 @@ namespace RoseCommon::Math
 		/// determine some properties of the angle between two vectors.For example, it can show
 		/// whether the vectors are orthogonal, parallel, or have an acute or obtuse angle between them.
 		/// </summary>
-		/// <param name="a">The first vector.</param>
-		/// <param name="b">The second vector.</param>
+		/// <param name="aValue1">The first vector.</param>
+		/// <param name="aValue2">The second vector.</param>
 		/// <returns>The dot product of the two vectors.</returns>
-		static constexpr T Dot(const Vector4& a, const Vector4& b)
+		static constexpr T Dot(const Vector4& aValue1, const Vector4& aValue2)
 		{
-			return (a.X * b.X) + (a.Y * b.Y) + (a.Z * b.Z) + (a.W * b.W);
+			return
+				(aValue1.X * aValue2.X) +
+				(aValue1.Y * aValue2.Y) +
+				(aValue1.Z * aValue2.Z) +
+				(aValue1.W * aValue2.W);
 		}
 
 		/// <summary>
 		/// Performs a linear interpolation between two vectors.
 		/// </summary>
-		/// <param name="a">Source vector.</param>
-		/// <param name="b">Source vector.</param>
+		/// <param name="aValue1">Source vector.</param>
+		/// <param name="aValue2">Source vector.</param>
 		/// <param name="anAmount">Value between 0 and 1 indicating the weight of the second vector.</param>
 		/// <returns>The linear interpolation of the two vectors.</returns>
-		static constexpr Vector4 Lerp(const Vector4& a, const Vector4& b, const T& anAmount)
+		static constexpr Vector4 Lerp(const Vector4& aValue1, const Vector4& aValue2, const T& anAmount)
 		{
-			return (a + ((b - a) * anAmount));
+			return (aValue1 + ((aValue2 - aValue1) * anAmount));
 		}
 
 		/// <summary>
 		/// Returns a vector that contains the highest value from each matching pair of components.
 		/// </summary>
-		static constexpr Vector4 Max(const Vector4& a, const Vector4& b)
+		static constexpr Vector4 Max(const Vector4& aValue1, const Vector4& aValue2)
 		{
 			return Vector4(
-				Math::Max<T>(a.X, b.X),
-				Math::Max<T>(a.Y, b.Y),
-				Math::Max<T>(a.Z, b.Z),
-				Math::Max<T>(a.W, b.W)
+				Math::Max<T>(aValue1.X, aValue2.X),
+				Math::Max<T>(aValue1.Y, aValue2.Y),
+				Math::Max<T>(aValue1.Z, aValue2.Z),
+				Math::Max<T>(aValue1.W, aValue2.W)
 			);
 		}
 
 		/// <summary>
 		/// Returns a vector that contains the lowest value from each matching pair of components.
 		/// </summary>
-		static constexpr Vector4 Min(const Vector4& a, const Vector4& b)
+		static constexpr Vector4 Min(const Vector4& aValue1, const Vector4& aValue2)
 		{
 			return Vector4(
-				Math::Min<T>(a.X, b.X),
-				Math::Min<T>(a.Y, b.Y),
-				Math::Min<T>(a.Z, b.Z),
-				Math::Min<T>(a.W, b.W)
+				Math::Min<T>(aValue1.X, aValue2.X),
+				Math::Min<T>(aValue1.Y, aValue2.Y),
+				Math::Min<T>(aValue1.Z, aValue2.Z),
+				Math::Min<T>(aValue1.W, aValue2.W)
 			);
 		}
 
 		/// <summary>
 		/// Returns a vector that contains cubic interpolation of the specified vectors.
 		/// </summary>
-		static constexpr Vector4 SmoothStep(const Vector4& a, const Vector4& b, const T& anAmount)
+		static constexpr Vector4 SmoothStep(const Vector4& aValue1, const Vector4& aValue2, const T& anAmount)
 		{
 			return Vector4(
-				Math::SmoothStep<T>(a.X, b.X, anAmount),
-				Math::SmoothStep<T>(a.Y, b.Y, anAmount),
-				Math::SmoothStep<T>(a.Z, b.Z, anAmount),
-				Math::SmoothStep<T>(a.W, b.W, anAmount)
+				Math::SmoothStep<T>(aValue1.X, aValue2.X, anAmount),
+				Math::SmoothStep<T>(aValue1.Y, aValue2.Y, anAmount),
+				Math::SmoothStep<T>(aValue1.Z, aValue2.Z, anAmount),
+				Math::SmoothStep<T>(aValue1.W, aValue2.W, anAmount)
 			);
 		}
 
@@ -877,7 +886,7 @@ namespace RoseCommon::Math
 		/// </summary>
 		/// <param name="aVector">Value of the X and Y, and Z components.</param>
 		/// <param name="aW">Value of the W component.</param>
-		explicit constexpr Vector4(const Vector3& aVector, const Float32& aW = 1)
+		explicit constexpr Vector4(const Vector3<T>& aVector, const T& aW = 1)
 			: Vector4(aVector.X, aVector.Y, aVector.Z, aW)
 		{ }
 
@@ -1005,31 +1014,31 @@ namespace RoseCommon::Math
 			W /= aVector.W;
 		}
 
-		constexpr bool operator==(const Vector4& b) const
+		constexpr bool operator==(const Vector4& aVector) const
 		{
-			return Math::Equals(X, b.X)
-				&& Math::Equals(Y, b.Y)
-				&& Math::Equals(Z, b.Z)
-				&& Math::Equals(W, b.W);
+			return Math::Equals(X, aVector.X)
+				&& Math::Equals(Y, aVector.Y)
+				&& Math::Equals(Z, aVector.Z)
+				&& Math::Equals(W, aVector.W);
 		}
 
-		constexpr bool operator!=(const Vector4& b) const
+		constexpr bool operator!=(const Vector4& aVector) const
 		{
-			return !operator==(b);
+			return !operator==(aVector);
 		}
 
-		constexpr std::strong_ordering operator<=>(const Vector3& b) const
+		constexpr std::strong_ordering operator<=>(const Vector4& aVector) const
 		{
-			std::strong_ordering order = std::strong_order(X, b.X);
+			std::strong_ordering order = std::strong_order(X, aVector.X);
 			if (order != std::strong_ordering::equal)
 				return order;
-			order = std::strong_order(Y, b.Y);
+			order = std::strong_order(Y, aVector.Y);
 			if (order != std::strong_ordering::equal)
 				return order;
-			order = std::strong_order(Z, b.Z);
+			order = std::strong_order(Z, aVector.Z);
 			if (order != std::strong_ordering::equal)
 				return order;
-			return std::strong_order(W, b.W);
+			return std::strong_order(W, aVector.W);
 		}
 
 		/// <summary>The X-component of the vector.</summary>

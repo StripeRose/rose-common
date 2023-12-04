@@ -5,65 +5,65 @@
 
 namespace RoseCommon::Math
 {
-	/*inline Float32 ArcSine(Float32 x) { return static_cast<Float32>(std::asinf(x)); }
-	inline Float64 ArcSine(Float64 x) { return static_cast<Float64>(std::asin(x)); }*/
+	/*inline float ArcSine(float aValue) { return static_cast<float>(std::asinf(aValue)); }
+	inline double ArcSine(double aValue) { return static_cast<double>(std::asin(aValue)); }*/
 
 	/*template <typename T>
-	constexpr T ArcCosine(T x)
+	constexpr T ArcCosine(T aValue)
 	{
-		return static_cast<T>((-0.69813170079773212 * x * x - 0.87266462599716477) * x + 1.5707963267948966);
+		return static_cast<T>((-0.69813170079773212 * aValue * aValue - 0.87266462599716477) * aValue + 1.5707963267948966);
 	}*/
 
 	// ArcTangent()
 
-	/*inline Float32 ArcTangent2(Float32 y, Float32 x)
+	/*inline float ArcTangent2(float aY, float anX)
 	{
-		return static_cast<Float32>(std::atan2f(y, x));
+		return static_cast<float>(std::atan2f(aY, anX));
 	}
 
-	inline Float64 ArcTangent2(Float64 y, Float64 x)
+	inline double ArcTangent2(double aY, double anX)
 	{
-		return static_cast<Float64>(std::atan2(y, x));
+		return static_cast<double>(std::atan2(aY, anX));
 	}*/
 
 	template <typename T>
-	constexpr T Hill(T x)
+	constexpr T Hill(T aValue)
 	{
 		const T a0 = static_cast<T>(1.0f);
 		const T a2 = (static_cast<T>(2.0f) / Math::Pi<T>) - (static_cast<T>(12.0f) / (Math::Pi<T> * Math::Pi<T>));
 		const T a3 = (static_cast<T>(16.0f) / (Math::Pi<T> * Math::Pi<T> * Math::Pi<T>))
 			- (static_cast<T>(4.0f) / (Math::Pi<T> * Math::Pi<T>));
-		const T xx = x * x;
-		const T xxx = xx * x;
+		const T xx = aValue * aValue;
+		const T xxx = xx * aValue;
 
 		return a0 + (a2 * xx) + (a3 * xxx);
 	}
 
 	template <typename T>
-	constexpr T Sine(T x)
+	constexpr T Sine(T aValue)
 	{
-		const T a = x * Math::ReciprocalTwoPi<T>;
-		x -= static_cast<int>(a) * Math::TwoPi<T>;
-		if (x < static_cast<T>(0))
+		const T a = aValue * Math::ReciprocalTwoPi<T>;
+		aValue -= static_cast<int>(a) * Math::TwoPi<T>;
+		if (aValue < static_cast<T>(0))
 		{
-			x += Math::TwoPi<T>;
+			aValue += Math::TwoPi<T>;
 		}
 
-		if (x < Math::HalfPi<T>)
+		if (aValue < Math::HalfPi<T>)
 		{
-			return Hill(Math::HalfPi<T> - x);
+			return Hill(Math::HalfPi<T> - aValue);
 		}
-		else if (x < Math::Pi<T>)
+		else if (aValue < Math::Pi<T>)
 		{
-			return Hill(x - Math::HalfPi<T>);
+			return Hill(aValue - Math::HalfPi<T>);
 		}
-		else if (x < static_cast<T>(3) * Math::HalfPi<T>)
+		else if (aValue < static_cast<T>(3) * Math::HalfPi<T>)
 		{
-			return -Hill((static_cast<T>(3) * Math::HalfPi<T>) - x);
+			return -Hill((static_cast<T>(3) * Math::HalfPi<T>) - aValue);
 		}
 		else
 		{
-			return -Hill(x - (static_cast<T>(3) * Math::HalfPi<T>));
+			return -Hill(aValue - (static_cast<T>(3) * Math::HalfPi<T>));
 		}
 	}
 
@@ -75,7 +75,7 @@ namespace RoseCommon::Math
 	/// <summary>
 	/// Converts radians to degrees.
 	/// </summary>
-	/// <param name="radians">The angle in radians.</param>
+	/// <param name="anAngleInRadians">The angle in radians.</param>
 	/// <returns>The angle in degrees.</returns>
 	template <typename T>
 	constexpr T ToDegrees(T anAngleInRadians) { return (static_cast<T>(180) / Math::Pi<T>) * anAngleInRadians; }
@@ -83,7 +83,7 @@ namespace RoseCommon::Math
 	/// <summary>
 	/// Converts degrees to radians.
 	/// </summary>
-	/// <param name="degrees">The angle in degrees.</param>
+	/// <param name="anAngleInDegrees">The angle in degrees.</param>
 	/// <returns>The angle in radians.</returns>
 	template <typename T>
 	constexpr T ToRadians(T anAngleInDegrees) { return (Math::Pi<T> / static_cast<T>(180)) * anAngleInDegrees; }
@@ -91,7 +91,7 @@ namespace RoseCommon::Math
 	/// <summary>
 	/// Reduces a given angle to a value between pi and -pi.
 	/// </summary>
-	/// <param name="angle">The angle to reduce, in radians.</param>
+	/// <param name="anAngleInRadians">The angle to reduce, in radians.</param>
 	/// <returns>The new angle, in radians.</returns>
 	template <typename T>
 	constexpr T WrapRadians(T anAngleInRadians)
@@ -110,7 +110,7 @@ namespace RoseCommon::Math
 	/// <summary>
 	/// Reduces a given angle to a value between 0 and -360.
 	/// </summary>
-	/// <param name="angle">The angle to reduce, in degrees.</param>
+	/// <param name="anAngleInDegrees">The angle to reduce, in degrees.</param>
 	/// <returns>The new angle, in degrees.</returns>
 	template <typename T>
 	constexpr T WrapDegrees(const T& anAngleInDegrees)

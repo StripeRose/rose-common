@@ -63,9 +63,9 @@ namespace RoseCommon::Math
 	}
 
 	template <typename T>
-	constexpr bool Equals(T a, T b, T tolerance = std::numeric_limits<T>::epsilon())
+	constexpr bool Equals(T aValue1, T aValue2, T aTolerance = std::numeric_limits<T>::epsilon())
 	{
-		return (a + tolerance >= b) && (a - tolerance <= b);
+		return (aValue1 + aTolerance >= aValue2) && (aValue1 - aTolerance <= aValue2);
 	}
 
 	template <typename T>
@@ -85,17 +85,17 @@ namespace RoseCommon::Math
 	}
 
 	template <typename T>
-	constexpr bool IsZero(T a, T tolerance = std::numeric_limits<T>::epsilon())
+	constexpr bool IsZero(T aValue, T aTolerance = std::numeric_limits<T>::epsilon())
 	{
-		return Math::Abs<T>(a) <= tolerance;
+		return Math::Abs<T>(aValue) <= aTolerance;
 	}
 
 	/// <summary>
 	/// Linearly interpolates between two values.
 	/// </summary>
-	/// <param name="value1">Source value.</param>
-	/// <param name="value2">Source value.</param>
-	/// <param name="amount">
+	/// <param name="aValue1">Source value.</param>
+	/// <param name="aValue2">Source value.</param>
+	/// <param name="anAmount">
 	/// Value between 0 and 1 indicating the weight of value2.
 	/// </param>
 	/// <returns>Interpolated value.</returns>
@@ -106,59 +106,59 @@ namespace RoseCommon::Math
 	/// cause value2 to be returned.
 	/// </remarks>
 	template <typename T>
-	constexpr T Lerp(T value1, T value2, T amount)
+	constexpr T Lerp(T aValue1, T aValue2, T anAmount)
 	{
-		return value1 + (value2 - value1) * amount;
+		return aValue1 + (aValue2 - aValue1) * anAmount;
 	}
 
 	/// <summary>
 	/// Returns the greater of two values.
 	/// </summary>
-	/// <param name="value1">Source value.</param>
-	/// <param name="value2">Source value.</param>
+	/// <param name="aValue1">Source value.</param>
+	/// <param name="aValue2">Source value.</param>
 	/// <returns>The greater value.</returns>
 	template <typename T>
-	constexpr T Max(T value1, T value2)
+	constexpr T Max(T aValue1, T aValue2)
 	{
-		return value1 > value2 ? value1 : value2;
+		return aValue1 > aValue2 ? aValue1 : aValue2;
 	}
 
 	/// <summary>
 	/// Returns the greater of three values.
 	/// </summary>
-	/// <param name="value1">Source value.</param>
-	/// <param name="value2">Source value.</param>
-	/// <param name="value3">Source value.</param>
+	/// <param name="aValue1">Source value.</param>
+	/// <param name="aValue2">Source value.</param>
+	/// <param name="aValue3">Source value.</param>
 	/// <returns>The greater value.</returns>
 	template <typename T>
-	constexpr T Max(T value1, T value2, T value3)
+	constexpr T Max(T aValue1, T aValue2, T aValue3)
 	{
-		return Max(Max(value1, value2), value3);
+		return Max(Max(aValue1, aValue2), aValue3);
 	}
 
 	/// <summary>
 	/// Returns the lesser of two values.
 	/// </summary>
-	/// <param name="value1">Source value.</param>
-	/// <param name="value2">Source value.</param>
+	/// <param name="aValue1">Source value.</param>
+	/// <param name="aValue2">Source value.</param>
 	/// <returns>The lesser value.</returns>
 	template <typename T>
-	constexpr T Min(T value1, T value2)
+	constexpr T Min(T aValue1, T aValue2)
 	{
-		return value1 < value2 ? value1 : value2;
+		return aValue1 < aValue2 ? aValue1 : aValue2;
 	}
 
 	/// <summary>
 	/// Returns the lesser of three values.
 	/// </summary>
-	/// <param name="value1">Source value.</param>
-	/// <param name="value2">Source value.</param>
-	/// <param name="value3">Source value.</param>
+	/// <param name="aValue1">Source value.</param>
+	/// <param name="aValue2">Source value.</param>
+	/// <param name="aValue3">Source value.</param>
 	/// <returns>The lesser value.</returns>
 	template <typename T>
-	constexpr T Min(T value1, T value2, T value3)
+	constexpr T Min(T aValue1, T aValue2, T aValue3)
 	{
-		return Min<T>(Min<T>(value1, value2), value3);
+		return Min<T>(Min<T>(aValue1, aValue2), aValue3);
 	}
 
 	template <typename T>
@@ -177,6 +177,9 @@ namespace RoseCommon::Math
 
 	namespace _impl
 	{
+		// Current implementation from https://github.com/bolero-MURAKAMI/Sprout/blob/master/sprout/math/sqrt.hpp
+		// Potential todo for the future: Look into how this works to gain a proper understanding of it.
+
 		template <typename T>
 		constexpr T sqrt_impl2(T x, T s, T s2)
 		{
@@ -241,13 +244,13 @@ namespace RoseCommon::Math
 	}
 
 	template <typename T>
-	T Wrap(const T& value, const T& min, const T& max)
+	T Wrap(const T& aValue, const T& aMinimum, const T& aMaximum)
 	{
-		int range = max - min + 1;
+		int range = aMaximum - aMinimum + 1;
 
-		if (value < min)
-			value += range * ((min - value) / range + 1);
+		if (aValue < aMinimum)
+			aValue += range * ((aMinimum - aValue) / range + 1);
 
-		return min + (value - min) % range;
+		return aMinimum + (aValue - aMinimum) % range;
 	}
 }

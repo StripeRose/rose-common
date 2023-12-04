@@ -19,11 +19,11 @@ namespace RoseCommon
             const T* operator->() const noexcept { return &myValue; }
             Iterator& operator++() noexcept { ++myValue; return *this; }
 
-            friend bool operator==(const Iterator& a, const Iterator b) noexcept {
-                return a.myValue == b.myValue;
+            friend bool operator==(const Iterator& aLHV, const Iterator aRHV) noexcept {
+                return aLHV.myValue == aRHV.myValue;
             }
-            friend bool operator!=(const Iterator& a, const Iterator b) noexcept {
-                return a.myValue != b.myValue;
+            friend bool operator!=(const Iterator& aLHV, const Iterator aRHV) noexcept {
+                return aLHV.myValue != aRHV.myValue;
             }
 
         private:
@@ -36,7 +36,7 @@ namespace RoseCommon
             , myLast(aLast)
         { }
 
-        Range(T&& first, T&& last) noexcept
+        Range(T&& aFirst, T&& aLast) noexcept
             : myFirst(std::move(aFirst))
             , myLast(std::move(aLast))
         { }

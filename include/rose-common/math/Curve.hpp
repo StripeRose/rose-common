@@ -5,69 +5,71 @@
 
 namespace RoseCommon::Math
 {
+	// Functions ported from https://github.com/FNA-XNA/FNA/blob/master/src/MathHelper.cs
+
 	/// <summary>
 	/// Returns the Cartesian coordinate for one axis of a point that is defined by a
 	/// given triangle and two normalized barycentric (areal) coordinates.
 	/// </summary>
-	/// <param name="value1">
+	/// <param name="aValue1">
 	/// The coordinate on one axis of vertex 1 of the defining triangle.
 	/// </param>
-	/// <param name="value2">
+	/// <param name="aValue2">
 	/// The coordinate on the same axis of vertex 2 of the defining triangle.
 	/// </param>
-	/// <param name="value3">
+	/// <param name="aValue3">
 	/// The coordinate on the same axis of vertex 3 of the defining triangle.
 	/// </param>
-	/// <param name="amount1">
+	/// <param name="anAmount1">
 	/// The normalized barycentric (areal) coordinate b2, equal to the weighting factor
-	/// for vertex 2, the coordinate of which is specified in value2.
+	/// for vertex 2, the coordinate of which is specified in aValue2.
 	/// </param>
-	/// <param name="amount2">
+	/// <param name="anAmount2">
 	/// The normalized barycentric (areal) coordinate b3, equal to the weighting factor
-	/// for vertex 3, the coordinate of which is specified in value3.
+	/// for vertex 3, the coordinate of which is specified in aValue3.
 	/// </param>
 	/// <returns>
 	/// Cartesian coordinate of the specified point with respect to the axis being used.
 	/// </returns>
 	template <typename T>
 	constexpr T Barycentric(
-		T value1,
-		T value2,
-		T value3,
-		T amount1,
-		T amount2)
+		T aValue1,
+		T aValue2,
+		T aValue3,
+		T anAmount1,
+		T anAmount2)
 	{
-		return value1 + (value2 - value1) * amount1 + (value3 - value1) * amount2;
+		return aValue1 + (aValue2 - aValue1) * anAmount1 + (aValue3 - aValue1) * anAmount2;
 	}
 
 	/// <summary>
 	/// Performs a Catmull-Rom interpolation using the specified positions.
 	/// </summary>
-	/// <param name="value1">The first position in the interpolation.</param>
-	/// <param name="value2">The second position in the interpolation.</param>
-	/// <param name="value3">The third position in the interpolation.</param>
-	/// <param name="value4">The fourth position in the interpolation.</param>
-	/// <param name="amount">Weighting factor.</param>
+	/// <param name="aValue1">The first position in the interpolation.</param>
+	/// <param name="aValue2">The second position in the interpolation.</param>
+	/// <param name="aValue3">The third position in the interpolation.</param>
+	/// <param name="aValue4">The fourth position in the interpolation.</param>
+	/// <param name="anAmount">Weighting factor.</param>
 	/// <returns>A position that is the result of the Catmull-Rom interpolation.</returns>
 	template <typename T>
 	inline T CatmullRom(
-		T value1,
-		T value2,
-		T value3,
-		T value4,
-		T amount)
+		T aValue1,
+		T aValue2,
+		T aValue3,
+		T aValue4,
+		T anAmount)
 	{
 		/* Using formula from http://www.mvps.org/directx/articles/catmull/
 		 * Internally using doubles not to lose precision.
 		 */
-		const double amountSquared = amount * amount;
-		const double amountCubed = amountSquared * amount;
+		const double anAmountSquared = anAmount * anAmount;
+		const double anAmountCubed = anAmountSquared * anAmount;
 		return static_cast<T>(
 			0.5 *
 			(
-				((2.0 * value2 + (value3 - value1) * amount) +
-					((2.0 * value1 - 5.0 * value2 + 4.0 * value3 - value4) * amountSquared) +
-					(3.0 * value2 - value1 - 3.0 * value3 + value4) * amountCubed)
+				((2.0 * aValue2 + (aValue3 - aValue1) * anAmount) +
+					((2.0 * aValue1 - 5.0 * aValue2 + 4.0 * aValue3 - aValue4) * anAmountSquared) +
+					(3.0 * aValue2 - aValue1 - 3.0 * aValue3 + aValue4) * anAmountCubed)
 				)
 			);
 	}
@@ -75,36 +77,36 @@ namespace RoseCommon::Math
 	/// <summary>
 	/// Performs a Hermite spline interpolation.
 	/// </summary>
-	/// <param name="value1">Source position.</param>
-	/// <param name="tangent1">Source tangent.</param>
-	/// <param name="value2">Source position.</param>
-	/// <param name="tangent2">Source tangent.</param>
-	/// <param name="amount">Weighting factor.</param>
+	/// <param name="aValue1">Source position.</param>
+	/// <param name="aTangent1">Source aTangent.</param>
+	/// <param name="aValue2">Source position.</param>
+	/// <param name="aTangent2">Source aTangent.</param>
+	/// <param name="anAmount">Weighting factor.</param>
 	/// <returns>The result of the Hermite spline interpolation.</returns>
 	template <typename T>
 	constexpr T Hermite(
-		T value1,
-		T tangent1,
-		T value2,
-		T tangent2,
-		T amount)
+		T aValue1,
+		T aTangent1,
+		T aValue2,
+		T aTangent2,
+		T anAmount)
 	{
 		/* All transformed to double not to lose precision
-		 * Otherwise, for high numbers of param:amount the result is NaN instead
+		 * Otherwise, for high numbers of param:anAmount the result is NaN instead
 		 * of Infinity.
 		 */
-		const double v1 = value1, v2 = value2, t1 = tangent1, t2 = tangent2, s = amount;
+		const double v1 = aValue1, v2 = aValue2, t1 = aTangent1, t2 = aTangent2, s = anAmount;
 		const double sCubed = s * s * s;
 		const double sSquared = s * s;
 
 		double result;
-		if (Math::IsZero(amount))
+		if (Math::IsZero(anAmount))
 		{
-			result = value1;
+			result = aValue1;
 		}
-		else if (Math::Equals(amount, T(1)))
+		else if (Math::Equals(anAmount, T(1)))
 		{
-			result = value2;
+			result = aValue2;
 		}
 		else
 		{
@@ -120,20 +122,20 @@ namespace RoseCommon::Math
 	}
 
 	/// <summary>
-	/// Interpolates between two values using a cubic equation.
+	/// Interpolates between two aValues using a cubic equation.
 	/// </summary>
-	/// <param name="value1">Source value.</param>
-	/// <param name="value2">Source value.</param>
-	/// <param name="amount">Weighting value.</param>
-	/// <returns>Interpolated value.</returns>
+	/// <param name="aValue1">Source aValue.</param>
+	/// <param name="aValue2">Source aValue.</param>
+	/// <param name="anAmount">Weighting aValue.</param>
+	/// <returns>Interpolated aValue.</returns>
 	template <typename T>
-	constexpr T SmoothStep(T value1, T value2, T amount)
+	constexpr T SmoothStep(T aValue1, T aValue2, T anAmount)
 	{
-		/* It is expected that 0 < amount < 1.
-		 * If amount < 0, return value1.
-		 * If amount > 1, return value2.
+		/* It is expected that 0 < anAmount < 1.
+		 * If anAmount < 0, return aValue1.
+		 * If anAmount > 1, return aValue2.
 		 */
-		const T result = Math::Clamp<T>(amount, T(0), T(1));
-		return Hermite<T>(value1, T(0), value2, T(0), result);
+		const T result = Math::Clamp<T>(anAmount, T(0), T(1));
+		return Hermite<T>(aValue1, T(0), aValue2, T(0), result);
 	}
 }

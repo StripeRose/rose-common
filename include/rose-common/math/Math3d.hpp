@@ -23,23 +23,23 @@ namespace RoseCommon::Math
 		/// <summary>
 		/// Extracts the scalar, translation, and rotation components from a 3D scale/rotate/translate (SRT) Matrix.
 		/// </summary>
-		/// <param name="aScaleOut">The scalar component of the transform matrix, expressed as a Vector3.</param>
-		/// <param name="aRotationOut">The rotation component of the transform matrix, expressed as a Quaternion.</param>
-		/// <param name="aTranslationOut">The translation component of the transform matrix, expressed as a Vector3.</param>
-		/*void Decompose(Vector3& aScaleOut, Quaternion& aRotationOut, Vector3& aTranslationOut) requires(NRows == 4 && NColumns == 4)
+		/// <param name="outScale">The scalar component of the transform matrix, expressed as a Vector3.</param>
+		/// <param name="outRotation">The rotation component of the transform matrix, expressed as a Quaternion.</param>
+		/// <param name="outTranslation">The translation component of the transform matrix, expressed as a Vector3.</param>
+		/*void Decompose(Vector3& outScale, Quaternion& outRotation, Vector3& outTranslation) requires(NRows == 4 && NColumns == 4)
 		{
-			aTranslationOut = GetTranslation();
+			outTranslation = GetTranslation();
 
-			aScaleOut.X = Math::Squareroot((M11 * M11) + (M12 * M12) + (M13 * M13));
-			aScaleOut.Y = Math::Squareroot((M21 * M21) + (M22 * M22) + (M23 * M23));
-			aScaleOut.Z = Math::Squareroot((M31 * M31) + (M32 * M32) + (M33 * M33));
+			outScale.X = Math::Squareroot((M11 * M11) + (M12 * M12) + (M13 * M13));
+			outScale.Y = Math::Squareroot((M21 * M21) + (M22 * M22) + (M23 * M23));
+			outScale.Z = Math::Squareroot((M31 * M31) + (M32 * M32) + (M33 * M33));
 
-			Matrix rotationMatrix = (*this) * Matrix::InvertCorrect(Matrix::CreateScale(aScaleOut) * Matrix::CreateTranslation(aTranslationOut));
+			Matrix rotationMatrix = (*this) * Matrix::InvertCorrect(Matrix::CreateScale(outScale) * Matrix::CreateTranslation(outTranslation));
 
-			aRotationOut.X = rotationMatrix.GetCell(0, 3);
-			aRotationOut.Y = rotationMatrix.GetCell(1, 3);
-			aRotationOut.Z = rotationMatrix.GetCell(2, 3);
-			aRotationOut.W = rotationMatrix.GetCell(3, 3);
+			outRotation.X = rotationMatrix.GetCell(0, 3);
+			outRotation.Y = rotationMatrix.GetCell(1, 3);
+			outRotation.Z = rotationMatrix.GetCell(2, 3);
+			outRotation.W = rotationMatrix.GetCell(3, 3);
 		}*/
 
 		/// <summary>

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Matrix.hpp"
+#include "Trigonometry.hpp"
 
 /// <summary>
 /// Provides creation functions for left-handed matrices.
@@ -259,7 +260,7 @@ namespace RoseCommon::Math::MakeMatrix
 	template <typename T>
 	constexpr Matrix<4, 4, T> Scale(const T& aScale) requires(std::is_floating_point_v<T>)
 	{
-		return CreateMatrix::Scale(aScale, aScale, aScale);
+		return Scale(aScale, aScale, aScale);
 	}
 
 	/// <summary>

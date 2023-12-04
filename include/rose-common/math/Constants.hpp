@@ -21,11 +21,11 @@ namespace RoseCommon::Math
 	template <typename T> constexpr T ReciprocalTwoPi	= static_cast<T>(1) / TwoPi<T>;
 
 	// Constant for Euler's number.
-	template <typename T> constexpr T E = static_cast<T>(2.71828182845904523536028747135266249775724709369995);
+	template <typename T> constexpr T E					= static_cast<T>(2.71828182845904523536028747135266249775724709369995);
 
 	// Constant for log base 10 of E.
-	template <typename T> constexpr T Log10E = static_cast<T>(0.43429448190325182);
+	template <typename T> constexpr T Log10E			= static_cast<T>(0.43429448190325182);
 
 	// Constant for log base 2 of E.
-	template <typename T> constexpr T Log2E = static_cast<T>(1.4426950408889634);
+	template <typename T> constexpr T Log2E				= static_cast<T>(1.4426950408889634);
 }
