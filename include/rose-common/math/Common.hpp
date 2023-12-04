@@ -42,7 +42,12 @@ namespace RoseCommon::Math
 	template <typename T>
 	constexpr T Clamp(const T& aValue, const T& aMin, const T& aMax)
 	{
-		return Min<T>(Max<T>(aValue, aMin), aMax);
+		if (aValue > aMax)
+			return aMax;
+		else if (aValue < aMin)
+			return aMin;
+		else
+			return aValue;
 	}
 
 	/// <summary>
