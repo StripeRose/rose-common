@@ -1,7 +1,5 @@
 #pragma once
 
-#include "Trigonometry.hpp"
-
 #include <array>
 #include <optional>
 #include <type_traits>
