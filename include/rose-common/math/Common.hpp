@@ -232,9 +232,8 @@ namespace RoseCommon::Math
 			if (aValue == 0)
 				return 0;
 
-			// Todo: Figure out how to handle errors in constexpr.
-			/*if (Math::Abs(aValue) >= std::numeric_limits<std::uintmax_t>::max())
-				return 0;*/
+			if (Math::Abs(aValue) >= std::numeric_limits<std::uintmax_t>::max())
+				throw std::exception("Value is too large to be truncated with the current implementation.");
 
 			if (aValue > 0)
 				return static_cast<T>(static_cast<std::uintmax_t>(aValue));
