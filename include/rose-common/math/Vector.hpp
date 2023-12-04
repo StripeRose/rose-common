@@ -7,33 +7,6 @@
 namespace RoseCommon::Math
 {
 	/// <summary>
-	/// Represents a mathematical vector with any amount of components.
-	/// </summary>
-	/*template <std::size_t N, typename T>
-	class Vector
-	{
-	public:
-		constexpr Vector()
-		{
-			for (std::size_t i = 0; i < N; ++i)
-				Component[i] = static_cast<T>(0);
-		}
-
-		constexpr operator Matrix<N, 1, T>() const
-		{
-			Matrix<N, 1, T> m;
-
-			for (std::size_t i = 0; i < N; ++i)
-				m.GetCell(i, 0) = Component[i];
-
-			return m;
-		}
-
-	public:
-		T Component[N];
-	};*/
-
-	/// <summary>
 	/// Represents a mathematical vector with two components.
 	/// </summary>
 	template <typename T>
@@ -93,7 +66,7 @@ namespace RoseCommon::Math
 		/// <summary>
 		/// Calculates the dot product of the two vectors. If the two vectors are unit vectors,
 		/// the dot product returns a floating point value between - 1 and 1 that can be used to
-		/// determine some properties of the angle between two vectors.For example, it can show
+		/// determine some properties of the angle between two vectors. For example, it can show
 		/// whether the vectors are orthogonal, parallel, or have an acute or obtuse angle between them.
 		/// </summary>
 		/// <param name="aValue1">The first vector.</param>
@@ -270,6 +243,24 @@ namespace RoseCommon::Math
 			);
 		}
 
+		template <std::size_t MatrixWidth, std::size_t MatrixHeight>
+		constexpr Vector2 operator*(const Matrix<MatrixWidth, MatrixHeight, T>& aMatrix) const requires(MatrixWidth >= 2)
+		{
+			Math::Matrix<MatrixWidth, 1, T> vectorAsMatrix;
+			vectorAsMatrix.GetCell(0, 0) = X;
+			vectorAsMatrix.GetCell(1, 0) = Y;
+
+			if constexpr (MatrixWidth > 2)
+				vectorAsMatrix.GetCell(MatrixWidth - 1, 0) = 1;
+
+			vectorAsMatrix = vectorAsMatrix * aMatrix;
+
+			Vector2 result;
+			result.X = vectorAsMatrix.GetCell(0, 0);
+			result.Y = vectorAsMatrix.GetCell(1, 0);
+			return result;
+		}
+
 		void operator+=(const Vector2& aVector)
 		{
 			X += aVector.X;
@@ -292,6 +283,22 @@ namespace RoseCommon::Math
 		{
 			X /= aVector.X;
 			Y /= aVector.Y;
+		}
+
+		template <std::size_t MatrixWidth, std::size_t MatrixHeight>
+		void operator*=(const Matrix<MatrixWidth, MatrixHeight, T>& aMatrix) requires(MatrixWidth >= 2)
+		{
+			Math::Matrix<MatrixWidth, 1, T> vectorAsMatrix;
+			vectorAsMatrix.GetCell(0, 0) = X;
+			vectorAsMatrix.GetCell(1, 0) = Y;
+
+			if (MatrixWidth > 2)
+				vectorAsMatrix.GetCell(MatrixWidth - 1, 0) = 1;
+
+			vectorAsMatrix = vectorAsMatrix * aMatrix;
+
+			X = vectorAsMatrix.GetCell(0, 0);
+			Y = vectorAsMatrix.GetCell(1, 0);
 		}
 
 		constexpr bool operator==(const Vector2& aVector) const
@@ -417,7 +424,7 @@ namespace RoseCommon::Math
 		/// <summary>
 		/// Calculates the dot product of the two vectors. If the two vectors are unit vectors,
 		/// the dot product returns a floating point value between - 1 and 1 that can be used to
-		/// determine some properties of the angle between two vectors.For example, it can show
+		/// determine some properties of the angle between two vectors. For example, it can show
 		/// whether the vectors are orthogonal, parallel, or have an acute or obtuse angle between them.
 		/// </summary>
 		/// <param name="aValue1">The first vector.</param>
@@ -638,6 +645,26 @@ namespace RoseCommon::Math
 			);
 		}
 
+		template <std::size_t MatrixWidth, std::size_t MatrixHeight>
+		constexpr Vector3 operator*(const Matrix<MatrixWidth, MatrixHeight, T>& aMatrix) const requires(MatrixWidth >= 3)
+		{
+			Math::Matrix<MatrixWidth, 1, T> vectorAsMatrix;
+			vectorAsMatrix.GetCell(0, 0) = X;
+			vectorAsMatrix.GetCell(1, 0) = Y;
+			vectorAsMatrix.GetCell(2, 0) = Z;
+
+			if constexpr (MatrixWidth > 3)
+				vectorAsMatrix.GetCell(MatrixWidth - 1, 0) = 1;
+
+			vectorAsMatrix = vectorAsMatrix * aMatrix;
+
+			Vector3 result;
+			result.X = vectorAsMatrix.GetCell(0, 0);
+			result.Y = vectorAsMatrix.GetCell(1, 0);
+			result.Z = vectorAsMatrix.GetCell(2, 0);
+			return result;
+		}
+
 		void operator+=(const Vector3& aVector)
 		{
 			X += aVector.X;
@@ -664,6 +691,24 @@ namespace RoseCommon::Math
 			X /= aVector.X;
 			Y /= aVector.Y;
 			Z /= aVector.Z;
+		}
+
+		template <std::size_t MatrixWidth, std::size_t MatrixHeight>
+		void operator*=(const Matrix<MatrixWidth, MatrixHeight, T>& aMatrix) requires(MatrixWidth >= 3)
+		{
+			Math::Matrix<MatrixWidth, 1, T> vectorAsMatrix;
+			vectorAsMatrix.GetCell(0, 0) = X;
+			vectorAsMatrix.GetCell(1, 0) = Y;
+			vectorAsMatrix.GetCell(2, 0) = Z;
+
+			if (MatrixWidth > 3)
+				vectorAsMatrix.GetCell(MatrixWidth - 1, 0) = 1;
+
+			vectorAsMatrix = vectorAsMatrix * aMatrix;
+
+			X = vectorAsMatrix.GetCell(0, 0);
+			Y = vectorAsMatrix.GetCell(1, 0);
+			Z = vectorAsMatrix.GetCell(2, 0);
 		}
 
 		constexpr bool operator==(const Vector3& aVector) const
@@ -767,7 +812,7 @@ namespace RoseCommon::Math
 		/// <summary>
 		/// Calculates the dot product of the two vectors. If the two vectors are unit vectors,
 		/// the dot product returns a floating point value between - 1 and 1 that can be used to
-		/// determine some properties of the angle between two vectors.For example, it can show
+		/// determine some properties of the angle between two vectors. For example, it can show
 		/// whether the vectors are orthogonal, parallel, or have an acute or obtuse angle between them.
 		/// </summary>
 		/// <param name="aValue1">The first vector.</param>
@@ -982,6 +1027,28 @@ namespace RoseCommon::Math
 			);
 		}
 
+		template <std::size_t MatrixWidth, std::size_t MatrixHeight>
+		constexpr Vector4 operator*(const Matrix<MatrixWidth, MatrixHeight, T>& aMatrix) const requires(MatrixWidth >= 4)
+		{
+			Math::Matrix<MatrixWidth, 1, T> vectorAsMatrix;
+			vectorAsMatrix.GetCell(0, 0) = X;
+			vectorAsMatrix.GetCell(1, 0) = Y;
+			vectorAsMatrix.GetCell(2, 0) = Z;
+			vectorAsMatrix.GetCell(3, 0) = W;
+
+			if constexpr (MatrixWidth > 4)
+				vectorAsMatrix.GetCell(MatrixWidth - 1, 0) = 1;
+
+			vectorAsMatrix = vectorAsMatrix * aMatrix;
+
+			Vector4 result;
+			result.X = vectorAsMatrix.GetCell(0, 0);
+			result.Y = vectorAsMatrix.GetCell(1, 0);
+			result.Z = vectorAsMatrix.GetCell(2, 0);
+			result.W = vectorAsMatrix.GetCell(3, 0);
+			return result;
+		}
+
 		void operator+=(const Vector4& aVector)
 		{
 			X += aVector.X;
@@ -1012,6 +1079,26 @@ namespace RoseCommon::Math
 			Y /= aVector.Y;
 			Z /= aVector.Z;
 			W /= aVector.W;
+		}
+
+		template <std::size_t MatrixWidth, std::size_t MatrixHeight>
+		void operator*=(const Matrix<MatrixWidth, MatrixHeight, T>& aMatrix) requires(MatrixWidth >= 4)
+		{
+			Math::Matrix<MatrixWidth, 1, T> vectorAsMatrix;
+			vectorAsMatrix.GetCell(0, 0) = X;
+			vectorAsMatrix.GetCell(1, 0) = Y;
+			vectorAsMatrix.GetCell(2, 0) = Z;
+			vectorAsMatrix.GetCell(3, 0) = W;
+
+			if (MatrixWidth > 4)
+				vectorAsMatrix.GetCell(MatrixWidth - 1, 0) = 1;
+
+			vectorAsMatrix = vectorAsMatrix * aMatrix;
+
+			X = vectorAsMatrix.GetCell(0, 0);
+			Y = vectorAsMatrix.GetCell(1, 0);
+			Z = vectorAsMatrix.GetCell(2, 0);
+			W = vectorAsMatrix.GetCell(3, 0);
 		}
 
 		constexpr bool operator==(const Vector4& aVector) const
