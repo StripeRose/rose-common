@@ -260,7 +260,13 @@ namespace RoseCommon::Math::MakeMatrix
 	template <typename T>
 	constexpr Matrix<4, 4, T> Scale(const T& aScale) requires(std::is_floating_point_v<T>)
 	{
-		return Scale(aScale, aScale, aScale);
+		Matrix<4, 4, T> matrix = Matrix<4, 4, T>::Identity();
+
+		matrix.GetCell(0, 0) = aScale;
+		matrix.GetCell(1, 1) = aScale;
+		matrix.GetCell(2, 2) = aScale;
+
+		return matrix;
 	}
 
 	/// <summary>
