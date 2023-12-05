@@ -2,6 +2,7 @@
 
 #include "Matrix.hpp"
 #include "Trigonometry.hpp"
+#include "Vector.hpp"
 
 /// <summary>
 /// Provides creation functions for left-handed matrices.
@@ -14,36 +15,37 @@ namespace RoseCommon::Math::MakeMatrix
 	/// <param name="anAxis">A normalized Vector3 specifying the axis.</param>
 	/// <param name="anAngle">The amount, in radians, in which to rotate.</param>
 	/// <returns>The resulting Matrix.</returns>
-	/*static Matrix CreateFromAxisAngle(const Vector3& anAxis, const Float32& anAngle) requires(NRows == 4 && NColumns == 4)
+	template <typename T>
+	static constexpr Matrix<4, 4, T> FromAxisAngle(const Vector3<T>& anAxis, const T& anAngle) requires(std::is_floating_point_v<T>)
 	{
-		Float32 c = static_cast<Float32>(Math::Cosine(anAngle));
-		Float32 s = static_cast<Float32>(Math::Sine(anAngle));
-		Float32 t = static_cast<Float32>(1.0f) - c;
+		T c = Math::Cosine<T>(anAngle);
+		T s = Math::Sine<T>(anAngle);
+		T t = static_cast<T>(1) - c;
 
-		Matrix rotation(Matrix::Identity);
+		Matrix<4, 4, T> rotation = Matrix<4, 4, T>::Identity();
 
-		rotation.M11 = c + anAxis.X * anAxis.X * t;
-		rotation.M22 = c + anAxis.Y * anAxis.Y * t;
-		rotation.M33 = c + anAxis.Z * anAxis.Z * t;
+		rotation.GetCell(0, 0) = c + anAxis.X * anAxis.X * t;
+		rotation.GetCell(1, 1) = c + anAxis.Y * anAxis.Y * t;
+		rotation.GetCell(2, 2) = c + anAxis.Z * anAxis.Z * t;
 
-		Float32 tmp1 = anAxis.X * anAxis.Y * t;
-		Float32 tmp2 = anAxis.Z * s;
+		T tmp1 = anAxis.X * anAxis.Y * t;
+		T tmp2 = anAxis.Z * s;
 
-		rotation.M21 = tmp1 + tmp2;
-		rotation.M12 = tmp1 - tmp2;
+		rotation.GetCell(0, 1) = tmp1 + tmp2;
+		rotation.GetCell(1, 0) = tmp1 - tmp2;
 
 		tmp1 = anAxis.X * anAxis.Z * t;
 		tmp2 = anAxis.Y * s;
-		rotation.M31 = tmp1 - tmp2;
-		rotation.M13 = tmp1 + tmp2;
+		rotation.GetCell(0, 2) = tmp1 - tmp2;
+		rotation.GetCell(2, 0) = tmp1 + tmp2;
 
 		tmp1 = anAxis.Y * anAxis.Z * t;
 		tmp2 = anAxis.X * s;
-		rotation.M32 = tmp1 + tmp2;
-		rotation.M23 = tmp1 - tmp2;
+		rotation.GetCell(1, 2) = tmp1 + tmp2;
+		rotation.GetCell(2, 1) = tmp1 - tmp2;
 
 		return rotation;
-	}*/
+	}
 
 	/// <summary>
 	/// Creates a new rotation <see cref="Matrix"/> from a <see cref="Quaternion"/>.
@@ -90,25 +92,20 @@ namespace RoseCommon::Math::MakeMatrix
 	/// <param name="aTarget">The target towards which the camera is pointing.</param>
 	/// <param name="anUpVector">The direction that is "up" from the camera's point of view.</param>
 	/// <returns>The resulting Matrix.</returns>
-	/*template <typename T>
-	constexpr Matrix<4, 4, T> CreateLookAt(const Vector3& aPosition, const Vector3& aTarget, const Vector3& anUpVector) requires(std::is_floating_point_v<T>)
+	template <typename T>
+	constexpr Matrix<4, 4, T> LookAt(const Vector3<T>& aPosition, const Vector3<T>& aTarget, const Vector3<T>& anUpVector) requires(std::is_floating_point_v<T>)
 	{
-		Vector3 usedTarget = aTarget;
+		const Vector3<T> zAxis = (aPosition - aTarget).Normalized();
+		const Vector3<T> xAxis = Vector3<T>::Cross(anUpVector, zAxis).Normalized();
+		const Vector3<T> yAxis = Vector3<T>::Cross(zAxis, xAxis).Normalized();
 
-		if (aPosition == usedTarget)
-			usedTarget = aPosition + Vector3::Forward;
-
-		Vector3 zAxis = (usedTarget - aPosition).Normalized();
-		Vector3 xAxis = Vector3::Cross(anUpVector, zAxis).Normalized();
-		Vector3 yAxis = Vector3::Cross(zAxis, xAxis);
-
-		return Matrix::Invert(Matrix(
-			xAxis.X, yAxis.X, zAxis.X, 0,
-			xAxis.Y, yAxis.Y, zAxis.Y, 0,
-			xAxis.Z, yAxis.Z, zAxis.Z, 0,
-			-Vector3::Dot(xAxis, aPosition), -Vector3::Dot(yAxis, aPosition), -Vector3::Dot(zAxis, aPosition), 1
-		));
-	}*/
+		return Matrix<4, 4, T>({
+			xAxis.X, xAxis.Y, xAxis.Z, static_cast<T>(0),
+			yAxis.X, yAxis.Y, yAxis.Y, static_cast<T>(0),
+			zAxis.X, zAxis.Y, zAxis.Z, static_cast<T>(0),
+			aPosition.X, aPosition.Y, aPosition.Z, static_cast<T>(1)
+			});
+	}
 
 	/// <summary>
 	/// Creates a new projection <see cref="Matrix"/> for orthographic view.
