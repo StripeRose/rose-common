@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AutoVisualizer xmlns="http://schemas.microsoft.com/vstudio/debugger/natvis/2010">
+  <!-- =========================
+		* System Namespace
+	========================== -->
+  <!-- Math Namespace -->
+  <Type Name="System::Math::Vector2">
+    <DisplayString>{{ X: {X}, Y: {Y} }}</DisplayString>
+  </Type>
+  <Type Name="System::Math::Vector3">
+    <DisplayString>{{ X: {X}, Y: {Y}, Z: {Z} }}</DisplayString>
+  </Type>
+  <Type Name="System::Math::Vector4">
+    <DisplayString>{{ X: {X}, Y: {Y}, Z: {Z}, W: {W} }}</DisplayString>
+  </Type>
+
+  <Type Name="System::Math::Matrix">
+    <DisplayString>{{ Translation = X: { M41 }, Y: { M42 }, Z: { M43 } }}</DisplayString>
+    <Expand>
+      <Item Name="Row 1" ExcludeView="simple">*(System::Math::Vector4*)(&amp;M11)</Item>
+      <Item Name="Row 2" ExcludeView="simple">*(System::Math::Vector4*)(&amp;M21)</Item>
+      <Item Name="Row 3" ExcludeView="simple">*(System::Math::Vector4*)(&amp;M31)</Item>
+      <Item Name="Row 4" ExcludeView="simple">*(System::Math::Vector4*)(&amp;M41)</Item>
+    </Expand>
+  </Type>
+
+  <!-- Memory Namespace -->
+  <!--<Type Name="System::Memory::PoolPtr&lt;*&gt;">
+    <DisplayString>{{ References = { myReferenceCountPtr->_My_val } }}</DisplayString>
+    <Expand>
+      <Item Name="References" ExcludeView="simple">myReferenceCountPtr->_My_val</Item>
+      <Item Name="Object">myPtr</Item>
+      <Item Name="Pool">myMemoryPool</Item>
+    </Expand>
+  </Type>
+
+  <Type Name="System::Memory::ManagedPtr&lt;*&gt;">
+    <DisplayString>{{ References = { myReferenceCountPtr->_My_val } }}</DisplayString>
+    <Expand>
+      <Item Name="References" ExcludeView="simple">myReferenceCountPtr->_My_val</Item>
+      <Item Name="Object" ExcludeView="simple" Condition="myArrayAmount->_My_val &lt;= 1">myPtr</Item>
+      <Item Name="Array Size" ExcludeView="simple" Condition="myArrayAmount->_My_val &gt; 1">myArrayAmount->_My_val</Item>
+      <ArrayItems Condition="myArrayAmount->_My_val &gt; 1">
+        <Size>myArrayAmount->_My_val</Size>
+        <ValuePointer>myPtr</ValuePointer>
+      </ArrayItems>
+      <Item Name="Pool">myMemoryPool</Item>
+    </Expand>
+  </Type>
+
+  <Type Name="System::Memory::ManagedMemoryPool&lt;*&gt;">
+    <DisplayString>{{ Used = { ((float)(myMemoryPool.myTotalPoolSize - myMemoryPool.myFreePoolSize) / (float)myMemoryPool.myTotalPoolSize) * 100 }% }}</DisplayString>
+    <Expand>
+      <Item Name="Objects" ExcludeView="simple">myRegisteredPtrs._Mysize</Item>
+      <Item Name="Total" ExcludeView="simple">myMemoryPool.myTotalPoolSize</Item>
+      <Item Name="Free" ExcludeView="simple">myMemoryPool.myFreePoolSize</Item>
+    </Expand>
+  </Type>-->
+</AutoVisualizer>
