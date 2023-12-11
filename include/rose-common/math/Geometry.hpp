@@ -1,5 +1,7 @@
 #pragma once
 
+#include <optional>
+
 namespace RoseCommon::Math
 {
 	template <typename VectorT>
@@ -16,7 +18,7 @@ namespace RoseCommon::Math
 
 	public:
 		Box()
-			: Box(VectorT::Zero, VectorT::Zero)
+			: Box(VectorT::Zero(), VectorT::Zero())
 		{ }
 
 		Box(VectorT aCenterPoint, VectorT aSize)
@@ -39,12 +41,15 @@ namespace RoseCommon::Math
 			ToExtents(thisMin, thisMax);
 			aBox.ToExtents(otherMin, otherMax);
 
-			return 
+			return
 				otherMin >= thisMin &&
-				thisMax >= otherMax
+				thisMax >= otherMax;
 		}
 
-		// Todo: float GetContent() - length/area/volume
+		typename VectorT::ComponentType Content() const
+		{
+			return Size.Content();
+		}
 
 		bool Intersects(const Box& aBox) const
 		{
@@ -52,46 +57,25 @@ namespace RoseCommon::Math
 			ToExtents(thisMin, thisMax);
 			aBox.ToExtents(otherMin, otherMax);
 
-			return
-				thisMin.X < otherMax.X &&
-				thisMax.X > otherMin.X &&
-
-				thisMin.Y < otherMax.Y &&
-				thisMax.Y > otherMin.Y &&
-
-				thisMin.Z < otherMax.Z &&
-				thisMax.Z > otherMin.Z;
+			return thisMin < otherMax && thisMax > otherMin;
 		}
 
-		/*bool IntersectingRect(const Rectangle& aRect, Rectangle& aResultRect) const
+		std::optional<Box> Intersection(const Box& aBox) const
 		{
-			if (Intersects(aRect) == false)
-			{
-				return false;
-			}
+			if (Intersects(aBox) == false)
+				return { };
 
-			const T aPoint1X = X;
-			const T aPoint1Y = Y;
-			const T aPoint2X = X + Width;
-			const T aPoint2Y = Y + Height;
-			const T bPoint1X = aRect.X;
-			const T bPoint1Y = aRect.Y;
-			const T bPoint2X = aRect.X + aRect.Width;
-			const T bPoint2Y = aRect.Y + aRect.Height;
+			VectorT thisMin, thisMax, otherMin, otherMax;
+			ToExtents(thisMin, thisMax);
+			aBox.ToExtents(otherMin, otherMax);
 
-			aResultRect.X = aPoint1X > bPoint1X ? aPoint1X : bPoint1X;
-			aResultRect.Y = aPoint1Y > bPoint1Y ? aPoint1Y : bPoint1Y;
-			aResultRect.Width = aPoint2X < bPoint2X ? aPoint2X : bPoint2X;
-			aResultRect.Height = aPoint2Y < bPoint2Y ? aPoint2Y : bPoint2Y;
-
-			aResultRect.Width -= aResultRect.X;
-			aResultRect.Height -= aResultRect.Y;
-
-			return true;
-
+			return Box::FromExtents(
+				VectorT::Max(thisMin, otherMin),
+				VectorT::Min(thisMax, otherMax)
+			);
 		}
 
-		bool IntersectingRect(const Rectangle& aRect, Rectangle& aResultRect, Rectangle& aUVResult) const
+		/*bool Intersection(const Rectangle& aRect, Rectangle& aResultRect, Rectangle& aUVResult) const
 		{
 			if (IntersectingRect(aRect, aResultRect) == false)
 			{
@@ -143,10 +127,10 @@ namespace RoseCommon::Math
 	{
 	public:
 		Sphere()
-			: Sphere(VectorT::Zero, 1.f)
+			: Sphere(VectorT::Zero(), 1.f)
 		{ }
 
-		Sphere(const VectorT& aCenter, const VectorT::ComponentType& aRadius)
+		Sphere(const VectorT& aCenter, const typename VectorT::ComponentType& aRadius)
 			: Center(aCenter)
 			, Radius(aRadius)
 		{ }
@@ -160,6 +144,6 @@ namespace RoseCommon::Math
 
 	public:
 		VectorT Center;
-		VectorT::ComponentType Radius;
+		typename VectorT::ComponentType Radius;
 	};
 }

@@ -13,6 +13,9 @@ namespace RoseCommon::Math
 	class Vector2
 	{
 	public:
+		using ComponentType = T;
+
+	public:
 		/// <summary>A Vector2 with both of its components set to one.</summary>
 		static constexpr Vector2 One() { return { 1, 1 }; }
 
@@ -170,6 +173,11 @@ namespace RoseCommon::Math
 		{ }
 
 	public:
+		constexpr T Content() const
+		{
+			return X * Y;
+		}
+
 		/// <summary>
 		/// Calculates the vector length.
 		/// </summary>
@@ -333,6 +341,9 @@ namespace RoseCommon::Math
 	template <typename T>
 	class Vector3
 	{
+	public:
+		using ComponentType = T;
+
 	public:
 		/// <summary>A unit Vector3 designating backward in a right-handed coordinate system (0, 0, -1).</summary>
 		static constexpr Vector3 Backward() { return -UnitZ(); }
@@ -563,6 +574,11 @@ namespace RoseCommon::Math
 		{ }
 
 	public:
+		constexpr T Content() const
+		{
+			return X * Y * Z;
+		}
+
 		/// <summary>
 		/// Calculates the vector length.
 		/// </summary>
@@ -751,6 +767,9 @@ namespace RoseCommon::Math
 	class Vector4
 	{
 	public:
+		using ComponentType = T;
+
+	public:
 		/// <summary>A Vector4 with all of its components set to one.</summary>
 		static constexpr Vector4 One() { return { 1, 1, 1, 1 }; }
 
@@ -936,6 +955,11 @@ namespace RoseCommon::Math
 		{ }
 
 	public:
+		constexpr T Content() const
+		{
+			return X * Y * Z * W;
+		}
+
 		/// <summary>
 		/// Calculates the vector length.
 		/// </summary>
