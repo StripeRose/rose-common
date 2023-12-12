@@ -1,5 +1,9 @@
 #pragma once
 
+#include <exception>
+#include <limits>
+#include <type_traits>
+
 namespace RoseCommon::Math
 {
 	// ---------------------------------------
