@@ -1,5 +1,7 @@
 #pragma once
 
+#include "math/Common.hpp"
+
 #include <cmath>
 #include <cstdint>
 
@@ -9,49 +11,59 @@ namespace RoseCommon
 	/// Represents a straight four-component color using red, green, blue, and alpha data.
 	/// </summary>
 	/// <remarks>Blend modes and alpha compositing not yet implemented.</remarks>
+	template <typename T>
 	class Color
 	{
+		static constexpr T ourSDRUpperBound = std::is_floating_point_v<T> ? static_cast<T>(1) : static_cast<T>(0xFF);
 	public:
 		constexpr Color() : R(0), G(0), B(0), A(0) { }
 
 		constexpr Color(const std::uint32_t aPackedArgbValue)
-			: A((aPackedArgbValue >> 24) & 0xFF)
-			, R((aPackedArgbValue >> 16) & 0xFF)
-			, G((aPackedArgbValue >> 8) & 0xFF)
-			, B((aPackedArgbValue >> 0) & 0xFF)
-		{ }
+			: A(static_cast<T>((aPackedArgbValue >> 24) & 0xFF))
+			, R(static_cast<T>((aPackedArgbValue >> 16) & 0xFF))
+			, G(static_cast<T>((aPackedArgbValue >> 8) & 0xFF))
+			, B(static_cast<T>((aPackedArgbValue >> 0) & 0xFF))
+		{
+			if constexpr (std::is_floating_point_v<T>)
+			{
+				A /= 0xFF;
+				R /= 0xFF;
+				G /= 0xFF;
+				B /= 0xFF;
+			}
+		}
 
-		constexpr Color(std::uint8_t aRedValue, std::uint8_t aGreenValue, std::uint8_t aBlueValue)
-			: A(0xFF)
+		constexpr Color(T aRedValue, T aGreenValue, T aBlueValue)
+			: A(ourSDRUpperBound)
 			, R(aRedValue)
 			, G(aGreenValue)
 			, B(aBlueValue)
 		{ }
 
-		constexpr Color(std::uint8_t anAlphaValue, std::uint8_t aRedValue, std::uint8_t aGreenValue, std::uint8_t aBlueValue)
+		constexpr Color(T anAlphaValue, T aRedValue, T aGreenValue, T aBlueValue)
 			: A(anAlphaValue)
 			, R(aRedValue)
 			, G(aGreenValue)
 			, B(aBlueValue)
 		{ }
 
-		float GetBrightness() const
+		constexpr float GetBrightness() const
 		{
-			const float r = static_cast<float>(R) / 255.0f;
-			const float g = static_cast<float>(G) / 255.0f;
-			const float b = static_cast<float>(B) / 255.0f;
+			const float r = static_cast<float>(R) / ourSDRUpperBound;
+			const float g = static_cast<float>(G) / ourSDRUpperBound;
+			const float b = static_cast<float>(B) / ourSDRUpperBound;
 
 			return std::max({ r, g, b });
 		}
 
-		float GetHue() const
+		constexpr float GetHue() const
 		{
 			if (R == G && G == B)
 				return 0.f;
 
-			const float r = static_cast<float>(R) / 255.0f;
-			const float g = static_cast<float>(G) / 255.0f;
-			const float b = static_cast<float>(B) / 255.0f;
+			const float r = static_cast<float>(R) / ourSDRUpperBound;
+			const float g = static_cast<float>(G) / ourSDRUpperBound;
+			const float b = static_cast<float>(B) / ourSDRUpperBound;
 
 			const float max = std::max({ r, g, b });
 			const float min = std::min({ r, g, b });
@@ -59,7 +71,7 @@ namespace RoseCommon
 
 			float hue = 0.f;
 			if (r == max) {
-				hue = std::fmodf((g - b) / delta, 6);
+				hue = Math::Modulo<float>((g - b) / delta, 6);
 			}
 			else if (g == max) {
 				hue = 2 + (b - r) / delta;
@@ -72,11 +84,11 @@ namespace RoseCommon
 			return hue;
 		}
 
-		float GetSaturation() const
+		constexpr float GetSaturation() const
 		{
-			const float r = static_cast<float>(R) / 255.0f;
-			const float g = static_cast<float>(G) / 255.0f;
-			const float b = static_cast<float>(B) / 255.0f;
+			const float r = static_cast<float>(R) / ourSDRUpperBound;
+			const float g = static_cast<float>(G) / ourSDRUpperBound;
+			const float b = static_cast<float>(B) / ourSDRUpperBound;
 
 			const float max = std::max({ r, g, b });
 			const float min = std::min({ r, g, b });
@@ -88,7 +100,17 @@ namespace RoseCommon
 				return delta / max;
 		}
 
-		Color& operator=(const Color& aColor)
+		constexpr Color Saturated() const
+		{
+			return Color<T>(
+				A,
+				Math::Clamp<T>(R, 0, ourSDRUpperBound),
+				Math::Clamp<T>(G, 0, ourSDRUpperBound),
+				Math::Clamp<T>(B, 0, ourSDRUpperBound)
+			);
+		}
+
+		constexpr Color& operator=(const Color& aColor)
 		{
 			A = aColor.A;
 			R = aColor.R;
@@ -97,69 +119,99 @@ namespace RoseCommon
 			return *this;
 		}
 
-		Color operator+(const Color& aColor) const
+		constexpr Color operator+(const Color& aColor) const
 		{
 			Color result(*this);
 			result += aColor;
 			return result;
 		}
 
-		Color operator-(const Color& aColor) const
+		constexpr Color operator-(const Color& aColor) const
 		{
 			Color result(*this);
 			result -= aColor;
 			return result;
 		}
 
-		Color operator*(const Color& aColor) const
+		constexpr Color operator*(const Color& aColor) const
 		{
 			Color result(*this);
 			result *= aColor;
 			return result;
 		}
 
-		void operator+=(const Color& aColor)
+		constexpr void operator+=(const Color& aColor)
 		{
-			const int result[] = {
-				int(A) + int(aColor.A),
-				int(R) + int(aColor.R),
-				int(G) + int(aColor.G),
-				int(B) + int(aColor.B)
-			};
+			if constexpr (std::is_floating_point_v<T>)
+			{
+				A = Math::Clamp<T>(A + aColor.A, 0, 1);
+				R += aColor.R;
+				G += aColor.G;
+				B += aColor.B;
+			}
+			else
+			{
+				const int result[] = {
+					int(A) + int(aColor.A),
+					int(R) + int(aColor.R),
+					int(G) + int(aColor.G),
+					int(B) + int(aColor.B)
+				};
 
-			A = static_cast<std::uint8_t>(std::min(result[0], 0xFF));
-			R = static_cast<std::uint8_t>(std::min(result[1], 0xFF));
-			G = static_cast<std::uint8_t>(std::min(result[2], 0xFF));
-			B = static_cast<std::uint8_t>(std::min(result[3], 0xFF));
+				A = static_cast<std::uint8_t>(std::min(result[0], 0xFF));
+				R = static_cast<std::uint8_t>(std::min(result[1], 0xFF));
+				G = static_cast<std::uint8_t>(std::min(result[2], 0xFF));
+				B = static_cast<std::uint8_t>(std::min(result[3], 0xFF));
+			}
 		}
 
-		void operator-=(const Color& aColor)
+		constexpr void operator-=(const Color& aColor)
 		{
-			const int result[] = {
-				int(A) - int(aColor.A),
-				int(R) - int(aColor.R),
-				int(G) - int(aColor.G),
-				int(B) - int(aColor.B)
-			};
+			if constexpr (std::is_floating_point_v<T>)
+			{
+				A = Math::Clamp<T>(A - aColor.A, 0, 1);
+				R -= aColor.R;
+				G -= aColor.G;
+				B -= aColor.B;
+			}
+			else
+			{
+				const int result[] = {
+					int(A) - int(aColor.A),
+					int(R) - int(aColor.R),
+					int(G) - int(aColor.G),
+					int(B) - int(aColor.B)
+				};
 
-			A = static_cast<std::uint8_t>(std::max(result[0], 0));
-			R = static_cast<std::uint8_t>(std::max(result[1], 0));
-			G = static_cast<std::uint8_t>(std::max(result[2], 0));
-			B = static_cast<std::uint8_t>(std::max(result[3], 0));
+				A = static_cast<std::uint8_t>(std::max(result[0], 0));
+				R = static_cast<std::uint8_t>(std::max(result[1], 0));
+				G = static_cast<std::uint8_t>(std::max(result[2], 0));
+				B = static_cast<std::uint8_t>(std::max(result[3], 0));
+			}
 		}
 
-		void operator*=(const Color& aColor)
+		constexpr void operator*=(const Color& aColor)
 		{
-			A = static_cast<std::uint8_t>(((A / 255.f) * (aColor.A / 255.f)) * 255.f);
-			R = static_cast<std::uint8_t>(((R / 255.f) * (aColor.R / 255.f)) * 255.f);
-			G = static_cast<std::uint8_t>(((G / 255.f) * (aColor.G / 255.f)) * 255.f);
-			B = static_cast<std::uint8_t>(((B / 255.f) * (aColor.B / 255.f)) * 255.f);
+			if constexpr (std::is_floating_point_v<T>)
+			{
+				A = Math::Clamp<T>(A * aColor.A, 0, 1);
+				R *= aColor.R;
+				G *= aColor.G;
+				B *= aColor.B;
+			}
+			else
+			{
+				A = static_cast<std::uint8_t>(((A / 255.f) * (aColor.A / 255.f)) * 255.f);
+				R = static_cast<std::uint8_t>(((R / 255.f) * (aColor.R / 255.f)) * 255.f);
+				G = static_cast<std::uint8_t>(((G / 255.f) * (aColor.G / 255.f)) * 255.f);
+				B = static_cast<std::uint8_t>(((B / 255.f) * (aColor.B / 255.f)) * 255.f);
+			}
 		}
 
-		bool operator==(const Color& aColor) const { return operator<=>(aColor) == std::weak_ordering::equivalent; }
-		bool operator!=(const Color& aColor) const { return operator<=>(aColor) != std::weak_ordering::equivalent; }
+		constexpr bool operator==(const Color& aColor) const { return operator<=>(aColor) == std::weak_ordering::equivalent; }
+		constexpr bool operator!=(const Color& aColor) const { return operator<=>(aColor) != std::weak_ordering::equivalent; }
 
-		std::strong_ordering operator<=>(const Color& aColor) const
+		constexpr std::strong_ordering operator<=>(const Color& aColor) const
 		{
 			std::strong_ordering order;
 			order = std::strong_order(R, aColor.R);
@@ -175,18 +227,19 @@ namespace RoseCommon
 		}
 
 		// The Alpha component value.
-		std::uint8_t A;
+		T A;
 		// The Red component value.
-		std::uint8_t R;
+		T R;
 		// The Green component value.
-		std::uint8_t G;
+		T G;
 		// The Blue component value.
-		std::uint8_t B;
+		T B;
 
 		struct Predefined;
 	};
 
-	struct Color::Predefined
+	template <typename T>
+	struct Color<T>::Predefined
 	{
 		static constexpr Color AliceBlue = 0xFFF0F8FF;
 		static constexpr Color AntiqueWhite = 0xFFFAEBD7;
