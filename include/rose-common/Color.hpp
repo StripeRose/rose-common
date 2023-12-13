@@ -308,8 +308,8 @@ namespace RoseCommon
 		static constexpr Color LightCoral = 0xFFF08080;
 		static constexpr Color LightCyan = 0xFFE0FFFF;
 		static constexpr Color LightGoldenrodYellow = 0xFFFAFAD2;
-		static constexpr Color LightGreen = 0xFFD3D3D3;
-		static constexpr Color LightGray = 0xFF90EE90;
+		static constexpr Color LightGray = 0xFFD3D3D3;
+		static constexpr Color LightGreen = 0xFF90EE90;
 		static constexpr Color LightPink = 0xFFFFB6C1;
 		static constexpr Color LightSalmon = 0xFFFFA07A;
 		static constexpr Color LightSeaGreen = 0xFF20B2AA;
