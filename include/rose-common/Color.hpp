@@ -140,6 +140,13 @@ namespace RoseCommon
 			return result;
 		}
 
+		constexpr Color operator*(float aScalar) const
+		{
+			Color result(*this);
+			result *= aScalar;
+			return result;
+		}
+
 		constexpr void operator+=(const Color& aColor)
 		{
 			if constexpr (std::is_floating_point_v<T>)
@@ -206,6 +213,24 @@ namespace RoseCommon
 				G = static_cast<std::uint8_t>(((G / 255.f) * (aColor.G / 255.f)) * 255.f);
 				B = static_cast<std::uint8_t>(((B / 255.f) * (aColor.B / 255.f)) * 255.f);
 			}
+		}
+
+		constexpr void operator*=(float aScalar)
+		{
+			if constexpr (std::is_floating_point_v<T>)
+				operator*=(Color(
+					aScalar,
+					aScalar,
+					aScalar,
+					aScalar
+				));
+			else
+				operator*=(Color(
+					static_cast<std::uint8_t>(aScalar * ourSDRUpperBound),
+					static_cast<std::uint8_t>(aScalar * ourSDRUpperBound),
+					static_cast<std::uint8_t>(aScalar * ourSDRUpperBound),
+					static_cast<std::uint8_t>(aScalar * ourSDRUpperBound)
+				));
 		}
 
 		constexpr bool operator==(const Color& aColor) const { return operator<=>(aColor) == std::weak_ordering::equivalent; }

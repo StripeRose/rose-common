@@ -109,8 +109,8 @@ namespace RoseCommon::Math
 	/// Passing amount a value of 0 will cause value1 to be returned, a value of 1 will
 	/// cause value2 to be returned.
 	/// </remarks>
-	template <typename T>
-	constexpr T Lerp(T aValue1, T aValue2, T anAmount)
+	template <typename T, typename S>
+	constexpr T Lerp(T aValue1, T aValue2, S anAmount)
 	{
 		return aValue1 + (aValue2 - aValue1) * anAmount;
 	}
