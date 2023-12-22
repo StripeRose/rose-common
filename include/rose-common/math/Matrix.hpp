@@ -2,6 +2,7 @@
 
 #include <array>
 #include <optional>
+#include <stdexcept>
 #include <type_traits>
 
 namespace RoseCommon::Math
