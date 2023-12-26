@@ -209,7 +209,10 @@ namespace RoseCommon::Math
 	template <typename T>
 	constexpr T Squareroot(T aValue)
 	{
-		return _impl::sqrt_impl(aValue);
+		if (aValue != T(0))
+			return _impl::sqrt_impl(aValue);
+		else
+			return T(0);
 	}
 
 	template <typename T>
