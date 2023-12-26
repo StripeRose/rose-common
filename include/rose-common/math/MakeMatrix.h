@@ -102,7 +102,7 @@ namespace RoseCommon::Math
 
 			return Matrix<4, 4, T>({
 				xAxis.X, xAxis.Y, xAxis.Z, static_cast<T>(0),
-				yAxis.X, yAxis.Y, yAxis.Y, static_cast<T>(0),
+				yAxis.X, yAxis.Y, yAxis.Z, static_cast<T>(0),
 				zAxis.X, zAxis.Y, zAxis.Z, static_cast<T>(0),
 				aPosition.X, aPosition.Y, aPosition.Z, static_cast<T>(1)
 				});
