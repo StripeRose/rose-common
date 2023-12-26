@@ -96,7 +96,7 @@ namespace RoseCommon::Math
 		/// <returns>The resulting Matrix.</returns>
 		static constexpr Matrix<4, 4, T> LookAt(const Vector3<T>& aPosition, const Vector3<T>& aTarget, const Vector3<T>& anUpVector) requires(std::is_floating_point_v<T>)
 		{
-			const Vector3<T> zAxis = (aPosition - aTarget).Normalized();
+			const Vector3<T> zAxis = (aTarget - aPosition).Normalized();
 			const Vector3<T> xAxis = Vector3<T>::Cross(anUpVector, zAxis).Normalized();
 			const Vector3<T> yAxis = Vector3<T>::Cross(zAxis, xAxis).Normalized();
 
