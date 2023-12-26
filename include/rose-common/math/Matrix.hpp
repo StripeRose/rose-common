@@ -43,18 +43,17 @@ namespace RoseCommon::Math
 		{
 			Matrix solution;
 			
-			bool isPositive = true;
 			for (std::size_t rowIndex = 0; rowIndex < Height; ++rowIndex)
 			{
 				for (std::size_t columnIndex = 0; columnIndex < Width; ++columnIndex)
 				{
 					const auto subMatrix = SubMatrix(columnIndex, rowIndex);
 					
+					const bool isPositive = ((columnIndex ^ rowIndex) % 2) == 0;
 					solution.GetCell(columnIndex, rowIndex) =
 						static_cast<T>(isPositive ? 1 : -1) *
 						subMatrix.Determinant()
 						;
-					isPositive = !isPositive;
 				}
 			}
 			
