@@ -139,8 +139,8 @@ namespace RoseCommon::Math
 			Matrix<4, 4, T> proj;
 			T sinFov, cosFov, height, width;
 
-			sinFov = Math::Sine<T>(0.5 * aFieldOfView);
-			cosFov = Math::Cosine<T>(0.5 * aFieldOfView);
+			sinFov = Math::Sine<T>(T(0.5) * aFieldOfView);
+			cosFov = Math::Cosine<T>(T(0.5) * aFieldOfView);
 
 			height = cosFov / sinFov;
 			width = height / anAspectRatio;
