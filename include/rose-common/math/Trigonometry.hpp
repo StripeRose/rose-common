@@ -3,28 +3,123 @@
 #include "Constants.hpp"
 #include "Common.hpp"
 
+#include <stdexcept>
+
 namespace RoseCommon::Math
 {
-	/*inline float ArcSine(float aValue) { return static_cast<float>(std::asinf(aValue)); }
-	inline double ArcSine(double aValue) { return static_cast<double>(std::asin(aValue)); }*/
-
-	/*template <typename T>
-	constexpr T ArcCosine(T aValue)
+	template <typename T>
+	constexpr T ArcSine(T aValue)
 	{
-		return static_cast<T>((-0.69813170079773212 * aValue * aValue - 0.87266462599716477) * aValue + 1.5707963267948966);
-	}*/
+		// https://github.com/bolero-MURAKAMI/Sprout/blob/master/sprout/math/asin.hpp
 
-	// ArcTangent()
+		auto center = [](T x, T x2) -> T {
+			return static_cast<T>(((((((((((((
+				+0.0316658385792867081040808) * x2
+				+ -0.0158620440988475212803145) * x2
+				+ 0.0192942786775238654913582) * x2
+				+ 0.0066153165197009078340075) * x2
+				+ 0.0121483892822292648695383) * x2
+				+ 0.0138885410156894774969889) * x2
+				+ 0.0173593516996479249428647) * x2
+				+ 0.0223717830666671020710108) * x2
+				+ 0.0303819580081956423799529) * x2
+				+ 0.0446428568582815922683933) * x2
+				+ 0.0750000000029696112392353) * x2
+				+ 0.1666666666666558995379880) * x2
+				* x + x
+				);
+		};
 
-	/*inline float ArcTangent2(float aY, float anX)
-	{
-		return static_cast<float>(std::atan2f(aY, anX));
+		auto tail = [](T x) -> T {
+			return static_cast<T>(Math::HalfPi<T> +
+				Math::Squareroot(T(1) - x)
+				* (((((((((((((
+					+-0.0000121189820098929624806) * x
+					+ 0.0001307564187657962919394) * x
+					+ -0.0006702485124770180942917) * x
+					+ 0.0021912255981979442677477) * x
+					+ -0.0052049731575223952626203) * x
+					+ 0.0097868293573384001221447) * x
+					+ -0.0156746038587246716524035) * x
+					+ 0.0229883479552557203133368) * x
+					+ -0.0331919619444009606270380) * x
+					+ 0.0506659694457588602631748) * x
+					+ -0.0890259194305537131666744) * x
+					+ 0.2145993335526539017488949) * x
+					+ -1.5707961988153774692344105
+				));
+		};
+
+		const T absVal = Abs(aValue);
+		if (absVal > T(1))
+			throw std::out_of_range("ArcSine input is out of range.");
+
+		const T sinVal = (absVal > T(0.5)) ? tail(absVal) : center(absVal, absVal * absVal);
+		return aValue < 0 ? -sinVal : sinVal;
 	}
 
-	inline double ArcTangent2(double aY, double anX)
+	template <typename T>
+	constexpr T ArcCosine(T aValue)
 	{
-		return static_cast<double>(std::atan2(aY, anX));
-	}*/
+		if (Abs(aValue) > T(1))
+			throw std::out_of_range("ArcCosine input is out of range.");
+
+		if (aValue == T(1))
+			return T(0);
+		else
+			return Math::HalfPi<T> - ArcSine(aValue);
+	}
+
+	namespace _impl
+	{
+		template <typename T>
+		constexpr T atan_term(T x2, int k)
+		{
+			return (T(2) * static_cast<T>(k) * x2)
+				/ ((T(2) * static_cast<T>(k) + T(1))* (T(1) + x2));
+		}
+
+		template <typename T>
+		constexpr T atan_product(T x, int k)
+		{
+			if (k == 1)
+				return atan_term(x * x, k);
+			else
+				return atan_term(x * x, k) * atan_product(x, k - 1);
+		}
+
+		template <typename T>
+		constexpr T atan_sum(T x, T sum, int n)
+		{
+			if (sum + atan_product(x, n) == sum)
+				return sum;
+			else
+				return atan_sum(x, sum + atan_product(x, n), n + 1);
+		}
+	}
+
+	template <typename T>
+	constexpr T ArcTangent(T aValue)
+	{
+		return aValue / (T(1) + aValue * aValue) * _impl::atan_sum(aValue, T(1), 1);
+	}
+
+	template <typename T>
+	constexpr T ArcTangent2(T aY, T anX)
+	{
+		if (anX > T(0))
+			return ArcTangent(aY / anX);
+		else if (aY >= T(0) && anX < T(0))
+			return ArcTangent(aY / anX) + Math::Pi<T>;
+		else if (aY < T(0) && anX < T(0))
+			return ArcTangent(aY / anX) - Math::Pi<T>;
+		else if (aY > T(0) && anX == T(0))
+			return Math::Pi<T> / T(2.01);
+		else if (aY < T(0) && anX == T(0))
+			return -(Math::Pi<T> / T(2.01));
+		else
+			throw std::exception();
+	}
 
 	template <typename T>
 	constexpr T Hill(T aValue)
@@ -70,7 +165,14 @@ namespace RoseCommon::Math
 	template <typename T>
 	constexpr T Cosine(T x) { return Sine(x + Math::HalfPi<T>); }
 
-	// Todo: Tangent
+	/// <summary>
+	/// Reciprocal of tangent.
+	/// </summary>
+	template <typename T>
+	constexpr T Cotangent(T x) { return Cosine(x) / Sine(x); }
+
+	template <typename T>
+	constexpr T Tangent(T x) { return Sine(x) / Cosine(x); }
 
 	/// <summary>
 	/// Converts radians to degrees.

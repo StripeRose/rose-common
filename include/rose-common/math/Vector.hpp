@@ -468,7 +468,7 @@ namespace RoseCommon::Math
 		/// <param name="aValue2">Source vector.</param>
 		/// <param name="anAmount">Value between 0 and 1 indicating the weight of the second vector.</param>
 		/// <returns>The spherical interpolation of the two vectors.</returns>
-		/*static constexpr Vector3 Slerp(const Vector3& aValue1, const Vector3& aValue2, const T& anAmount)
+		static constexpr Vector3 Slerp(const Vector3& aValue1, const Vector3& aValue2, const T& anAmount)
 		{
 			if (aValue1 == aValue2)
 				return aValue1;
@@ -478,7 +478,7 @@ namespace RoseCommon::Math
 			Vector3 relativeVector = aValue2 - (aValue1 * dot);
 			relativeVector.Normalize();
 			return ((aValue1 * Math::Cosine(theta)) + (relativeVector * Math::Sine(theta)));
-		}*/
+		}
 
 		/// <summary>
 		/// Returns a vector that contains the highest value from each matching pair of components.
