@@ -20,18 +20,23 @@ namespace RoseCommon
 	public:
 		// Assert that a condition is true, otherwise logging a fatal message.
 		static void Assert(bool aCondition, const char* anErrorMessage, ...);
+		static void Assert(bool aCondition, const wchar_t* anErrorMessage, ...);
 
 		// Log a message for debugging information only.
 		static void Log(const char* aMessage, ...);
+		static void Log(const wchar_t* aMessage, ...);
 
 		// Log a warning message to indicate a potential problem.
 		static void LogWarning(const char* aMessage, ...);
+		static void LogWarning(const wchar_t* aMessage, ...);
 
 		// Log an error message to indicate an issue that needs to be fixed.
 		static void LogError(const char* aMessage, ...);
+		static void LogError(const wchar_t* aMessage, ...);
 
 		// Log a fatal error message which usually terminates the application with a callstack.
 		static void LogFatal(const char* aMessage, ...);
+		static void LogFatal(const wchar_t* aMessage, ...);
 
 		/// <summary>
 		/// Tries to set the current thread's name to the specified value.
@@ -50,6 +55,7 @@ namespace RoseCommon
 
 		// Verify a condition to be true, otherwise logging it as an error.
 		static bool Verify(bool aCondition, const char* anErrorMessage, ...);
+		static bool Verify(bool aCondition, const wchar_t* anErrorMessage, ...);
 	};
 
 	class Debug::Impl

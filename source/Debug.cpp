@@ -54,11 +54,41 @@ namespace RoseCommon
 		}
 	}
 
+	void Debug::Assert(bool aCondition, const wchar_t* anErrorMessage, ...)
+	{
+		if (ourDebugImplementation && !aCondition)
+		{
+			std::wstringstream ss;
+			ss << "Assertion failed:\n\n";
+
+			va_list args;
+			va_start(args, anErrorMessage);
+			Debug_cpp::FormatLogMessage(anErrorMessage, args, ss);
+			va_end(args);
+
+			ourDebugImplementation->Log(Impl::LogType::Fatal, ss.str());
+			ourDebugImplementation->TriggerCrash(ss.str());
+		}
+	}
+
 	void Debug::Log(const char* aMessage, ...)
 	{
 		if (ourDebugImplementation)
 		{
 			std::stringstream ss;
+			va_list args;
+			va_start(args, aMessage);
+			Debug_cpp::FormatLogMessage(aMessage, args, ss);
+			va_end(args);
+			ourDebugImplementation->Log(Impl::LogType::Information, ss.str());
+		}
+	}
+
+	void Debug::Log(const wchar_t* aMessage, ...)
+	{
+		if (ourDebugImplementation)
+		{
+			std::wstringstream ss;
 			va_list args;
 			va_start(args, aMessage);
 			Debug_cpp::FormatLogMessage(aMessage, args, ss);
@@ -80,11 +110,37 @@ namespace RoseCommon
 		}
 	}
 
+	void Debug::LogWarning(const wchar_t* aMessage, ...)
+	{
+		if (ourDebugImplementation)
+		{
+			std::wstringstream ss;
+			va_list args;
+			va_start(args, aMessage);
+			Debug_cpp::FormatLogMessage(aMessage, args, ss);
+			va_end(args);
+			ourDebugImplementation->Log(Impl::LogType::Warning, ss.str());
+		}
+	}
+
 	void Debug::LogError(const char* aMessage, ...)
 	{
 		if (ourDebugImplementation)
 		{
 			std::stringstream ss;
+			va_list args;
+			va_start(args, aMessage);
+			Debug_cpp::FormatLogMessage(aMessage, args, ss);
+			va_end(args);
+			ourDebugImplementation->Log(Impl::LogType::Error, ss.str());
+		}
+	}
+
+	void Debug::LogError(const wchar_t* aMessage, ...)
+	{
+		if (ourDebugImplementation)
+		{
+			std::wstringstream ss;
 			va_list args;
 			va_start(args, aMessage);
 			Debug_cpp::FormatLogMessage(aMessage, args, ss);
@@ -99,6 +155,20 @@ namespace RoseCommon
 		{
 			va_list args;
 			std::stringstream ss;
+			va_start(args, aMessage);
+			Debug_cpp::FormatLogMessage(aMessage, args, ss);
+			va_end(args);
+			ourDebugImplementation->Log(Impl::LogType::Fatal, ss.str());
+			ourDebugImplementation->TriggerCrash(ss.str());
+		}
+	}
+
+	void Debug::LogFatal(const wchar_t* aMessage, ...)
+	{
+		if (ourDebugImplementation)
+		{
+			va_list args;
+			std::wstringstream ss;
 			va_start(args, aMessage);
 			Debug_cpp::FormatLogMessage(aMessage, args, ss);
 			va_end(args);
@@ -124,6 +194,21 @@ namespace RoseCommon
 		if (ourDebugImplementation && !aCondition)
 		{
 			std::stringstream ss;
+			va_list args;
+			va_start(args, anErrorMessage);
+			Debug_cpp::FormatLogMessage(anErrorMessage, args, ss);
+			va_end(args);
+			ourDebugImplementation->Log(Impl::LogType::Error, ss.str());
+		}
+
+		return aCondition;
+	}
+
+	bool Debug::Verify(bool aCondition, const wchar_t* anErrorMessage, ...)
+	{
+		if (ourDebugImplementation && !aCondition)
+		{
+			std::wstringstream ss;
 			va_list args;
 			va_start(args, anErrorMessage);
 			Debug_cpp::FormatLogMessage(anErrorMessage, args, ss);
