@@ -110,6 +110,33 @@ namespace RoseCommon
 			);
 		}
 
+		constexpr std::uint32_t ToARGB() const
+		{
+			std::uint8_t a, r, g, b;
+
+			if constexpr (std::is_floating_point_v<T>)
+			{
+				a = static_cast<std::uint8_t>(A * 0xFF);
+				r = static_cast<std::uint8_t>(R * 0xFF);
+				g = static_cast<std::uint8_t>(G * 0xFF);
+				b = static_cast<std::uint8_t>(B * 0xFF);
+			}
+			else
+			{
+				a = A;
+				r = R;
+				g = G;
+				b = B;
+			}
+
+			return (
+				a << 24 |
+				r << 16 |
+				g << 8 |
+				b
+				);
+		}
+
 		constexpr Color& operator=(const Color& aColor)
 		{
 			A = aColor.A;
