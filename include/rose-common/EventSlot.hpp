@@ -30,7 +30,7 @@ namespace RoseCommon
 		void Disconnect(void* aRegistrar)
 		{
 			if (myCallbacks.contains(aRegistrar))
-				myCallbacks.erase(aRegistrar);
+				myCallbacks.at(aRegistrar) = nullptr;
 		}
 
 	private:
@@ -62,7 +62,7 @@ namespace RoseCommon
 		void Disconnect(void* aRegistrar)
 		{
 			if (myCallbacks.contains(aRegistrar))
-				myCallbacks.erase(aRegistrar);
+				myCallbacks.at(aRegistrar) = nullptr;
 		}
 
 	private:
