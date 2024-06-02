@@ -173,6 +173,9 @@ namespace RoseCommon
 
 						auto valueEnd = valueStart;
 						skipUntilCharacterOrComment(valueEnd, line.cend(), nullptr);
+						if (valueEnd == valueStart)
+							break;
+
 						trimEndWhitespace(line.cbegin(), valueEnd);
 
 						currentSection->Set(
