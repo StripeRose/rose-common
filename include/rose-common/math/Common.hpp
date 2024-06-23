@@ -12,7 +12,7 @@ namespace RoseCommon::Math
 	template <typename T> constexpr T Truncate(T aValue);
 
 	template <typename T>
-	constexpr T Abs(T aValue) { return aValue < 0 ? -aValue : aValue; }
+	constexpr T Abs(T aValue) { return aValue < static_cast<T>(0) ? -aValue : aValue; }
 
 	template <typename T>
 	constexpr T Ceil(T aValue)
