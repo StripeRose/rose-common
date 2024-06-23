@@ -1,6 +1,7 @@
 #pragma once
 
 #include <algorithm>
+#include <cwctype>
 #include <filesystem>
 #include <fstream>
 #include <map>
@@ -101,6 +102,10 @@ namespace RoseCommon
 	{
 		std::ifstream fileStream;
 		fileStream.open(aPath);
+
+		if (!fileStream.is_open())
+			return;
+
 		ReadFromStream(fileStream);
 		fileStream.close();
 	}
@@ -112,20 +117,20 @@ namespace RoseCommon
 				bool wasSpace = false;
 				while (anIt != anEndIterator && (!someCharacters || !strchr(someCharacters, *anIt)) && !(wasSpace && strchr(Ini::InlineCommentPrefixes, *anIt)))
 				{
-					wasSpace = std::isspace(*anIt);
+					wasSpace = std::iswspace(*anIt);
 					++anIt;
 				}
 			};
 
 		auto skipWhitespace = [](std::string::const_iterator& anIt, const std::string::const_iterator& anEndIterator)
 			{
-				while (anIt != anEndIterator && std::isspace(*anIt))
+				while (anIt != anEndIterator && std::iswspace(*anIt))
 					++anIt;
 			};
 
 		auto trimEndWhitespace = [](const std::string::const_iterator& aStartIterator, std::string::const_iterator& anIt)
 			{
-				while (anIt != aStartIterator && std::isspace(*(anIt - 1)))
+				while (anIt != aStartIterator && std::iswspace(*(anIt - 1)))
 					--anIt;
 			};
 
