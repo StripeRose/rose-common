@@ -30,6 +30,9 @@ namespace RoseCommon::Math
 		}
 	}
 
+	template <typename R, typename V>
+	constexpr R CeilTo(V aValue) { return static_cast<R>(Ceil<V>(aValue)); }
+
 	/// <summary>
 	/// Restricts a value to be within a specified range.
 	/// </summary>
@@ -87,6 +90,9 @@ namespace RoseCommon::Math
 				return -Math::Truncate<T>(-aValue);
 		}
 	}
+
+	template <typename R, typename V>
+	constexpr R FloorTo(V aValue) { return static_cast<R>(Floor<V>(aValue)); }
 
 	template <typename T>
 	constexpr bool IsZero(T aValue, T aTolerance = std::numeric_limits<T>::epsilon())
@@ -248,6 +254,9 @@ namespace RoseCommon::Math
 				return -static_cast<T>(static_cast<std::uintmax_t>(-aValue));
 		}
 	}
+
+	template <typename R, typename V>
+	constexpr R TruncateTo(V aValue) { return static_cast<R>(Truncate<V>(aValue)); }
 
 	template <typename T>
 	T Wrap(const T& aValue, const T& aMinimum, const T& aMaximum)
