@@ -185,6 +185,26 @@ namespace RoseCommon::Math
 		}
 	}
 
+	template <typename T>
+	constexpr T Round(T aValue)
+	{
+		// Rounding half up.
+		// If other rounding types are useful, each should split into their own function,
+		// and Round() should inline-call RoundUpFromHalf().
+
+		if constexpr (!std::is_floating_point_v<T>)
+		{
+			return aValue;
+		}
+		else
+		{
+			return Floor(aValue) + Floor(Modulo<T>(aValue, 1) + T(0.5));
+		}
+	}
+
+	template <typename R, typename V>
+	constexpr R RoundTo(V aValue) { return static_cast<R>(Round<V>(aValue)); }
+
 	namespace _impl
 	{
 		// Current implementation from https://github.com/bolero-MURAKAMI/Sprout/blob/master/sprout/math/sqrt.hpp
