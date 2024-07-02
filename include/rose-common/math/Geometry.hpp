@@ -8,7 +8,7 @@ namespace RoseCommon::Math
 	class Box
 	{
 	public:
-		static Box FromExtents(const VectorT& aMinExtents, const VectorT& aMaxExtents)
+		static constexpr Box FromExtents(const VectorT& aMinExtents, const VectorT& aMaxExtents)
 		{
 			Box extentsBox;
 			extentsBox.Size = aMaxExtents - aMinExtents;
@@ -17,25 +17,24 @@ namespace RoseCommon::Math
 		}
 
 	public:
-		Box()
+		constexpr Box()
 			: Box(VectorT::Zero(), VectorT::Zero())
 		{ }
 
-		Box(VectorT aCenterPoint, VectorT aSize)
+		constexpr Box(VectorT aCenterPoint, VectorT aSize)
 			: Center(aCenterPoint)
 			, Size(aSize)
 		{ }
 
 	public:
-
-		bool Contains(const VectorT& aPoint) const
+		constexpr bool Contains(const VectorT& aPoint) const
 		{
 			VectorT minExtents, maxExtents;
 			ToExtents(minExtents, maxExtents);
 			return !(maxExtents < aPoint) && !(aPoint < minExtents);
 		}
 
-		bool Contains(const Box& aBox) const
+		constexpr bool Contains(const Box& aBox) const
 		{
 			VectorT thisMin, thisMax, otherMin, otherMax;
 			ToExtents(thisMin, thisMax);
@@ -46,12 +45,12 @@ namespace RoseCommon::Math
 				thisMax >= otherMax;
 		}
 
-		typename VectorT::ComponentType Content() const
+		constexpr typename VectorT::ComponentType Content() const
 		{
 			return Size.Content();
 		}
 
-		bool Intersects(const Box& aBox) const
+		constexpr bool Intersects(const Box& aBox) const
 		{
 			VectorT thisMin, thisMax, otherMin, otherMax;
 			ToExtents(thisMin, thisMax);
@@ -60,7 +59,7 @@ namespace RoseCommon::Math
 			return thisMin < otherMax && thisMax > otherMin;
 		}
 
-		std::optional<Box> Intersection(const Box& aBox) const
+		constexpr std::optional<Box> Intersection(const Box& aBox) const
 		{
 			if (Intersects(aBox) == false)
 				return { };
@@ -111,7 +110,7 @@ namespace RoseCommon::Math
 
 		}*/
 
-		void ToExtents(VectorT& outMinExtents, VectorT& outMaxExtents) const
+		constexpr void ToExtents(VectorT& outMinExtents, VectorT& outMaxExtents) const
 		{
 			outMinExtents = Center - (Size / 2);
 			outMaxExtents = outMinExtents + Size;
@@ -126,16 +125,16 @@ namespace RoseCommon::Math
 	class Sphere
 	{
 	public:
-		Sphere()
+		constexpr Sphere()
 			: Sphere(VectorT::Zero(), 1.f)
 		{ }
 
-		Sphere(const VectorT& aCenter, const typename VectorT::ComponentType& aRadius)
+		constexpr Sphere(const VectorT& aCenter, const typename VectorT::ComponentType& aRadius)
 			: Center(aCenter)
 			, Radius(aRadius)
 		{ }
 
-		bool Contains(const VectorT& aPoint) const
+		constexpr bool Contains(const VectorT& aPoint) const
 		{
 			return VectorT::DistanceSquared(Center, aPoint) < (Radius * Radius);
 		}
