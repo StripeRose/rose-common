@@ -24,9 +24,14 @@ namespace RoseCommon::Math
 		else
 		{
 			if (aValue > static_cast<T>(0))
-				return -Math::Truncate<T>(-aValue);
+			{
+				const T truncated = Math::Truncate<T>(aValue);
+				return aValue == truncated ? truncated : truncated + static_cast<T>(1);
+			}
 			else
-				return Math::Truncate<T>(aValue);
+			{
+				return -Math::Truncate<T>(-aValue);
+			}
 		}
 	}
 
@@ -84,10 +89,15 @@ namespace RoseCommon::Math
 		}
 		else
 		{
-			if (aValue > 0)
+			if (aValue > static_cast<T>(0))
+			{
 				return Math::Truncate<T>(aValue);
+			}
 			else
-				return -Math::Truncate<T>(-aValue);
+			{
+				const T truncated = -Math::Truncate<T>(-aValue);
+				return aValue == truncated ? truncated : truncated - static_cast<T>(1);
+			}
 		}
 	}
 
