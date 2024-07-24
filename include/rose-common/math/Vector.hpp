@@ -271,22 +271,10 @@ namespace RoseCommon::Math
 			);
 		}
 
-		template <std::size_t MatrixWidth, std::size_t MatrixHeight>
-		constexpr Vector2 operator*(const Matrix<MatrixWidth, MatrixHeight, T>& aMatrix) const requires(MatrixWidth >= 2)
+		constexpr Vector2 operator*(const Matrix<2, 2, T>& aMatrix) const
 		{
-			Math::Matrix<MatrixWidth, 1, T> vectorAsMatrix;
-			vectorAsMatrix.GetCell(0, 0) = X;
-			vectorAsMatrix.GetCell(1, 0) = Y;
-
-			if constexpr (MatrixWidth > 2)
-				vectorAsMatrix.GetCell(MatrixWidth - 1, 0) = 1;
-
-			vectorAsMatrix = vectorAsMatrix * aMatrix;
-
-			Vector2 result;
-			result.X = vectorAsMatrix.GetCell(0, 0);
-			result.Y = vectorAsMatrix.GetCell(1, 0);
-			return result;
+			const Math::Matrix result = ToRowMatrix() * aMatrix;
+			return Vector2(result.GetCell(0, 0), result.GetCell(1, 0));
 		}
 
 		void operator+=(const Vector2& aVector)
@@ -313,20 +301,12 @@ namespace RoseCommon::Math
 			Y /= aVector.Y;
 		}
 
-		template <std::size_t MatrixWidth, std::size_t MatrixHeight>
-		void operator*=(const Matrix<MatrixWidth, MatrixHeight, T>& aMatrix) requires(MatrixWidth >= 2)
+		void operator*=(const Matrix<2, 2, T>& aMatrix)
 		{
-			Math::Matrix<MatrixWidth, 1, T> vectorAsMatrix;
-			vectorAsMatrix.GetCell(0, 0) = X;
-			vectorAsMatrix.GetCell(1, 0) = Y;
+			const Math::Matrix result = ToRowMatrix() * aMatrix;
 
-			if (MatrixWidth > 2)
-				vectorAsMatrix.GetCell(MatrixWidth - 1, 0) = 1;
-
-			vectorAsMatrix = vectorAsMatrix * aMatrix;
-
-			X = vectorAsMatrix.GetCell(0, 0);
-			Y = vectorAsMatrix.GetCell(1, 0);
+			X = result.GetCell(0, 0);
+			Y = result.GetCell(1, 0);
 		}
 
 		constexpr bool operator==(const Vector2& aVector) const
@@ -703,24 +683,10 @@ namespace RoseCommon::Math
 			);
 		}
 
-		template <std::size_t MatrixWidth, std::size_t MatrixHeight>
-		constexpr Vector3 operator*(const Matrix<MatrixWidth, MatrixHeight, T>& aMatrix) const requires(MatrixWidth >= 3)
+		constexpr Vector3 operator*(const Matrix<3, 3, T>& aMatrix) const
 		{
-			Math::Matrix<MatrixWidth, 1, T> vectorAsMatrix;
-			vectorAsMatrix.GetCell(0, 0) = X;
-			vectorAsMatrix.GetCell(1, 0) = Y;
-			vectorAsMatrix.GetCell(2, 0) = Z;
-
-			if constexpr (MatrixWidth > 3)
-				vectorAsMatrix.GetCell(MatrixWidth - 1, 0) = 1;
-
-			vectorAsMatrix = vectorAsMatrix * aMatrix;
-
-			Vector3 result;
-			result.X = vectorAsMatrix.GetCell(0, 0);
-			result.Y = vectorAsMatrix.GetCell(1, 0);
-			result.Z = vectorAsMatrix.GetCell(2, 0);
-			return result;
+			const Math::Matrix result = ToRowMatrix() * aMatrix;
+			return Vector3(result.GetCell(0, 0), result.GetCell(1, 0), result.GetCell(2, 0));
 		}
 
 		void operator+=(const Vector3& aVector)
@@ -751,22 +717,13 @@ namespace RoseCommon::Math
 			Z /= aVector.Z;
 		}
 
-		template <std::size_t MatrixWidth, std::size_t MatrixHeight>
-		void operator*=(const Matrix<MatrixWidth, MatrixHeight, T>& aMatrix) requires(MatrixWidth >= 3)
+		void operator*=(const Matrix<3, 3, T>& aMatrix)
 		{
-			Math::Matrix<MatrixWidth, 1, T> vectorAsMatrix;
-			vectorAsMatrix.GetCell(0, 0) = X;
-			vectorAsMatrix.GetCell(1, 0) = Y;
-			vectorAsMatrix.GetCell(2, 0) = Z;
+			const Math::Matrix result = ToRowMatrix() * aMatrix;
 
-			if (MatrixWidth > 3)
-				vectorAsMatrix.GetCell(MatrixWidth - 1, 0) = 1;
-
-			vectorAsMatrix = vectorAsMatrix * aMatrix;
-
-			X = vectorAsMatrix.GetCell(0, 0);
-			Y = vectorAsMatrix.GetCell(1, 0);
-			Z = vectorAsMatrix.GetCell(2, 0);
+			X = result.GetCell(0, 0);
+			Y = result.GetCell(1, 0);
+			Z = result.GetCell(2, 0);
 		}
 
 		constexpr bool operator==(const Vector3& aVector) const
@@ -840,7 +797,7 @@ namespace RoseCommon::Math
 		/// <returns>The clamped vector.</returns>
 		static constexpr Vector4 Clamp(const Vector4& aVector, const Vector4& aMinimum, const Vector4& aMaximum)
 		{
-			return Vector3(
+			return Vector4(
 				Math::Clamp<T>(aVector.X, aMinimum.X, aMaximum.X),
 				Math::Clamp<T>(aVector.Y, aMinimum.Y, aMaximum.Y),
 				Math::Clamp<T>(aVector.Z, aMinimum.Z, aMaximum.Z),
@@ -1117,26 +1074,10 @@ namespace RoseCommon::Math
 			);
 		}
 
-		template <std::size_t MatrixWidth, std::size_t MatrixHeight>
-		constexpr Vector4 operator*(const Matrix<MatrixWidth, MatrixHeight, T>& aMatrix) const requires(MatrixWidth >= 4)
+		constexpr Vector4 operator*(const Matrix<4, 4, T>& aMatrix) const
 		{
-			Math::Matrix<MatrixWidth, 1, T> vectorAsMatrix;
-			vectorAsMatrix.GetCell(0, 0) = X;
-			vectorAsMatrix.GetCell(1, 0) = Y;
-			vectorAsMatrix.GetCell(2, 0) = Z;
-			vectorAsMatrix.GetCell(3, 0) = W;
-
-			if constexpr (MatrixWidth > 4)
-				vectorAsMatrix.GetCell(MatrixWidth - 1, 0) = 1;
-
-			vectorAsMatrix = vectorAsMatrix * aMatrix;
-
-			Vector4 result;
-			result.X = vectorAsMatrix.GetCell(0, 0);
-			result.Y = vectorAsMatrix.GetCell(1, 0);
-			result.Z = vectorAsMatrix.GetCell(2, 0);
-			result.W = vectorAsMatrix.GetCell(3, 0);
-			return result;
+			const Math::Matrix result = ToRowMatrix() * aMatrix;
+			return Vector4(result.GetCell(0, 0), result.GetCell(1, 0), result.GetCell(2, 0), result.GetCell(3, 0));
 		}
 
 		void operator+=(const Vector4& aVector)
@@ -1171,24 +1112,14 @@ namespace RoseCommon::Math
 			W /= aVector.W;
 		}
 
-		template <std::size_t MatrixWidth, std::size_t MatrixHeight>
-		void operator*=(const Matrix<MatrixWidth, MatrixHeight, T>& aMatrix) requires(MatrixWidth >= 4)
+		void operator*=(const Matrix<4, 4, T>& aMatrix)
 		{
-			Math::Matrix<MatrixWidth, 1, T> vectorAsMatrix;
-			vectorAsMatrix.GetCell(0, 0) = X;
-			vectorAsMatrix.GetCell(1, 0) = Y;
-			vectorAsMatrix.GetCell(2, 0) = Z;
-			vectorAsMatrix.GetCell(3, 0) = W;
+			const Math::Matrix result = ToRowMatrix() * aMatrix;
 
-			if (MatrixWidth > 4)
-				vectorAsMatrix.GetCell(MatrixWidth - 1, 0) = 1;
-
-			vectorAsMatrix = vectorAsMatrix * aMatrix;
-
-			X = vectorAsMatrix.GetCell(0, 0);
-			Y = vectorAsMatrix.GetCell(1, 0);
-			Z = vectorAsMatrix.GetCell(2, 0);
-			W = vectorAsMatrix.GetCell(3, 0);
+			X = result.GetCell(0, 0);
+			Y = result.GetCell(1, 0);
+			Z = result.GetCell(2, 0);
+			W = result.GetCell(3, 0);
 		}
 
 		constexpr bool operator==(const Vector4& aVector) const
