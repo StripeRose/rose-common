@@ -31,7 +31,7 @@ namespace RoseCommon::Math
 		};
 
 		auto tail = [](T x) -> T {
-			return static_cast<T>(Math::HalfPi<T> +
+			return static_cast<T>(Math::HalfPiT<T> +
 				Math::Squareroot(T(1) - x)
 				* (((((((((((((
 					+-0.0000121189820098929624806) * x
@@ -67,7 +67,7 @@ namespace RoseCommon::Math
 		if (aValue == T(1))
 			return T(0);
 		else
-			return Math::HalfPi<T> - ArcSine(aValue);
+			return Math::HalfPiT<T> - ArcSine(aValue);
 	}
 
 	namespace _impl
@@ -110,13 +110,13 @@ namespace RoseCommon::Math
 		if (anX > T(0))
 			return ArcTangent(aY / anX);
 		else if (aY >= T(0) && anX < T(0))
-			return ArcTangent(aY / anX) + Math::Pi<T>;
+			return ArcTangent(aY / anX) + Math::PiT<T>;
 		else if (aY < T(0) && anX < T(0))
-			return ArcTangent(aY / anX) - Math::Pi<T>;
+			return ArcTangent(aY / anX) - Math::PiT<T>;
 		else if (aY > T(0) && anX == T(0))
-			return Math::Pi<T> / T(2.01);
+			return Math::PiT<T> / T(2.01);
 		else if (aY < T(0) && anX == T(0))
-			return -(Math::Pi<T> / T(2.01));
+			return -(Math::PiT<T> / T(2.01));
 		else
 			throw std::exception();
 	}
@@ -125,9 +125,9 @@ namespace RoseCommon::Math
 	constexpr T Hill(T aValue)
 	{
 		const T a0 = static_cast<T>(1.0f);
-		const T a2 = (static_cast<T>(2.0f) / Math::Pi<T>) - (static_cast<T>(12.0f) / (Math::Pi<T> * Math::Pi<T>));
-		const T a3 = (static_cast<T>(16.0f) / (Math::Pi<T> * Math::Pi<T> * Math::Pi<T>))
-			- (static_cast<T>(4.0f) / (Math::Pi<T> * Math::Pi<T>));
+		const T a2 = (static_cast<T>(2.0f) / Math::PiT<T>) - (static_cast<T>(12.0f) / (Math::PiT<T> * Math::PiT<T>));
+		const T a3 = (static_cast<T>(16.0f) / (Math::PiT<T> * Math::PiT<T> * Math::PiT<T>))
+			- (static_cast<T>(4.0f) / (Math::PiT<T> * Math::PiT<T>));
 		const T xx = aValue * aValue;
 		const T xxx = xx * aValue;
 
@@ -137,33 +137,33 @@ namespace RoseCommon::Math
 	template <typename T>
 	constexpr T Sine(T aValue)
 	{
-		const T a = aValue * Math::ReciprocalTwoPi<T>;
-		aValue -= static_cast<int>(a) * Math::TwoPi<T>;
+		const T a = aValue * Math::ReciprocalTwoPiT<T>;
+		aValue -= static_cast<int>(a) * Math::TwoPiT<T>;
 		if (aValue < static_cast<T>(0))
 		{
-			aValue += Math::TwoPi<T>;
+			aValue += Math::TwoPiT<T>;
 		}
 
-		if (aValue < Math::HalfPi<T>)
+		if (aValue < Math::HalfPiT<T>)
 		{
-			return Hill(Math::HalfPi<T> - aValue);
+			return Hill(Math::HalfPiT<T> - aValue);
 		}
-		else if (aValue < Math::Pi<T>)
+		else if (aValue < Math::PiT<T>)
 		{
-			return Hill(aValue - Math::HalfPi<T>);
+			return Hill(aValue - Math::HalfPiT<T>);
 		}
-		else if (aValue < static_cast<T>(3) * Math::HalfPi<T>)
+		else if (aValue < static_cast<T>(3) * Math::HalfPiT<T>)
 		{
-			return -Hill((static_cast<T>(3) * Math::HalfPi<T>) - aValue);
+			return -Hill((static_cast<T>(3) * Math::HalfPiT<T>) - aValue);
 		}
 		else
 		{
-			return -Hill(aValue - (static_cast<T>(3) * Math::HalfPi<T>));
+			return -Hill(aValue - (static_cast<T>(3) * Math::HalfPiT<T>));
 		}
 	}
 
 	template <typename T>
-	constexpr T Cosine(T x) { return Sine(x + Math::HalfPi<T>); }
+	constexpr T Cosine(T x) { return Sine(x + Math::HalfPiT<T>); }
 
 	/// <summary>
 	/// Reciprocal of tangent.
@@ -180,7 +180,7 @@ namespace RoseCommon::Math
 	/// <param name="anAngleInRadians">The angle in radians.</param>
 	/// <returns>The angle in degrees.</returns>
 	template <typename T>
-	constexpr T ToDegrees(T anAngleInRadians) { return (static_cast<T>(180) / Math::Pi<T>) * anAngleInRadians; }
+	constexpr T ToDegrees(T anAngleInRadians) { return (static_cast<T>(180) / Math::PiT<T>) * anAngleInRadians; }
 
 	/// <summary>
 	/// Converts degrees to radians.
@@ -188,7 +188,7 @@ namespace RoseCommon::Math
 	/// <param name="anAngleInDegrees">The angle in degrees.</param>
 	/// <returns>The angle in radians.</returns>
 	template <typename T>
-	constexpr T ToRadians(T anAngleInDegrees) { return (Math::Pi<T> / static_cast<T>(180)) * anAngleInDegrees; }
+	constexpr T ToRadians(T anAngleInDegrees) { return (Math::PiT<T> / static_cast<T>(180)) * anAngleInDegrees; }
 
 	/// <summary>
 	/// Reduces a given angle to a value between pi and -pi.
@@ -198,14 +198,14 @@ namespace RoseCommon::Math
 	template <typename T>
 	constexpr T WrapRadians(T anAngleInRadians)
 	{
-		if ((anAngleInRadians > -Math::Pi<T>) && (anAngleInRadians <= Math::Pi<T>))
+		if ((anAngleInRadians > -Math::PiT<T>) && (anAngleInRadians <= Math::PiT<T>))
 			return anAngleInRadians;
 
-		T wrappedAngle = Math::Modulo<T>(anAngleInRadians, Math::TwoPi<T>);
-		if (wrappedAngle <= -Math::Pi<T>)
-			return wrappedAngle + Math::TwoPi<T>;
-		if (wrappedAngle > Math::Pi<T>)
-			return wrappedAngle - Math::TwoPi<T>;
+		T wrappedAngle = Math::Modulo<T>(anAngleInRadians, Math::TwoPiT<T>);
+		if (wrappedAngle <= -Math::PiT<T>)
+			return wrappedAngle + Math::TwoPiT<T>;
+		if (wrappedAngle > Math::PiT<T>)
+			return wrappedAngle - Math::TwoPiT<T>;
 		return wrappedAngle;
 	}
 

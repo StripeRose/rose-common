@@ -289,7 +289,7 @@ namespace RoseCommon::Math
 	constexpr R TruncateTo(V aValue) { return static_cast<R>(Truncate<V>(aValue)); }
 
 	template <typename T>
-	T Wrap(const T& aValue, const T& aMinimum, const T& aMaximum)
+	constexpr T Wrap(const T& aValue, const T& aMinimum, const T& aMaximum)
 	{
 		int range = aMaximum - aMinimum + 1;
 
