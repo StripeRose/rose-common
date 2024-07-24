@@ -191,7 +191,7 @@ namespace RoseCommon::Math
 
 	public:
 		template <std::size_t _Width>
-		constexpr Matrix<_Width, Height, T> operator*(const Matrix<Width, _Width, T>& aMatrix) const
+		constexpr Matrix<_Width, Height, T> operator*(const Matrix<_Width, Width, T>& aMatrix) const
 		{
 			Matrix<_Width, Height, T> result;
 
