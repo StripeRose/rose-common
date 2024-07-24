@@ -198,19 +198,11 @@ namespace RoseCommon::Math
 	template <typename T>
 	constexpr T WrapRadians(T anAngleInRadians)
 	{
-		if ((anAngleInRadians > -Math::PiT<T>) && (anAngleInRadians <= Math::PiT<T>))
-			return anAngleInRadians;
-
-		T wrappedAngle = Math::Modulo<T>(anAngleInRadians, Math::TwoPiT<T>);
-		if (wrappedAngle <= -Math::PiT<T>)
-			return wrappedAngle + Math::TwoPiT<T>;
-		if (wrappedAngle > Math::PiT<T>)
-			return wrappedAngle - Math::TwoPiT<T>;
-		return wrappedAngle;
+		return Math::Wrap<T>(anAngleInRadians, -Math::PiT<T>, Math::PiT<T>);
 	}
 
 	/// <summary>
-	/// Reduces a given angle to a value between 0 and -360.
+	/// Reduces a given angle to a value between 0 and 360.
 	/// </summary>
 	/// <param name="anAngleInDegrees">The angle to reduce, in degrees.</param>
 	/// <returns>The new angle, in degrees.</returns>

@@ -186,7 +186,7 @@ namespace RoseCommon::Math
 	{
 		if constexpr (std::is_integral_v<T>)
 		{
-			return aDividend % aDivisor;
+			return (aDividend % aDivisor + aDivisor) % aDivisor;
 		}
 		else
 		{
@@ -289,13 +289,8 @@ namespace RoseCommon::Math
 	constexpr R TruncateTo(V aValue) { return static_cast<R>(Truncate<V>(aValue)); }
 
 	template <typename T>
-	constexpr T Wrap(const T& aValue, const T& aMinimum, const T& aMaximum)
+	constexpr T Wrap(T aValue, T aMinimum, T aMaximum)
 	{
-		int range = aMaximum - aMinimum + 1;
-
-		if (aValue < aMinimum)
-			aValue += range * ((aMinimum - aValue) / range + 1);
-
-		return aMinimum + (aValue - aMinimum) % range;
+		return Modulo<T>(aValue - aMinimum, aMaximum - aMinimum) + aMinimum;
 	}
 }
