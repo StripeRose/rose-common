@@ -172,6 +172,16 @@ namespace RoseCommon::Math
 			, Y(static_cast<T>(aVector.Y))
 		{ }
 
+		explicit constexpr Vector2(const Matrix<1, 2, T>& aColumnMatrix)
+			: X(aColumnMatrix.GetCell(0, 0))
+			, Y(aColumnMatrix.GetCell(0, 1))
+		{ }
+
+		explicit constexpr Vector2(const Matrix<2, 1, T>& aRowMatrix)
+			: X(aRowMatrix.GetCell(0, 0))
+			, Y(aRowMatrix.GetCell(1, 0))
+		{ }
+
 	public:
 		constexpr T Content() const
 		{
@@ -211,6 +221,16 @@ namespace RoseCommon::Math
 		void Normalize()
 		{
 			(*this) /= Length();
+		}
+
+		constexpr Matrix<1, 2, T> ToColumnMatrix() const
+		{
+			return Matrix<1, 2, T>({ X, Y });
+		}
+
+		constexpr Matrix<2, 1, T> ToRowMatrix() const
+		{
+			return Matrix<2, 1, T>({ X, Y });
 		}
 
 	public:
@@ -573,6 +593,18 @@ namespace RoseCommon::Math
 			: Vector3(aVector.X, aVector.Y, aZ)
 		{ }
 
+		explicit constexpr Vector3(const Matrix<1, 3, T>& aColumnMatrix)
+			: X(aColumnMatrix.GetCell(0, 0))
+			, Y(aColumnMatrix.GetCell(0, 1))
+			, Z(aColumnMatrix.GetCell(0, 2))
+		{ }
+
+		explicit constexpr Vector3(const Matrix<3, 1, T>& aRowMatrix)
+			: X(aRowMatrix.GetCell(0, 0))
+			, Y(aRowMatrix.GetCell(1, 0))
+			, Z(aRowMatrix.GetCell(2, 0))
+		{ }
+
 	public:
 		constexpr T Content() const
 		{
@@ -612,6 +644,16 @@ namespace RoseCommon::Math
 		void Normalize()
 		{
 			(*this) /= Length();
+		}
+
+		constexpr Matrix<1, 3, T> ToColumnMatrix() const
+		{
+			return Matrix<1, 3, T>({ X, Y, Z });
+		}
+
+		constexpr Matrix<3, 1, T> ToRowMatrix() const
+		{
+			return Matrix<3, 1, T>({ X, Y, Z });
 		}
 
 	public:
@@ -954,6 +996,20 @@ namespace RoseCommon::Math
 			: Vector4(aVector.X, aVector.Y, aVector.Z, aW)
 		{ }
 
+		explicit constexpr Vector4(const Matrix<1, 4, T>& aColumnMatrix)
+			: X(aColumnMatrix.GetCell(0, 0))
+			, Y(aColumnMatrix.GetCell(0, 1))
+			, Z(aColumnMatrix.GetCell(0, 2))
+			, W(aColumnMatrix.GetCell(0, 3))
+		{ }
+
+		explicit constexpr Vector4(const Matrix<4, 1, T>& aRowMatrix)
+			: X(aRowMatrix.GetCell(0, 0))
+			, Y(aRowMatrix.GetCell(1, 0))
+			, Z(aRowMatrix.GetCell(2, 0))
+			, W(aRowMatrix.GetCell(3, 0))
+		{ }
+
 	public:
 		constexpr T Content() const
 		{
@@ -993,6 +1049,16 @@ namespace RoseCommon::Math
 		void Normalize()
 		{
 			(*this) /= Length();
+		}
+
+		constexpr Matrix<1, 4, T> ToColumnMatrix() const
+		{
+			return Matrix<1, 4, T>({ X, Y, Z, W });
+		}
+
+		constexpr Matrix<4, 1, T> ToRowMatrix() const
+		{
+			return Matrix<4, 1, T>({ X, Y, Z, W });
 		}
 
 	public:
