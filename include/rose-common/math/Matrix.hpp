@@ -126,7 +126,7 @@ namespace RoseCommon::Math
 		/// </summary>
 		/// <param name="aMatrix">The source matrix.</param>
 		/// <returns>The inverse of the Matrix.</returns>
-		constexpr std::optional<Matrix> Invert() const requires(std::is_floating_point_v<T> && Width == Height && Width > 0)
+		constexpr std::optional<Matrix> Inverse() const requires(std::is_floating_point_v<T> && Width == Height && Width > 0)
 		{
 			const T determinant = Determinant();
 			if (determinant == static_cast<T>(0))
@@ -145,7 +145,7 @@ namespace RoseCommon::Math
 			}
 			else
 			{
-				return reciprocalDeterminant * Cofactor().Transpose();
+				return reciprocalDeterminant * Cofactor().Transposed();
 			}
 		}
 
@@ -174,7 +174,7 @@ namespace RoseCommon::Math
 		/// </summary>
 		/// <param name="aMatrix">The source matrix.</param>
 		/// <returns>The transposed matrix.</returns>
-		constexpr Matrix<Height, Width, T> Transpose() const
+		constexpr Matrix<Height, Width, T> Transposed() const
 		{
 			Matrix<Height, Width, T> transposedMatrix;
 
