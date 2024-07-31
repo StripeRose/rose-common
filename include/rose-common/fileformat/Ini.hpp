@@ -15,55 +15,148 @@
 
 namespace RoseCommon
 {
+	/**
+	 * @brief Represents the structure of an Initialization (*.ini) file.
+	 *        https://en.wikipedia.org/wiki/INI_file
+	 */
 	class Ini
 	{
 	public:
 		class Section;
 
+		/**
+		 * @brief Valid characters at the start of lines that define valid comments.
+		 */
 		static constexpr const char* StartCommentPrefixes = ";#";
+
+		/**
+		 * @brief Valid characters in the middle of a line which defines the start of a comment.
+		 */
 		static constexpr const char* InlineCommentPrefixes = ";";
 
 	public:
+		/**
+		 * @brief Creates a named data-section which may contain its own list of key-value data pairs.
+		 *        If a section with the same name already existed, it will be erased and a new one will take its place.
+		 * @param aSectionName The name given to the new section, which it is identified by when getting.
+		 * @return A reference to the newly created data-section
+		 */
 		Section& CreateSection(const std::string_view& aSectionName);
 
+		/**
+		 * @brief Gets a reference to a data-section by name.
+		 *        Throws std::out_of_range if the section does not exist. Use HasSection() to check before accessing.
+		 * @param aSectionName The name of the section to get.
+		 * @return A reference to the relevant section.
+		 */
+		[[nodiscard]]
 		Section& GetSection(const std::string_view& aSectionName);
 
+		/**
+		 * @brief Gets a constant reference to a data-section by name.
+		 *        Throws std::out_of_range if the section does not exist. Use HasSection() to check before accessing.
+		 * @param aSectionName The name of the section to get.
+		 * @return A constant reference to the relevant section.
+		 */
+		[[nodiscard]]
 		const Section& GetSection(const std::string_view& aSectionName) const;
 
+		/**
+		 * @brief Checks if a particular named section exists in the structure.
+		 * @param aSectionName The name of the section to check for.
+		 * @return True if the specified section exists.
+		 */
+		[[nodiscard]]
 		bool HasSection(const std::string_view& aSectionName) const;
 
+		/**
+		 * @brief Reads all contents from an Ini-formatted file into the structure.
+		 * @param aPath The relative or absolute path of the file to read.
+		 */
 		void ReadFromFile(const std::filesystem::path& aPath);
 
-		void ReadFromStream(std::ifstream& aStream);
+		/**
+		 * @brief Reads all contents from an Ini-formatted data-stream into the structure.
+		 * @param aStream The stream to read in data from.
+		 */
+		void ReadFromStream(std::istream& aStream);
 
-		void WriteToFile(const std::filesystem::path& aPath) const;
+		/**
+		 * @brief Writes the contents of the structure out into an Ini-formatted file.
+		 * @param aPath The relative or absolute path of the file to write.
+		 * @param anOpenMode Optional open mode. By default will overwrite any existing files at the destination.
+		 */
+		bool WriteToFile(const std::filesystem::path& aPath, std::ios_base::openmode anOpenMode = std::ios_base::trunc) const;
 
-		void WriteToStream(std::ofstream& aStream) const;
+		/**
+		 * @brief Writes the contents of the structure out to the specified stream with an Ini-file format.
+		 * @param aStream The out-stream to write to.
+		 */
+		void WriteToStream(std::ostream& aStream) const;
 
 	private:
 		std::map<std::string, Section> mySections;
 	};
 
+	/**
+	 * @brief Represents an individual section of an Ini structure.
+	 */
 	class Ini::Section
 	{
+		friend class Ini;
+
 	public:
-		bool IsEmpty() const { return myProperties.empty(); }
+		/**
+		 * @brief Checks if the section contains a property of a given name.
+		 * @param aProperty The name of the property to check for.
+		 * @return True if the named property exists and can be read.
+		 */
+		[[nodiscard]]
+		bool Has(const std::string_view& aProperty) const
+		{
+			return myProperties.contains(aProperty.data());
+		}
 
-		bool Has(const std::string& aProperty) const { return myProperties.contains(aProperty); }
-
+		/**
+		 * @brief Sets a property of a given name to a specified value.
+		 *        The value is set by converting it to a text-string using operator&lt;&lt;().
+		 * @tparam T The type of the value to set.
+		 * @param aProperty The name of the property to set the value to.
+		 * @param aValue The value to set the property to.
+		 */
 		template <typename T = std::string>
 		void Set(const std::string_view& aProperty, const T& aValue);
 
+		/**
+		 * @brief Gets the value from a property of a given name.
+		 * @tparam T
+		 * @param aProperty
+		 * @return The value it fetched by converting it from a text-string using operator&gt;&gt;().
+		 */
 		template <typename T = std::string>
+		[[nodiscard]]
 		T Get(const std::string_view& aProperty) const;
 
+		/**
+		 * @brief Sets a property of a given name to a specified list of values.
+		 *        The individual items in the list are set by converting them to a text-string using operator&lt;&lt;().
+		 * @tparam T The type of the individual items in the list.
+		 * @param aProperty The name of the property to set the list to.
+		 * @param aList The list to set the property to.
+		 */
 		template <typename T = std::string>
 		void SetList(const std::string_view& aProperty, const std::vector<T>& aList);
 
+		/**
+		 * @brief Gets the list of values from a property of a given name.
+		 *        The individual items in the list are set by converting them from a text-string using operator&gt;&gt;().
+		 * @tparam T The type of the individual items in the list.
+		 * @param aProperty The name of the property to get the list from.
+		 * @return The resulting list of items.
+		 */
 		template <typename T = std::string>
+		[[nodiscard]]
 		std::vector<T> GetList(const std::string_view& aProperty) const;
-
-		void WriteToStream(std::ofstream& aStream) const;
 
 	private:
 		template <typename T>
@@ -80,7 +173,7 @@ namespace RoseCommon
 
 	inline Ini::Section& Ini::CreateSection(const std::string_view& aSectionName)
 	{
-		return mySections[aSectionName.data()];
+		return mySections[aSectionName.data()] = Ini::Section();
 	}
 
 	inline Ini::Section& Ini::GetSection(const std::string_view& aSectionName)
@@ -110,9 +203,10 @@ namespace RoseCommon
 		fileStream.close();
 	}
 
-	inline void Ini::ReadFromStream(std::ifstream& aStream)
+	inline void Ini::ReadFromStream(std::istream& aStream)
 	{
-		auto skipUntilCharacterOrComment = [](std::string::const_iterator& anIt, const std::string::const_iterator& anEndIterator, const char* someCharacters)
+		auto skipUntilCharacterOrComment =
+			[](std::string::const_iterator& anIt, const std::string::const_iterator& anEndIterator, const char* someCharacters)
 			{
 				bool wasSpace = false;
 				while (anIt != anEndIterator && (!someCharacters || !strchr(someCharacters, *anIt)) && !(wasSpace && strchr(Ini::InlineCommentPrefixes, *anIt)))
@@ -199,79 +293,85 @@ namespace RoseCommon
 		}
 	}
 
-	inline void Ini::WriteToFile(const std::filesystem::path& aPath) const
+	inline bool Ini::WriteToFile(const std::filesystem::path& aPath, std::ios_base::openmode anOpenMode) const
 	{
 		std::ofstream fileStream;
-		fileStream.open(aPath);
+		fileStream.open(aPath, anOpenMode | std::ios_base::out);
+
+		if (!fileStream.is_open())
+			return false;
+
 		WriteToStream(fileStream);
 		fileStream.close();
+
+		return true;
 	}
 
-	inline void Ini::WriteToStream(std::ofstream& aStream) const
+	inline void Ini::WriteToStream(std::ostream& aStream) const
 	{
-		if (!aStream.is_open())
-			return;
-
 		for (const auto& section : mySections)
 		{
 			aStream << "[" << section.first << "]\n";
-			section.second.WriteToStream(aStream);
+
+			for (const auto& property : section.second.myProperties)
+			{
+				aStream << property.first << "=" << property.second << "\n";
+			}
 		}
 	}
 
-	template<typename T>
+	template <typename T>
 	inline void Ini::Section::Set(const std::string_view& aProperty, const T& aValue)
 	{
 		myProperties[aProperty.data()] = ValueToString(aValue);
 	}
 
-	template<typename T>
+	template <typename T>
 	inline T Ini::Section::Get(const std::string_view& aProperty) const
 	{
 		const std::string& valueString = myProperties.at(aProperty.data());
 		return StringToValue<T>(valueString);
 	}
 
-	template<typename T>
+	template <typename T>
 	inline void Ini::Section::SetList(const std::string_view& aProperty, const std::vector<T>& aList)
 	{
 		myProperties[aProperty.data()] = ValueToString(aList);
 	}
 
-	template<typename T>
+	template <typename T>
 	inline std::vector<T> Ini::Section::GetList(const std::string_view& aProperty) const
 	{
 		std::istringstream ss(myProperties.at(aProperty.data()));
-		const std::vector<std::string> strs{ std::istream_iterator<std::string>{ss},
-											std::istream_iterator<std::string>() };
+		const std::vector<std::string> strs{ std::istream_iterator<std::string> {ss}, std::istream_iterator<std::string>() };
 
 		std::vector<T> list;
-		for (const std::string& s : strs) {
+		for (const std::string& s : strs)
+		{
 			list.emplace_back(StringToValue<T>(s));
 		}
 		return list;
-	}
-
-	inline void Ini::Section::WriteToStream(std::ofstream& aStream) const
-	{
-		for (const auto& property : myProperties)
-			aStream << property.first << "=" << property.second << "\n";
 	}
 
 	template <>
 	inline bool Ini::Section::StringToValue<bool>(const std::string& aString)
 	{
 		std::string s(aString);
+
 		for (auto& c : s)
 			c = static_cast<char>(std::tolower(c));
+
 		static const std::unordered_map<std::string, bool> s2b{
 			{"1", true},  {"true", true},   {"yes", true}, {"on", true},
 			{"0", false}, {"false", false}, {"no", false}, {"off", false},
 		};
+
 		auto const value = s2b.find(s);
-		if (value == s2b.end()) {
+		if (value == s2b.end())
+		{
 			throw std::runtime_error("\"" + s + "\" is not a valid boolean value.");
 		}
+
 		return value->second;
 	}
 
@@ -299,12 +399,14 @@ namespace RoseCommon
 		return ss.str();
 	}
 
-	template<typename T>
+	template <typename T>
 	inline std::string Ini::Section::ValueToString(const std::vector<T>& aValue)
 	{
-		if (aValue.empty()) {
+		if (aValue.empty())
+		{
 			return "";
 		}
+
 		std::ostringstream oss;
 		std::copy(aValue.begin(), aValue.end() - 1, std::ostream_iterator<T>(oss, " "));
 		oss << aValue.back();
