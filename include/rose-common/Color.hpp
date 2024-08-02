@@ -7,109 +7,74 @@
 
 namespace RoseCommon
 {
-	/// <summary>
-	/// Represents a straight four-component color using red, green, blue, and alpha data.
-	/// </summary>
-	/// <remarks>Blend modes and alpha compositing not yet implemented.</remarks>
+	/**
+	 * @brief A straight four-component color using red, green, blue, and alpha data.
+	 * @tparam T The type used for each color component.
+	 */
 	template <typename T>
 	class Color
 	{
 		static constexpr T ourSDRUpperBound = std::is_floating_point_v<T> ? static_cast<T>(1) : static_cast<T>(0xFF);
 	public:
-		constexpr Color() : R(0), G(0), B(0), A(0) { }
+		struct Predefined;
 
-		constexpr Color(const std::uint32_t aPackedArgbValue)
-			: A(static_cast<T>((aPackedArgbValue >> 24) & 0xFF))
-			, R(static_cast<T>((aPackedArgbValue >> 16) & 0xFF))
-			, G(static_cast<T>((aPackedArgbValue >> 8) & 0xFF))
-			, B(static_cast<T>((aPackedArgbValue >> 0) & 0xFF))
-		{
-			if constexpr (std::is_floating_point_v<T>)
-			{
-				A /= 0xFF;
-				R /= 0xFF;
-				G /= 0xFF;
-				B /= 0xFF;
-			}
-		}
+		/**
+		 * @brief Initialize to be transparent black.
+		 */
+		constexpr Color();
 
-		constexpr Color(T aRedValue, T aGreenValue, T aBlueValue)
-			: A(ourSDRUpperBound)
-			, R(aRedValue)
-			, G(aGreenValue)
-			, B(aBlueValue)
-		{ }
+		/**
+		 * @brief Initialize the color components based on the provided ARGB value.
+		 * @param aPackedArgbValue A 32-bit unsigned integer with the format 0xAARRGGBB.
+		 */
+		constexpr Color(const std::uint32_t aPackedArgbValue);
 
-		constexpr Color(T anAlphaValue, T aRedValue, T aGreenValue, T aBlueValue)
-			: A(anAlphaValue)
-			, R(aRedValue)
-			, G(aGreenValue)
-			, B(aBlueValue)
-		{ }
+		/**
+		 * @brief Initialize an opaque color with the provided component values.
+		 * @param aRedValue A red component value.
+		 * @param aGreenValue A green component value.
+		 * @param aBlueValue A blue component value.
+		 */
+		constexpr Color(T aRedValue, T aGreenValue, T aBlueValue);
 
-		constexpr float GetBrightness() const
-		{
-			const float r = static_cast<float>(R) / ourSDRUpperBound;
-			const float g = static_cast<float>(G) / ourSDRUpperBound;
-			const float b = static_cast<float>(B) / ourSDRUpperBound;
+		/**
+		 * @brief Initialize a color with the provided color and alpha components.
+		 * @param anAlphaValue An alpha component value.
+		 * @param aRedValue A red component value.
+		 * @param aGreenValue A green component value.
+		 * @param aBlueValue A blue component value.
+		 */
+		constexpr Color(T anAlphaValue, T aRedValue, T aGreenValue, T aBlueValue);
 
-			return std::max({ r, g, b });
-		}
+		/**
+		 * @brief Calculate the brightness component of an HSB/HSV color from the RGB components.
+		 * @return The brightness component, in range 0 - 1.
+		 */
+		constexpr float GetBrightness() const;
 
-		constexpr float GetHue() const
-		{
-			if (R == G && G == B)
-				return 0.f;
+		/**
+		 * @brief Calculate the hue component of an HSB/HSV color from the RGB components.
+		 * @return The hue component, as an angle in the hue circle.
+		 */
+		constexpr float GetHue() const;
 
-			const float r = static_cast<float>(R) / ourSDRUpperBound;
-			const float g = static_cast<float>(G) / ourSDRUpperBound;
-			const float b = static_cast<float>(B) / ourSDRUpperBound;
+		/**
+		 * @brief Calculate the saturation component of an HSB/HSV color, from the RGB components.
+		 * @return The saturation value, in range 0 - 1.
+		 */
+		constexpr float GetSaturation() const;
 
-			const float max = std::max({ r, g, b });
-			const float min = std::min({ r, g, b });
-			const float delta = max - min;
+		/**
+		 * @brief Limit the color components to their maximum SDR value. 255 for integers, 1 for decimal numbers.
+		 * @return The color with all its components limited to be within the 0 - 255 / 0 - 1 range.
+		 */
+		constexpr Color<T> Saturated() const;
 
-			float hue = 0.f;
-			if (r == max) {
-				hue = Math::Modulo<float>((g - b) / delta, 6);
-			}
-			else if (g == max) {
-				hue = 2 + (b - r) / delta;
-			}
-			else if (b == max) {
-				hue = 4 + (r - g) / delta;
-			}
-			hue *= 60.f;
-
-			return hue;
-		}
-
-		constexpr float GetSaturation() const
-		{
-			const float r = static_cast<float>(R) / ourSDRUpperBound;
-			const float g = static_cast<float>(G) / ourSDRUpperBound;
-			const float b = static_cast<float>(B) / ourSDRUpperBound;
-
-			const float max = std::max({ r, g, b });
-			const float min = std::min({ r, g, b });
-			const float delta = max - min;
-
-			if (max == 0)
-				return 0;
-			else
-				return delta / max;
-		}
-
-		constexpr Color Saturated() const
-		{
-			return Color<T>(
-				A,
-				Math::Clamp<T>(R, 0, ourSDRUpperBound),
-				Math::Clamp<T>(G, 0, ourSDRUpperBound),
-				Math::Clamp<T>(B, 0, ourSDRUpperBound)
-			);
-		}
-
+		/**
+		 * @brief Pack the color into a single 32-bit unsigned integer, with 8 bits for each component.
+		 *        Requires the color to be in 0 - 255 / 0 - 1 range.
+		 * @return A 32-bit unsigned integer with the format 0xAARRGGBB.
+		 */
 		constexpr std::uint32_t ToARGB() const
 		{
 			std::uint8_t a, r, g, b;
@@ -186,10 +151,10 @@ namespace RoseCommon
 			else
 			{
 				const int result[] = {
-					int(A) + int(aColor.A),
-					int(R) + int(aColor.R),
-					int(G) + int(aColor.G),
-					int(B) + int(aColor.B)
+					static_cast<int>(A) + static_cast<int>(aColor.A),
+					static_cast<int>(R) + static_cast<int>(aColor.R),
+					static_cast<int>(G) + static_cast<int>(aColor.G),
+					static_cast<int>(B) + static_cast<int>(aColor.B)
 				};
 
 				A = static_cast<std::uint8_t>(std::min(result[0], 0xFF));
@@ -211,10 +176,10 @@ namespace RoseCommon
 			else
 			{
 				const int result[] = {
-					int(A) - int(aColor.A),
-					int(R) - int(aColor.R),
-					int(G) - int(aColor.G),
-					int(B) - int(aColor.B)
+					static_cast<int>(A) - static_cast<int>(aColor.A),
+					static_cast<int>(R) - static_cast<int>(aColor.R),
+					static_cast<int>(G) - static_cast<int>(aColor.G),
+					static_cast<int>(B) - static_cast<int>(aColor.B)
 				};
 
 				A = static_cast<std::uint8_t>(std::max(result[0], 0));
@@ -278,18 +243,136 @@ namespace RoseCommon
 			return std::strong_order(A, aColor.A);
 		}
 
-		// The Alpha component value.
+		/**
+		 * @brief The Alpha component value.
+		 */
 		T A;
-		// The Red component value.
-		T R;
-		// The Green component value.
-		T G;
-		// The Blue component value.
-		T B;
 
-		struct Predefined;
+		/**
+		 * @brief The Red component value.
+		 */
+		T R;
+		
+		/**
+		 * @brief The Green component value.
+		 */
+		T G;
+
+		/**
+		 * @brief The Blue component value.
+		 */
+		T B;
 	};
 
+	template<typename T>
+	inline constexpr Color<T>::Color()
+		: R(0), G(0), B(0), A(0)
+	{
+	}
+
+	template<typename T>
+	inline constexpr Color<T>::Color(const std::uint32_t aPackedArgbValue)
+		: A(static_cast<T>((aPackedArgbValue >> 24) & 0xFF))
+		, R(static_cast<T>((aPackedArgbValue >> 16) & 0xFF))
+		, G(static_cast<T>((aPackedArgbValue >> 8) & 0xFF))
+		, B(static_cast<T>((aPackedArgbValue >> 0) & 0xFF))
+	{
+		if constexpr (std::is_floating_point_v<T>)
+		{
+			A /= 0xFF;
+			R /= 0xFF;
+			G /= 0xFF;
+			B /= 0xFF;
+		}
+	}
+
+	template<typename T>
+	inline constexpr Color<T>::Color(T aRedValue, T aGreenValue, T aBlueValue)
+		: A(ourSDRUpperBound)
+		, R(aRedValue)
+		, G(aGreenValue)
+		, B(aBlueValue)
+	{ }
+
+	template<typename T>
+	inline constexpr Color<T>::Color(T anAlphaValue, T aRedValue, T aGreenValue, T aBlueValue)
+		: A(anAlphaValue)
+		, R(aRedValue)
+		, G(aGreenValue)
+		, B(aBlueValue)
+	{ }
+
+	template<typename T>
+	inline constexpr float Color<T>::GetBrightness() const
+	{
+		const float r = static_cast<float>(R) / ourSDRUpperBound;
+		const float g = static_cast<float>(G) / ourSDRUpperBound;
+		const float b = static_cast<float>(B) / ourSDRUpperBound;
+
+		return std::max({ r, g, b });
+	}
+
+	template<typename T>
+	inline constexpr float Color<T>::GetHue() const
+	{
+		if (R == G && G == B)
+			return 0.f;
+
+		const float r = static_cast<float>(R) / ourSDRUpperBound;
+		const float g = static_cast<float>(G) / ourSDRUpperBound;
+		const float b = static_cast<float>(B) / ourSDRUpperBound;
+
+		const float max = std::max({ r, g, b });
+		const float min = std::min({ r, g, b });
+		const float delta = max - min;
+
+		float hue = 0.f;
+		if (r == max) {
+			hue = Math::Modulo<float>((g - b) / delta, 6);
+		}
+		else if (g == max) {
+			hue = 2 + (b - r) / delta;
+		}
+		else if (b == max) {
+			hue = 4 + (r - g) / delta;
+		}
+		hue *= 60.f;
+
+		return hue;
+	}
+
+	template<typename T>
+	inline constexpr float Color<T>::GetSaturation() const
+	{
+		const float r = static_cast<float>(R) / ourSDRUpperBound;
+		const float g = static_cast<float>(G) / ourSDRUpperBound;
+		const float b = static_cast<float>(B) / ourSDRUpperBound;
+
+		const float max = std::max({ r, g, b });
+		const float min = std::min({ r, g, b });
+		const float delta = max - min;
+
+		if (max == 0)
+			return 0;
+		else
+			return delta / max;
+	}
+
+	template<typename T>
+	inline constexpr Color<T> Color<T>::Saturated() const
+	{
+		return Color<T>(
+			A,
+			Math::Clamp<T>(R, 0, ourSDRUpperBound),
+			Math::Clamp<T>(G, 0, ourSDRUpperBound),
+			Math::Clamp<T>(B, 0, ourSDRUpperBound)
+		);
+	}
+
+	/**
+	 * @brief A list of pre-defined named colors.
+	 * @tparam T The type used for each color component.
+	 */
 	template <typename T>
 	struct Color<T>::Predefined
 	{

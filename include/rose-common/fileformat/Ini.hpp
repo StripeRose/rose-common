@@ -16,7 +16,7 @@
 namespace RoseCommon
 {
 	/**
-	 * @brief Represents the structure of an Initialization (*.ini) file.
+	 * @brief A structure of an Initialization (*.ini) file.
 	 *        https://en.wikipedia.org/wiki/INI_file
 	 */
 	class Ini
@@ -36,7 +36,7 @@ namespace RoseCommon
 
 	public:
 		/**
-		 * @brief Creates a named data-section which may contain its own list of key-value data pairs.
+		 * @brief Create a named data-section which may contain its own list of key-value data pairs.
 		 *        If a section with the same name already existed, it will be erased and a new one will take its place.
 		 * @param aSectionName The name given to the new section, which it is identified by when getting.
 		 * @return A reference to the newly created data-section
@@ -44,7 +44,7 @@ namespace RoseCommon
 		Section& CreateSection(const std::string_view& aSectionName);
 
 		/**
-		 * @brief Gets a reference to a data-section by name.
+		 * @brief Get a reference to a data-section by name.
 		 *        Throws std::out_of_range if the section does not exist. Use HasSection() to check before accessing.
 		 * @param aSectionName The name of the section to get.
 		 * @return A reference to the relevant section.
@@ -53,7 +53,7 @@ namespace RoseCommon
 		Section& GetSection(const std::string_view& aSectionName);
 
 		/**
-		 * @brief Gets a constant reference to a data-section by name.
+		 * @brief Get a constant reference to a data-section by name.
 		 *        Throws std::out_of_range if the section does not exist. Use HasSection() to check before accessing.
 		 * @param aSectionName The name of the section to get.
 		 * @return A constant reference to the relevant section.
@@ -62,34 +62,35 @@ namespace RoseCommon
 		const Section& GetSection(const std::string_view& aSectionName) const;
 
 		/**
-		 * @brief Checks if a particular named section exists in the structure.
+		 * @brief Check if a particular named section exists in the structure.
 		 * @param aSectionName The name of the section to check for.
-		 * @return True if the specified section exists.
+		 * @return Whether the specified section exists.
 		 */
 		[[nodiscard]]
 		bool HasSection(const std::string_view& aSectionName) const;
 
 		/**
-		 * @brief Reads all contents from an Ini-formatted file into the structure.
+		 * @brief Read all contents from an Ini-formatted file into the structure.
 		 * @param aPath The relative or absolute path of the file to read.
 		 */
 		void ReadFromFile(const std::filesystem::path& aPath);
 
 		/**
-		 * @brief Reads all contents from an Ini-formatted data-stream into the structure.
+		 * @brief Read all contents from an Ini-formatted data-stream into the structure.
 		 * @param aStream The stream to read in data from.
 		 */
 		void ReadFromStream(std::istream& aStream);
 
 		/**
-		 * @brief Writes the contents of the structure out into an Ini-formatted file.
+		 * @brief Write the contents of the structure out into an Ini-formatted file.
 		 * @param aPath The relative or absolute path of the file to write.
 		 * @param anOpenMode Optional open mode. By default will overwrite any existing files at the destination.
+		 * @return Whether the file write was successful.
 		 */
 		bool WriteToFile(const std::filesystem::path& aPath, std::ios_base::openmode anOpenMode = std::ios_base::trunc) const;
 
 		/**
-		 * @brief Writes the contents of the structure out to the specified stream with an Ini-file format.
+		 * @brief Write the contents of the structure out to the specified stream with an Ini-file format.
 		 * @param aStream The out-stream to write to.
 		 */
 		void WriteToStream(std::ostream& aStream) const;
@@ -99,7 +100,7 @@ namespace RoseCommon
 	};
 
 	/**
-	 * @brief Represents an individual section of an Ini structure.
+	 * @brief An individual section of an Ini structure.
 	 */
 	class Ini::Section
 	{
@@ -107,28 +108,7 @@ namespace RoseCommon
 
 	public:
 		/**
-		 * @brief Checks if the section contains a property of a given name.
-		 * @param aProperty The name of the property to check for.
-		 * @return True if the named property exists and can be read.
-		 */
-		[[nodiscard]]
-		bool Has(const std::string_view& aProperty) const
-		{
-			return myProperties.contains(aProperty.data());
-		}
-
-		/**
-		 * @brief Sets a property of a given name to a specified value.
-		 *        The value is set by converting it to a text-string using operator&lt;&lt;().
-		 * @tparam T The type of the value to set.
-		 * @param aProperty The name of the property to set the value to.
-		 * @param aValue The value to set the property to.
-		 */
-		template <typename T = std::string>
-		void Set(const std::string_view& aProperty, const T& aValue);
-
-		/**
-		 * @brief Gets the value from a property of a given name.
+		 * @brief Get the value from a property of a given name.
 		 * @tparam T
 		 * @param aProperty
 		 * @return The value it fetched by converting it from a text-string using operator&gt;&gt;().
@@ -138,17 +118,7 @@ namespace RoseCommon
 		T Get(const std::string_view& aProperty) const;
 
 		/**
-		 * @brief Sets a property of a given name to a specified list of values.
-		 *        The individual items in the list are set by converting them to a text-string using operator&lt;&lt;().
-		 * @tparam T The type of the individual items in the list.
-		 * @param aProperty The name of the property to set the list to.
-		 * @param aList The list to set the property to.
-		 */
-		template <typename T = std::string>
-		void SetList(const std::string_view& aProperty, const std::vector<T>& aList);
-
-		/**
-		 * @brief Gets the list of values from a property of a given name.
+		 * @brief Get the list of values from a property of a given name.
 		 *        The individual items in the list are set by converting them from a text-string using operator&gt;&gt;().
 		 * @tparam T The type of the individual items in the list.
 		 * @param aProperty The name of the property to get the list from.
@@ -157,6 +127,37 @@ namespace RoseCommon
 		template <typename T = std::string>
 		[[nodiscard]]
 		std::vector<T> GetList(const std::string_view& aProperty) const;
+
+		/**
+		 * @brief Check if the section contains a property of a given name.
+		 * @param aProperty The name of the property to check for.
+		 * @return Whether the named property exists and can be read.
+		 */
+		[[nodiscard]]
+		bool Has(const std::string_view& aProperty) const
+		{
+			return myProperties.contains(aProperty.data());
+		}
+
+		/**
+		 * @brief Set a property of a given name to a specified value.
+		 *        The value is set by converting it to a text-string using operator&lt;&lt;().
+		 * @tparam T The type of the value to set.
+		 * @param aProperty The name of the property to set the value to.
+		 * @param aValue The value to set the property to.
+		 */
+		template <typename T = std::string>
+		void Set(const std::string_view& aProperty, const T& aValue);
+
+		/**
+		 * @brief Set a property of a given name to a specified list of values.
+		 *        The individual items in the list are set by converting them to a text-string using operator&lt;&lt;().
+		 * @tparam T The type of the individual items in the list.
+		 * @param aProperty The name of the property to set the list to.
+		 * @param aList The list to set the property to.
+		 */
+		template <typename T = std::string>
+		void SetList(const std::string_view& aProperty, const std::vector<T>& aList);
 
 	private:
 		template <typename T>

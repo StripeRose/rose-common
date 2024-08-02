@@ -10,20 +10,26 @@
 
 namespace RoseCommon
 {
-	/// <summary>
-	/// Provides a simple interface for parsing and getting values of command line-style flags.
-	/// 
-	/// Line format:
-	/// Flag names must start with either a minus('-') or plus('+') sign and are part of the flag name.
-	/// Values has no prefix and is automatically attributed to the previous flag. Only one value per flag is allowed.
-	/// -FlagWithoutValue -StringFlag1 StringWithoutSpaces -StringFlag2 "String Value with spaces" +NumberFlag 0.55 -BoolFlag false
-	/// </summary>
+	/**
+	 * @brief An interface for parsing and getting values off command line-style flags.
+	 *
+	 *        Flag names must start with either a minus('-') or plus('+') sign, which are part of the flag name.
+	 *        Values has no prefix and is automatically attributed to the previous flag. Only one value per flag is allowed.
+	 *        -FlagWithoutValue -StringFlag1 StringWithoutSpaces -StringFlag2 "String Value with spaces" +NumberFlag 0.55 -BoolFlag false
+	 * 
+	 * @tparam StringType The string type used for parsing and returning data.
+	 */
 	template <typename StringType = std::string>
 	class CommandLineParser
 	{
 		using stringviewtype = std::basic_string_view<typename StringType::value_type>;
 
 	public:
+		/**
+		 * @brief Initialize the parser with a C-style character array.
+		 * @param aCommandLineArray Pointer to the character to start parsing from.
+		 * @param anArrayCount The length of the character array to parse.
+		 */
 		CommandLineParser(StringType::const_pointer* aCommandLineArray, const std::size_t anArrayCount)
 		{
 			std::vector<stringviewtype> tokens;
@@ -35,6 +41,10 @@ namespace RoseCommon
 			InternalParse(tokens);
 		}
 
+		/**
+		 * @brief Initialize the parser with a string.
+		 * @param aString A string to parse.
+		 */
 		CommandLineParser(const StringType& aString)
 		{
 			if (aString.empty())
@@ -64,8 +74,19 @@ argumentEnd++;
 			InternalParse(tokens);
 		}
 
+		/**
+		 * @brief Get the amount of non-flag arguments that were parsed.
+		 * @return The amount of parsed arguments.
+		 */
+		[[nodiscard]]
 		inline std::size_t GetArgumentCount() const { return myArguments.size(); }
 
+		/**
+		 * @brief Get a commandline argument by index as a boolean.
+		 * @param anIndex Index of the argument to get.
+		 * @return The set value if the argument exists, otherwise an unset optional.
+		 */
+		[[nodiscard]]
 		std::optional<bool> GetBooleanArgument(const std::size_t anIndex) const
 		{
 			if (anIndex < myArguments.size())
@@ -74,6 +95,12 @@ argumentEnd++;
 			return StringToBool(myArguments[anIndex]);
 		}
 
+		/**
+		 * @brief Get a commandline argument by index as a number.
+		 * @param anIndex Index of the argument to get.
+		 * @return The set value if the argument exists, otherwise an unset optional.
+		 */
+		[[nodiscard]]
 		std::optional<double> GetNumberArgument(const std::size_t anIndex) const
 		{
 			if (anIndex < myArguments.size())
@@ -83,6 +110,12 @@ argumentEnd++;
 			return std::stod(stringValue);
 		}
 
+		/**
+		 * @brief Get a commandline argument by index as a string.
+		 * @param anIndex Index of the argument to get.
+		 * @return The set value if the argument exists, otherwise an unset optional.
+		 */
+		[[nodiscard]]
 		std::optional<StringType> GetStringArgument(const std::size_t anIndex) const
 		{
 			if (anIndex < myArguments.size())
@@ -91,11 +124,23 @@ argumentEnd++;
 			return myArguments[anIndex];
 		}
 
+		/**
+		 * @brief Check if a specific flag exists in the commandline.
+		 * @param aFlagName The flag name to check for.
+		 * @return Whether the flag exists.
+		 */
+		[[nodiscard]]
 		inline bool HasFlag(const StringType& aFlagName) const
 		{
 			return myFlagValues.contains(aFlagName);
 		}
 
+		/**
+		 * @brief Get the value of a commandline flag by the flag name, as a boolean.
+		 * @param aFlagName The name of the flag to get the value from.
+		 * @return The set value if the flag exists, otherwise an unset optional.
+		 */
+		[[nodiscard]]
 		std::optional<bool> GetBooleanFlag(const StringType& aFlagName) const
 		{
 			const auto iterator = myFlagValues.find(aFlagName);
@@ -105,6 +150,12 @@ argumentEnd++;
 			return StringToBool(iterator->second);
 		}
 
+		/**
+		 * @brief Get the value of a commandline flag by the flag name, as a number.
+		 * @param aFlagName The name of the flag to get the value from.
+		 * @return The set value if the flag exists, otherwise an unset optional.
+		 */
+		[[nodiscard]]
 		std::optional<double> GetNumberFlag(const StringType& aFlagName) const
 		{
 			const auto iterator = myFlagValues.find(aFlagName);
@@ -121,6 +172,12 @@ argumentEnd++;
 			}
 		}
 
+		/**
+		 * @brief Get the value of a commandline flag by the flag name, as a string.
+		 * @param aFlagName The name of the flag to get the value from.
+		 * @return The set value if the flag exists, otherwise an unset optional.
+		 */
+		[[nodiscard]]
 		std::optional<typename StringType> GetStringFlag(const StringType& aFlagName) const
 		{
 			const auto iterator = myFlagValues.find(aFlagName);

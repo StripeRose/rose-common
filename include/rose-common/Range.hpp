@@ -4,6 +4,10 @@
 
 namespace RoseCommon
 {
+    /**
+     * @brief A number range which can be iterated through.
+     * @tparam T The integer type to use.
+     */
     template<typename T>
     class Range
     {
