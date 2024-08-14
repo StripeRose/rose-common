@@ -11,3 +11,4 @@ But for the sake of my own learning and to simplify the code I write, I'd like t
 * Further my understanding in when and how the C++ standard library should and can be used.
 * Rebuild the set of useful classes and code not otherwise available in STL, to hopefully serve as a good base for the future.
 * Let the repository be easy to include for use in other projects.
+* Target C++20 to be able to use some additional features added there.
