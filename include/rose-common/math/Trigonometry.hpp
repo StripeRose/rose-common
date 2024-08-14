@@ -7,6 +7,121 @@
 
 namespace RoseCommon::Math
 {
+	/**
+	 * @brief Calculate the angle whose sine is the specified number.
+	 * @tparam T The type of the parameter and returned value.
+	 * @param aValue A number representing a sine, where -1 <= aValue <= 1.
+	 * @return An angle, measured in radians.
+	 */
+	template <typename T>
+	constexpr T ArcSine(T aValue);
+
+	/**
+	 * @brief Calculate the angle whose cosine is the specified number.
+	 * @tparam T The type of the parameter and returned value.
+	 * @param aValue A number representing a cosine, where -1 <= aValue <= 1.
+	 * @return An angle, measured in radians.
+	 */
+	template <typename T>
+	constexpr T ArcCosine(T aValue);
+	
+	/**
+	 * @brief Calculate the angle whose tangent is the specified number.
+	 * @tparam T The type of the parameter and returned value.
+	 * @param aValue A number representing a tangent, where -1 <= aValue <= 1.
+	 * @return An angle, measured in radians.
+	 */
+	template <typename T>
+	constexpr T ArcTangent(T aValue);
+
+	/**
+	 * @brief Calculate the angle whose tangent is the quotient of two specified numbers.
+	 * @tparam T The type of the parameter and returned value.
+	 * @param aY A Y coordinate of a point.
+	 * @param anX An X coordinate of a point.
+	 * @return An angle, measured in radians.
+	 */
+	template <typename T>
+	constexpr T ArcTangent2(T aY, T anX);
+
+	template <typename T>
+	constexpr T Hill(T aValue);
+	
+	/**
+	 * @brief Calculate the sine of an angle.
+	 * @tparam T The type of the parameter and returned value.
+	 * @param aValue An angle, measured in radians.
+	 * @return The sine of aValue.
+	 */
+	template <typename T>
+	constexpr T Sine(T aValue);
+
+	/**
+	 * @brief Calculate the cosine of an angle.
+	 * @tparam T The type of the parameter and returned value.
+	 * @param aValue An angle, measured in radians.
+	 * @return The cosine of aValue.
+	 */
+	template <typename T>
+	constexpr T Cosine(T aValue);
+
+	/**
+	 * @brief Calculate the reciprocal tangent.
+	 * @tparam T The type of the parameter and returned value.
+	 * @param aValue An angle, measured in radians.
+	 * @return The reciprocal of the tangent. 1 / Tangent(aValue)
+	 */
+	template <typename T>
+	constexpr T Cotangent(T aValue);
+
+	/**
+	 * @brief Calculate the ratio of two sides of a triangle.
+	 * @tparam T The type of the parameter and returned value.
+	 * @param aValue An angle, measured in radians.
+	 * @return The tangent of aValue.
+	 */
+	template <typename T>
+	constexpr T Tangent(T aValue);
+	
+	/**
+	 * @brief Convert an angle in radians to the same angle in degrees.
+	 * @tparam T The type of the parameter and returned value.
+	 * @param anAngleInRadians An angle, measured in radians.
+	 * @return The angle, measured in degrees.
+	 */
+	template <typename T>
+	constexpr T ToDegrees(T anAngleInRadians);
+
+	/**
+	 * @brief Convert an angle in degrees to the same angle in radians.
+	 * @tparam T The type of the parameter and returned value.
+	 * @param anAngleInDegrees An angle, measured in degrees.
+	 * @return The angle, measured in radians.
+	 */
+	template <typename T>
+	constexpr T ToRadians(T anAngleInDegrees);
+
+	/**
+	 * @brief Reduces a given angle to a value between Pi and -Pi.
+	 * @tparam T The type of the parameter and returned value.
+	 * @param anAngleInRadians An angle to reduce, in radians.
+	 * @return The new angle, in radians.
+	 */
+	template <typename T>
+	constexpr T WrapRadians(T anAngleInRadians);
+
+	/**
+	 * @brief Reduce a given angle to a value between 0 and 360.
+	 * @tparam T The type of the parameter and returned value.
+	 * @param anAngleInDegrees An angle to reduce, in degrees.
+	 * @return The new angle, in degreees.
+	 */
+	template <typename T>
+	constexpr T WrapDegrees(const T& anAngleInDegrees);
+}
+
+namespace RoseCommon::Math
+{
 	template <typename T>
 	constexpr T ArcSine(T aValue)
 	{
@@ -28,7 +143,7 @@ namespace RoseCommon::Math
 				+ 0.1666666666666558995379880) * x2
 				* x + x
 				);
-		};
+			};
 
 		auto tail = [](T x) -> T {
 			return static_cast<T>(Math::HalfPiT<T> +
@@ -47,8 +162,8 @@ namespace RoseCommon::Math
 					+ -0.0890259194305537131666744) * x
 					+ 0.2145993335526539017488949) * x
 					+ -1.5707961988153774692344105
-				));
-		};
+					));
+			};
 
 		const T absVal = Abs(aValue);
 		if (absVal > T(1))
@@ -67,7 +182,7 @@ namespace RoseCommon::Math
 		if (aValue == T(1))
 			return T(0);
 		else
-			return Math::HalfPiT<T> - ArcSine(aValue);
+			return Math::HalfPiT<T> -ArcSine(aValue);
 	}
 
 	namespace _impl
@@ -76,7 +191,7 @@ namespace RoseCommon::Math
 		constexpr T atan_term(T x2, int k)
 		{
 			return (T(2) * static_cast<T>(k) * x2)
-				/ ((T(2) * static_cast<T>(k) + T(1))* (T(1) + x2));
+				/ ((T(2) * static_cast<T>(k) + T(1)) * (T(1) + x2));
 		}
 
 		template <typename T>
@@ -125,9 +240,9 @@ namespace RoseCommon::Math
 	constexpr T Hill(T aValue)
 	{
 		const T a0 = static_cast<T>(1.0f);
-		const T a2 = (static_cast<T>(2.0f) / Math::PiT<T>) - (static_cast<T>(12.0f) / (Math::PiT<T> * Math::PiT<T>));
-		const T a3 = (static_cast<T>(16.0f) / (Math::PiT<T> * Math::PiT<T> * Math::PiT<T>))
-			- (static_cast<T>(4.0f) / (Math::PiT<T> * Math::PiT<T>));
+		const T a2 = (static_cast<T>(2.0f) / Math::PiT<T>) - (static_cast<T>(12.0f) / (Math::PiT<T> *Math::PiT<T>));
+		const T a3 = (static_cast<T>(16.0f) / (Math::PiT<T> *Math::PiT<T> *Math::PiT<T>))
+			- (static_cast<T>(4.0f) / (Math::PiT<T> *Math::PiT<T>));
 		const T xx = aValue * aValue;
 		const T xxx = xx * aValue;
 
@@ -163,49 +278,41 @@ namespace RoseCommon::Math
 	}
 
 	template <typename T>
-	constexpr T Cosine(T x) { return Sine(x + Math::HalfPiT<T>); }
-
-	/// <summary>
-	/// Reciprocal of tangent.
-	/// </summary>
-	template <typename T>
-	constexpr T Cotangent(T x) { return Cosine(x) / Sine(x); }
+	constexpr T Cosine(T aValue)
+	{
+		return Sine(aValue + Math::HalfPiT<T>);
+	}
 
 	template <typename T>
-	constexpr T Tangent(T x) { return Sine(x) / Cosine(x); }
+	constexpr T Cotangent(T aValue)
+	{
+		return Cosine(aValue) / Sine(aValue);
+	}
 
-	/// <summary>
-	/// Converts radians to degrees.
-	/// </summary>
-	/// <param name="anAngleInRadians">The angle in radians.</param>
-	/// <returns>The angle in degrees.</returns>
 	template <typename T>
-	constexpr T ToDegrees(T anAngleInRadians) { return (static_cast<T>(180) / Math::PiT<T>) * anAngleInRadians; }
+	constexpr T Tangent(T aValue)
+	{
+		return Sine(aValue) / Cosine(aValue);
+	}
 
-	/// <summary>
-	/// Converts degrees to radians.
-	/// </summary>
-	/// <param name="anAngleInDegrees">The angle in degrees.</param>
-	/// <returns>The angle in radians.</returns>
 	template <typename T>
-	constexpr T ToRadians(T anAngleInDegrees) { return (Math::PiT<T> / static_cast<T>(180)) * anAngleInDegrees; }
+	constexpr T ToDegrees(T anAngleInRadians)
+	{
+		return (static_cast<T>(180) / Math::PiT<T>) * anAngleInRadians;
+	}
 
-	/// <summary>
-	/// Reduces a given angle to a value between pi and -pi.
-	/// </summary>
-	/// <param name="anAngleInRadians">The angle to reduce, in radians.</param>
-	/// <returns>The new angle, in radians.</returns>
+	template <typename T>
+	constexpr T ToRadians(T anAngleInDegrees)
+	{
+		return (Math::PiT<T> / static_cast<T>(180)) * anAngleInDegrees;
+	}
+
 	template <typename T>
 	constexpr T WrapRadians(T anAngleInRadians)
 	{
 		return Math::Wrap<T>(anAngleInRadians, -Math::PiT<T>, Math::PiT<T>);
 	}
 
-	/// <summary>
-	/// Reduces a given angle to a value between 0 and 360.
-	/// </summary>
-	/// <param name="anAngleInDegrees">The angle to reduce, in degrees.</param>
-	/// <returns>The new angle, in degrees.</returns>
 	template <typename T>
 	constexpr T WrapDegrees(const T& anAngleInDegrees)
 	{

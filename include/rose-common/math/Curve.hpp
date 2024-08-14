@@ -6,58 +6,52 @@
 namespace RoseCommon::Math
 {
 	// Functions ported from https://github.com/FNA-XNA/FNA/blob/master/src/MathHelper.cs
-
-	/// <summary>
-	/// Returns the Cartesian coordinate for one axis of a point that is defined by a
-	/// given triangle and two normalized barycentric (areal) coordinates.
-	/// </summary>
-	/// <param name="aValue1">
-	/// The coordinate on one axis of vertex 1 of the defining triangle.
-	/// </param>
-	/// <param name="aValue2">
-	/// The coordinate on the same axis of vertex 2 of the defining triangle.
-	/// </param>
-	/// <param name="aValue3">
-	/// The coordinate on the same axis of vertex 3 of the defining triangle.
-	/// </param>
-	/// <param name="anAmount1">
-	/// The normalized barycentric (areal) coordinate b2, equal to the weighting factor
-	/// for vertex 2, the coordinate of which is specified in aValue2.
-	/// </param>
-	/// <param name="anAmount2">
-	/// The normalized barycentric (areal) coordinate b3, equal to the weighting factor
-	/// for vertex 3, the coordinate of which is specified in aValue3.
-	/// </param>
-	/// <returns>
-	/// Cartesian coordinate of the specified point with respect to the axis being used.
-	/// </returns>
+	
+	/**
+	 * @brief Calculate the Cartesian coordinate for one axis of a point that is defined by a
+	 *        given triangle and two normalized barycentric (areal) coordinates.
+	 * @tparam T The type of all parameters and the returned value.
+	 * @param aValue1 The coordinate on one axis of vertex 1 of the defining triangle.
+	 * @param aValue2 The coordinate on the same axis of vertex 2 of the defining triangle.
+	 * @param aValue3 The coordinate on the same axis of vertex 3 of the defining triangle.
+	 * @param anAmount1 The normalized barycentric (areal) coordinate b2, equal to the weighting factor
+	 *                  for vertex 2, the coordinate of which is specified in aValue2.
+	 * @param anAmount2 The normalized barycentric (areal) coordinate b3, equal to the weighting factor
+	 *                  for vertex 3, the coordinate of which is specified in aValue3.
+	 * @return Cartesian coordinate of the specified point with respect to the axis being used.
+	 */
 	template <typename T>
-	constexpr T Barycentric(
-		T aValue1,
-		T aValue2,
-		T aValue3,
-		T anAmount1,
-		T anAmount2)
+	constexpr T Barycentric(T aValue1, T aValue2, T aValue3, T anAmount1, T anAmount2);
+	
+	/**
+	 * @brief Performs a Catmull-Rom interpolation using the specified positions.
+	 */
+	template <typename T>
+	constexpr T CatmullRom(T aValue1, T aValue2, T aValue3, T aValue4, T anAmount);
+
+	/**
+	 * @brief Performs a Hermite spline interpolation.
+	 */
+	template <typename T>
+	constexpr T Hermite(T aValue1, T aTangent1, T aValue2, T aTangent2, T anAmount);
+
+	/**
+	 * @brief Interpolates between two aValues using a cubic equation.
+	 */
+	template <typename T>
+	constexpr T SmoothStep(T aValue1, T aValue2, T anAmount);
+}
+
+namespace RoseCommon::Math
+{
+	template <typename T>
+	constexpr T Barycentric(T aValue1, T aValue2, T aValue3, T anAmount1, T anAmount2)
 	{
 		return aValue1 + (aValue2 - aValue1) * anAmount1 + (aValue3 - aValue1) * anAmount2;
 	}
 
-	/// <summary>
-	/// Performs a Catmull-Rom interpolation using the specified positions.
-	/// </summary>
-	/// <param name="aValue1">The first position in the interpolation.</param>
-	/// <param name="aValue2">The second position in the interpolation.</param>
-	/// <param name="aValue3">The third position in the interpolation.</param>
-	/// <param name="aValue4">The fourth position in the interpolation.</param>
-	/// <param name="anAmount">Weighting factor.</param>
-	/// <returns>A position that is the result of the Catmull-Rom interpolation.</returns>
 	template <typename T>
-	inline T CatmullRom(
-		T aValue1,
-		T aValue2,
-		T aValue3,
-		T aValue4,
-		T anAmount)
+	constexpr T CatmullRom(T aValue1, T aValue2, T aValue3, T aValue4, T anAmount)
 	{
 		/* Using formula from http://www.mvps.org/directx/articles/catmull/
 		 * Internally using doubles not to lose precision.
@@ -74,22 +68,8 @@ namespace RoseCommon::Math
 			);
 	}
 
-	/// <summary>
-	/// Performs a Hermite spline interpolation.
-	/// </summary>
-	/// <param name="aValue1">Source position.</param>
-	/// <param name="aTangent1">Source aTangent.</param>
-	/// <param name="aValue2">Source position.</param>
-	/// <param name="aTangent2">Source aTangent.</param>
-	/// <param name="anAmount">Weighting factor.</param>
-	/// <returns>The result of the Hermite spline interpolation.</returns>
 	template <typename T>
-	constexpr T Hermite(
-		T aValue1,
-		T aTangent1,
-		T aValue2,
-		T aTangent2,
-		T anAmount)
+	constexpr T Hermite(T aValue1, T aTangent1, T aValue2, T aTangent2, T anAmount)
 	{
 		/* All transformed to double not to lose precision
 		 * Otherwise, for high numbers of param:anAmount the result is NaN instead
@@ -121,13 +101,6 @@ namespace RoseCommon::Math
 		return static_cast<T>(result);
 	}
 
-	/// <summary>
-	/// Interpolates between two aValues using a cubic equation.
-	/// </summary>
-	/// <param name="aValue1">Source aValue.</param>
-	/// <param name="aValue2">Source aValue.</param>
-	/// <param name="anAmount">Weighting aValue.</param>
-	/// <returns>Interpolated aValue.</returns>
 	template <typename T>
 	constexpr T SmoothStep(T aValue1, T aValue2, T anAmount)
 	{

@@ -6,11 +6,241 @@
 
 namespace RoseCommon::Math
 {
-	// ---------------------------------------
-	// * Forward declarations
-	// ---------------------------------------
-	template <typename T> constexpr T Truncate(T aValue);
+	/**
+	 * @brief Get the absolute value of a specified value.
+	 * @tparam T The type of the parameter and returned value.
+	 * @param aValue Any numerical value.
+	 * @return The input with a positive sign.
+	 */
+	template <typename T>
+	constexpr T Abs(T aValue);
 
+	/**
+	 * @brief Calculate the smallest integral value greater than or equal to the specified value.
+	 * @tparam T The type of the parameter and returned value.
+	 * @param aValue A numerical value.
+	 * @return The smallest integral value greater than or equal to the input.
+	 */
+	template <typename T>
+	constexpr T Ceil(T aValue);
+
+	/**
+	 * @brief Calculate the smallest integral value greater than or equal to the specified value, and converts it to a given type.
+	 * @tparam R The type of the returned value.
+	 * @tparam V The type of the parameter value.
+	 * @param aValue A decimal or integer number. No operation is done for an integer number.
+	 * @return The smallest integral value greater than or equal to the input.
+	 */
+	template <typename R, typename V>
+	constexpr R CeilTo(V aValue);
+
+	/**
+	 * @brief Restrict a value to be within a specified range.
+	 * @tparam T The type of all parameters and the returned value.
+	 * @param aValue The value to clamp.
+	 * @param aMin The minimum value. If @a aValue is less than @a aMin, @a aMin will be returned.
+	 * @param aMax The maximum value. If @a aValue is greater than @a aMax, @a aMax will be returned.
+	 * @return The clamped value.
+	 */
+	template <typename T>
+	constexpr T Clamp(const T& aValue, const T& aMin, const T& aMax);
+	
+	/**
+	 * @brief Calculate the distance between two values.
+	 *        Requires the type to implement the less-than comparison, uniary and binary subtraction operators.
+	 * @tparam T The type of the parameters and the returned value.
+	 * @param aFrom The point to calculate the distance from.
+	 * @param aTo The point to calculate the distance to.
+	 * @return The distance between the two values.
+	 */
+	template <typename T>
+	constexpr T Distance(const T& aFrom, const T& aTo);
+
+	/**
+	 * @brief Check if a value equal another, within a known tolerance from each other.
+	 * @tparam T The type of the parameters.
+	 * @param aValue1 A value to check equality.
+	 * @param aValue2 A value to check equality.
+	 * @param aTolerance A tolerance to allow, and still be considered equal.
+	 * @return Whether the values equal, within the specified tolerance.
+	 */
+	template <typename T>
+	constexpr bool Equals(T aValue1, T aValue2, T aTolerance = std::numeric_limits<T>::epsilon());
+
+	 /**
+	  * @brief Calculate the largest integral value less than or equal to the specified value.
+	  * @tparam T The type of the parameter and returned value.
+	  * @param aValue A numerical value.
+	  * @return The largest integral value less than or equal to @a aValue.
+	  */
+	template <typename T>
+	constexpr T Floor(T aValue);
+
+	/**
+	  * @brief Calculate the largest integral value less than or equal to the specified value, and converts it to a given type.
+	  * @tparam R The type of the returned value.
+	  * @tparam V The type of the parameter value.
+	  * @param aValue A numerical value.
+	  * @return The largest integral value less than or equal to @a aValue.
+	  */
+	template <typename R, typename V>
+	constexpr R FloorTo(V aValue);
+
+	/**
+	 * @brief Check if a value equal zero, within a known tolerance from each other.
+	 * @tparam T The type of the parameters.
+	 * @param aValue The value to check against zero.
+	 * @param aTolerance The tolerance to use.
+	 * @return Whether the value equal zero.
+	 */
+	template <typename T>
+	constexpr bool IsZero(T aValue, T aTolerance = std::numeric_limits<T>::epsilon());
+	
+	/**
+	 * @brief Linearly interpolate between two values, based on a specified weight.
+	 *        Passing amount a value of 0 will cause @a aValue1 to be returned, a value of 1 will
+	 *        cause @a aValue2 to be returned.
+	 * @tparam T The type of the bound and returned value.
+	 * @tparam S Scalar weight value type.
+	 * @param aValue1 A value intended to be the lower bound.
+	 * @param aValue2 A value intended to be the upper bound.
+	 * @param anAmount Value between 0 and 1 indicating the weight of value2.
+	 * @return The interpolated value.
+	 */
+	template <typename T, typename S>
+	constexpr T Lerp(T aValue1, T aValue2, S anAmount);
+
+	/**
+	 * @brief Get the greater of two values.
+	 * @tparam T The type of both parameters and the returned value.
+	 * @param aValue1 A first value to compare with.
+	 * @param aValue2 A second value to compare with.
+	 * @return The largest value of the two inputs.
+	 */
+	template <typename T>
+	constexpr T Max(T aValue1, T aValue2);
+
+	/**
+	 * @brief Get the greater of three values.
+	 * @tparam T The type of all parameters and the returned value.
+	 * @param aValue1 A first value to compare with.
+	 * @param aValue2 A second value to compare with.
+	 * @param aValue3 A third value to compare with.
+	 * @return The largest value of the three inputs.
+	 */
+	template <typename T>
+	constexpr T Max(T aValue1, T aValue2, T aValue3);
+
+	/**
+	 * @brief Get the lesser of two values.
+	 * @tparam T The type of both parameters and the returned value.
+	 * @param aValue1 A first value to compare with.
+	 * @param aValue2 A second value to compare with.
+	 * @return The smallest value of the two inputs.
+	 */
+	template <typename T>
+	constexpr T Min(T aValue1, T aValue2);
+
+	/**
+	 * @brief Get the lesser of three values.
+	 * @tparam T The type of both parameters and the returned value.
+	 * @param aValue1 A first value to compare with.
+	 * @param aValue2 A second value to compare with.
+	 * @param aValue3 A third value to compare with.
+	 * @return The smallest value of the three inputs.
+	 */
+	template <typename T>
+	constexpr T Min(T aValue1, T aValue2, T aValue3);
+
+	/**
+	 * @brief Calculate a division remainder.
+	 * @tparam T The type of both parameters and the returned value.
+	 * @param aDividend A number to divide up.
+	 * @param aDivisor A number to divide by.
+	 * @return The remainder value.
+	 */
+	template <typename T>
+	constexpr T Modulo(T aDividend, T aDivisor);
+
+	/**
+	 * @brief Round a value to the closest integer value. Half-way values are rounded up.
+	 * @tparam T The type of the parameter and returned value.
+	 * @param aValue The number to round.
+	 * @return The rounded value.
+	 */
+	template <typename T>
+	constexpr T Round(T aValue);
+
+	/**
+	 * @brief Round a value to the closest integer value, and converts it to a given type. Half-way values are rounded up.
+	 * @tparam R The type of the returned value.
+	 * @tparam V The type of the parameter value.
+	 * @param aValue The number to round.
+	 * @return The rounded value.
+	 */
+	template <typename R, typename V>
+	constexpr R RoundTo(V aValue);
+
+	/**
+	 * @brief Calculate the square root of a specified value.
+	 * @tparam T The type of the parameter and returned value.
+	 * @param aValue The number whose square root is to be found.
+	 * @return The square root of the input value.
+	 */
+	template <typename T>
+	constexpr T Squareroot(T aValue);
+
+	/**
+	 * @brief Calculate the reciprocal square root of a specified value.
+	 * @tparam T The type of the parameter and returned value.
+	 * @param aValue The number whose reciprocal square root is to be found.
+	 * @return The reciprocal square root of the input value.
+	 */
+	template <typename T>
+	constexpr T ReciprocalSquareroot(T aValue);
+
+	/**
+	 * @brief Calculate the multiplicative inverse of a value.
+	 * @tparam T The type of the parameter and returned value.
+	 * @param aValue A number to calculate the reciprocal of.
+	 * @return The reciprocal of the input value.
+	 */
+	template <typename T>
+	constexpr T Reciprocal(T aValue);
+
+	/**
+	 * @brief Round towards zero by truncating away the decimals of a value.
+	 * @tparam T The type of the parameter and returned value.
+	 * @param aValue A number to truncate.
+	 * @return The truncated value.
+	 */
+	template <typename T>
+	constexpr T Truncate(T aValue);
+
+	/**
+	 * @brief Round towards zero by truncating away the decimals of a value.
+	 * @tparam R The type of the returned value.
+	 * @tparam V The type of the parameter value.
+	 * @param aValue A number to truncate.
+	 * @return The truncated value.
+	 */
+	template <typename R, typename V>
+	constexpr R TruncateTo(V aValue);
+
+	/**
+	 * @brief Wrap a specified value around to make it always be within the specified range.
+	 * @tparam T The type of the parameters and returned value.
+	 * @param aValue A value to wrap.
+	 * @param aMinimum The lower bound of the wrapping range.
+	 * @param aMaximum The upper bound of the wrapping range.
+	 * @return The wrapped value.
+	 */
+	template <typename T>
+	constexpr T Wrap(T aValue, T aMinimum, T aMaximum);
+}
+
+namespace RoseCommon::Math
+{
 	template <typename T>
 	constexpr T Abs(T aValue) { return aValue < static_cast<T>(0) ? -aValue : aValue; }
 
@@ -38,19 +268,6 @@ namespace RoseCommon::Math
 	template <typename R, typename V>
 	constexpr R CeilTo(V aValue) { return static_cast<R>(Ceil<V>(aValue)); }
 
-	/// <summary>
-	/// Restricts a value to be within a specified range.
-	/// </summary>
-	/// <param name="aValue">The value to clamp.</param>
-	/// <param name="aMin">
-	/// The minimum value. If <c>value</c> is less than <c>min</c>, <c>min</c>
-	/// will be returned.
-	/// </param>
-	/// <param name="aMax">
-	/// The maximum value. If <c>value</c> is greater than <c>max</c>, <c>max</c>
-	/// will be returned.
-	/// </param>
-	/// <returns>The clamped value.</returns>
 	template <typename T>
 	constexpr T Clamp(const T& aValue, const T& aMin, const T& aMax)
 	{
@@ -62,20 +279,14 @@ namespace RoseCommon::Math
 			return aValue;
 	}
 
-	/// <summary>
-	/// Calculates the absolute value of the difference of two values.
-	/// </summary>
-	/// <param name="aValue1">Source value.</param>
-	/// <param name="aValue2">Source value.</param>
-	/// <returns>Distance between the two values.</returns>
 	template <typename T>
-	constexpr T Distance(const T& aValue1, const T& aValue2)
+	constexpr T Distance(const T& aFrom, const T& aTo)
 	{
-		return Abs<T>(aValue1 - aValue2);
+		return Abs<T>(aFrom - aTo);
 	}
 
 	template <typename T>
-	constexpr bool Equals(T aValue1, T aValue2, T aTolerance = std::numeric_limits<T>::epsilon())
+	constexpr bool Equals(T aValue1, T aValue2, T aTolerance)
 	{
 		return (aValue1 + aTolerance >= aValue2) && (aValue1 - aTolerance <= aValue2);
 	}
@@ -105,76 +316,35 @@ namespace RoseCommon::Math
 	constexpr R FloorTo(V aValue) { return static_cast<R>(Floor<V>(aValue)); }
 
 	template <typename T>
-	constexpr bool IsZero(T aValue, T aTolerance = std::numeric_limits<T>::epsilon())
+	constexpr bool IsZero(T aValue, T aTolerance)
 	{
 		return Math::Abs<T>(aValue) <= aTolerance;
 	}
 
-	/// <summary>
-	/// Linearly interpolates between two values.
-	/// </summary>
-	/// <param name="aValue1">Source value.</param>
-	/// <param name="aValue2">Source value.</param>
-	/// <param name="anAmount">
-	/// Value between 0 and 1 indicating the weight of value2.
-	/// </param>
-	/// <returns>Interpolated value.</returns>
-	/// <remarks>
-	/// This method performs the linear interpolation based on the following formula.
-	/// <c>value1 + (value2 - value1) * amount</c>
-	/// Passing amount a value of 0 will cause value1 to be returned, a value of 1 will
-	/// cause value2 to be returned.
-	/// </remarks>
 	template <typename T, typename S>
 	constexpr T Lerp(T aValue1, T aValue2, S anAmount)
 	{
 		return aValue1 + (aValue2 - aValue1) * anAmount;
 	}
 
-	/// <summary>
-	/// Returns the greater of two values.
-	/// </summary>
-	/// <param name="aValue1">Source value.</param>
-	/// <param name="aValue2">Source value.</param>
-	/// <returns>The greater value.</returns>
 	template <typename T>
 	constexpr T Max(T aValue1, T aValue2)
 	{
 		return aValue1 > aValue2 ? aValue1 : aValue2;
 	}
 
-	/// <summary>
-	/// Returns the greater of three values.
-	/// </summary>
-	/// <param name="aValue1">Source value.</param>
-	/// <param name="aValue2">Source value.</param>
-	/// <param name="aValue3">Source value.</param>
-	/// <returns>The greater value.</returns>
 	template <typename T>
 	constexpr T Max(T aValue1, T aValue2, T aValue3)
 	{
 		return Max(Max(aValue1, aValue2), aValue3);
 	}
 
-	/// <summary>
-	/// Returns the lesser of two values.
-	/// </summary>
-	/// <param name="aValue1">Source value.</param>
-	/// <param name="aValue2">Source value.</param>
-	/// <returns>The lesser value.</returns>
 	template <typename T>
 	constexpr T Min(T aValue1, T aValue2)
 	{
 		return aValue1 < aValue2 ? aValue1 : aValue2;
 	}
 
-	/// <summary>
-	/// Returns the lesser of three values.
-	/// </summary>
-	/// <param name="aValue1">Source value.</param>
-	/// <param name="aValue2">Source value.</param>
-	/// <param name="aValue3">Source value.</param>
-	/// <returns>The lesser value.</returns>
 	template <typename T>
 	constexpr T Min(T aValue1, T aValue2, T aValue3)
 	{
