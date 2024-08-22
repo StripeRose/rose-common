@@ -22,7 +22,7 @@ namespace RoseCommon::Math
 	 * @return The smallest integral value greater than or equal to the input.
 	 */
 	template <typename T>
-	constexpr T Ceil(T aValue);
+	constexpr T Ceiling(T aValue);
 
 	/**
 	 * @brief Calculate the smallest integral value greater than or equal to the specified value, and converts it to a given type.
@@ -32,7 +32,7 @@ namespace RoseCommon::Math
 	 * @return The smallest integral value greater than or equal to the input.
 	 */
 	template <typename R, typename V>
-	constexpr R CeilTo(V aValue);
+	constexpr R CeilingTo(V aValue);
 
 	/**
 	 * @brief Restrict a value to be within a specified range.
@@ -245,7 +245,7 @@ namespace RoseCommon::Math
 	constexpr T Abs(T aValue) { return aValue < static_cast<T>(0) ? -aValue : aValue; }
 
 	template <typename T>
-	constexpr T Ceil(T aValue)
+	constexpr T Ceiling(T aValue)
 	{
 		if constexpr (!std::is_floating_point_v<T>)
 		{
@@ -266,7 +266,7 @@ namespace RoseCommon::Math
 	}
 
 	template <typename R, typename V>
-	constexpr R CeilTo(V aValue) { return static_cast<R>(Ceil<V>(aValue)); }
+	constexpr R CeilingTo(V aValue) { return static_cast<R>(Ceiling<V>(aValue)); }
 
 	template <typename T>
 	constexpr T Clamp(const T& aValue, const T& aMin, const T& aMax)
