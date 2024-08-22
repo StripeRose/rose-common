@@ -80,7 +80,7 @@ namespace RoseCommon::Math
 		 * @param aVector A vector to convert the values from.
 		 */
 		template <typename U = T>
-		constexpr Vector2(const Vector2<U>& aVector);
+		explicit constexpr Vector2(const Vector2<U>& aVector);
 
 		/**
 		 * @brief Initialize the components with the values from a 1x2 matrix.
@@ -385,7 +385,7 @@ namespace RoseCommon::Math
 		 * @param aVector A vector to convert the values from.
 		 */
 		template <typename U = T>
-		constexpr Vector3(const Vector3<U>& aVector);
+		explicit constexpr Vector3(const Vector3<U>& aVector);
 
 		/**
 		 * @brief Initialize the components from a Vector2 and a Z value.
@@ -699,7 +699,7 @@ namespace RoseCommon::Math
 		 * @param aVector A vector to convert the values from.
 		 */
 		template <typename U = T>
-		constexpr Vector4(const Vector4<U>& aVector);
+		explicit constexpr Vector4(const Vector4<U>& aVector);
 
 		/**
 		 * @brief Initialize the components from a Vector2, a Z value and a W value.
