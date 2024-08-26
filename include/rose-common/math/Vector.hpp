@@ -3,6 +3,7 @@
 #include "Common.hpp"
 #include "Curve.hpp"
 #include "Matrix.hpp"
+#include "Trigonometry.hpp"
 
 namespace RoseCommon::Math
 {
