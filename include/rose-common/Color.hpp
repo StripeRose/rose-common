@@ -3,7 +3,9 @@
 #include "math/Common.hpp"
 
 #include <cmath>
+#include <compare>
 #include <cstdint>
+#include <utility>
 
 namespace RoseCommon
 {
