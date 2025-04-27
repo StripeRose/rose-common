@@ -3,6 +3,10 @@
 #include <assert.h>
 #include <string>
 
+#if _WIN32
+#include <Windows.h>
+#endif
+
 #undef assert
 #define assert(x) System::Debug::Assert(!!(x), #x);
 
@@ -28,6 +32,16 @@ namespace RoseCommon
 		 */
 		static void Assert(bool aCondition, const char* anErrorMessage, ...);
 		static void Assert(bool aCondition, const wchar_t* anErrorMessage, ...);
+
+		#if _WIN32
+		/**
+		 * @brief Assert that a result was successful, otherwise logging a fatal message.
+		 * @param aResult A result to assert being successful.
+		 * @param anErrorMessage A message to log if the assert fails.
+		 */
+		static void Assert(HRESULT aResult, const char* anErrorMessage, ...);
+		static void Assert(HRESULT aResult, const wchar_t* anErrorMessage, ...);
+		#endif
 
 		/**
 		 * @brief Log a message for debugging information only.
@@ -80,6 +94,16 @@ namespace RoseCommon
 		 */
 		static bool Verify(bool aCondition, const char* anErrorMessage, ...);
 		static bool Verify(bool aCondition, const wchar_t* anErrorMessage, ...);
+
+		#if _WIN32
+		/**
+		 * @brief Verify that a result was successful, otherwise logging it as an error.
+		 * @param aResult A result to verify as successful.
+		 * @param anErrorMessage An error-message to log if the result is not successful.
+		 */
+		static bool Verify(HRESULT aResult, const char* anErrorMessage, ...);
+		static bool Verify(HRESULT aResult, const wchar_t* anErrorMessage, ...);
+		#endif
 	};
 
 	/**

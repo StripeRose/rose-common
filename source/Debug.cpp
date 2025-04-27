@@ -7,6 +7,7 @@
 #include <thread>
 
 #if defined(_WIN32)
+#include <comdef.h>
 #include <Windows.h>
 #endif
 
@@ -70,6 +71,50 @@ namespace RoseCommon
 			ourDebugImplementation->TriggerCrash(ss.str());
 		}
 	}
+
+	#if _WIN32
+	void Debug::Assert(HRESULT aResult, const char* anErrorMessage, ...)
+	{
+		if (ourDebugImplementation && FAILED(aResult))
+		{
+			std::stringstream ss;
+			ss << "Assertion failed:\n\n";
+
+			va_list args;
+			va_start(args, anErrorMessage);
+			Debug_cpp::FormatLogMessage(anErrorMessage, args, ss);
+			va_end(args);
+
+			_com_error error(aResult);
+			ss << "\nHRESULT: ";
+			ss << static_cast<const char*>(error.ErrorMessage());
+
+			ourDebugImplementation->Log(Impl::LogType::Fatal, ss.str());
+			ourDebugImplementation->TriggerCrash(ss.str());
+		}
+	}
+
+	void Debug::Assert(HRESULT aResult, const wchar_t* anErrorMessage, ...)
+	{
+		if (ourDebugImplementation && FAILED(aResult))
+		{
+			std::wstringstream ss;
+			ss << "Assertion failed:\n\n";
+
+			va_list args;
+			va_start(args, anErrorMessage);
+			Debug_cpp::FormatLogMessage(anErrorMessage, args, ss);
+			va_end(args);
+
+			_com_error error(aResult);
+			ss << "\nHRESULT: ";
+			ss << static_cast<const char*>(error.ErrorMessage());
+
+			ourDebugImplementation->Log(Impl::LogType::Fatal, ss.str());
+			ourDebugImplementation->TriggerCrash(ss.str());
+		}
+	}
+	#endif
 
 	void Debug::Log(const char* aMessage, ...)
 	{
@@ -218,6 +263,48 @@ namespace RoseCommon
 
 		return aCondition;
 	}
+
+	#if _WIN32
+	bool Debug::Verify(HRESULT aResult, const char* anErrorMessage, ...)
+	{
+		if (ourDebugImplementation && FAILED(aResult))
+		{
+			std::stringstream ss;
+			va_list args;
+			va_start(args, anErrorMessage);
+			Debug_cpp::FormatLogMessage(anErrorMessage, args, ss);
+			va_end(args);
+
+			_com_error error(aResult);
+			ss << "\nHRESULT: ";
+			ss << static_cast<const char*>(error.ErrorMessage());
+
+			ourDebugImplementation->Log(Impl::LogType::Error, ss.str());
+		}
+
+		return SUCCEEDED(aResult);
+	}
+
+	bool Debug::Verify(HRESULT aResult, const wchar_t* anErrorMessage, ...)
+	{
+		if (ourDebugImplementation && FAILED(aResult))
+		{
+			std::wstringstream ss;
+			va_list args;
+			va_start(args, anErrorMessage);
+			Debug_cpp::FormatLogMessage(anErrorMessage, args, ss);
+			va_end(args);
+
+			_com_error error(aResult);
+			ss << "\nHRESULT: ";
+			ss << static_cast<const char*>(error.ErrorMessage());
+
+			ourDebugImplementation->Log(Impl::LogType::Error, ss.str());
+		}
+
+		return SUCCEEDED(aResult);
+	}
+	#endif
 
 #if defined(_WIN32)
 	class DebugWin32Impl final : public Debug::Impl
