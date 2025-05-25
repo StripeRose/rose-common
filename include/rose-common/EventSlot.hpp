@@ -51,6 +51,11 @@ namespace RoseCommon
 				myCallbacks.at(aRegistrar) = nullptr;
 		}
 
+		void operator()(CallbackArguments... someArguments) const
+		{
+			Invoke(someArguments...);
+		}
+
 	private:
 		std::map<void*, std::function<void(CallbackArguments...)>> myCallbacks;
 	};
@@ -97,6 +102,11 @@ namespace RoseCommon
 		{
 			if (myCallbacks.contains(aRegistrar))
 				myCallbacks.at(aRegistrar) = nullptr;
+		}
+
+		void operator()() const
+		{
+			Invoke();
 		}
 
 	private:
