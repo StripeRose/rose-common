@@ -10,7 +10,7 @@
 namespace ROSECOMMON_MATH_NAMESPACE
 {
 	template <std::size_t Width, std::size_t Height, typename T>
-	class Matrix
+	class MatrixT
 	{
 	public:
 
@@ -32,7 +32,7 @@ namespace ROSECOMMON_MATH_NAMESPACE
 		 * @brief Create an identity matrix for the chosen type and dimension.
 		 * @return The identity matrix.
 		 */
-		static constexpr Matrix Identity() requires(Width == Height);
+		static constexpr MatrixT Identity() requires(Width == Height);
 
 		#pragma endregion
 
@@ -44,13 +44,13 @@ namespace ROSECOMMON_MATH_NAMESPACE
 		/**
 		 * @brief Initialize an all-zero matrix.
 		 */
-		constexpr Matrix();
+		constexpr MatrixT();
 
 		/**
 		 * @brief Initialize with an array of cell-data.
 		 * @param someCells A row-major array of cell-data to initialize with.
 		 */
-		constexpr Matrix(const std::array<T, Width* Height>& someCells);
+		constexpr MatrixT(const std::array<T, Width* Height>& someCells);
 
 		#pragma endregion
 
@@ -87,7 +87,7 @@ namespace ROSECOMMON_MATH_NAMESPACE
 		 *        Requires the matrix to be square.
 		 * @return The matrix cofactor.
 		 */
-		constexpr Matrix Cofactor() const requires(Width == Height && Width > 0);
+		constexpr MatrixT Cofactor() const requires(Width == Height && Width > 0);
 
 		/**
 		 * @brief Calculate the matrix's determinant.
@@ -101,7 +101,7 @@ namespace ROSECOMMON_MATH_NAMESPACE
 		 * @brief Calculate the matrix inverse.
 		 * @return The inverse of the matrix.
 		 */
-		constexpr std::optional<Matrix> Inverse() const requires(std::is_floating_point_v<T>&& Width == Height && Width > 0);
+		constexpr std::optional<MatrixT> Inverse() const requires(std::is_floating_point_v<T>&& Width == Height && Width > 0);
 
 		/**
 		 * @brief Calculate the matrix's minor. The square matrix consisting of the determinants of its submatrices.
@@ -109,13 +109,13 @@ namespace ROSECOMMON_MATH_NAMESPACE
 		 *        Requires the matrix to be square.
 		 * @return The minor matrix.
 		 */
-		constexpr Matrix Minor() const requires(std::is_floating_point_v<T>&& Width == Height && Width > 0);
+		constexpr MatrixT Minor() const requires(std::is_floating_point_v<T>&& Width == Height && Width > 0);
 
 		/**
 		 * @brief Transpose the rows and columns of the matrix.
 		 * @return The transposed matrix.
 		 */
-		constexpr Matrix<Height, Width, T> Transposed() const;
+		constexpr MatrixT<Height, Width, T> Transposed() const;
 
 		#pragma endregion
 
@@ -132,24 +132,24 @@ namespace ROSECOMMON_MATH_NAMESPACE
 		 * @return The product of the matrix multiplication.
 		 */
 		template <std::size_t _Width>
-		constexpr Matrix<_Width, Height, T> operator*(const Matrix<_Width, Width, T>& aMatrix) const;
+		constexpr MatrixT<_Width, Height, T> operator*(const MatrixT<_Width, Width, T>& aMatrix) const;
 
-		constexpr bool operator==(const Matrix& aMatrix) const;
-		constexpr bool operator!=(const Matrix& aMatrix) const;
+		constexpr bool operator==(const MatrixT& aMatrix) const;
+		constexpr bool operator!=(const MatrixT& aMatrix) const;
 
 		#pragma endregion
 
 	private:
-		constexpr Matrix<Width - 1, Height - 1, T> SubMatrix(std::size_t aColumn, std::size_t aRow) const;
+		constexpr MatrixT<Width - 1, Height - 1, T> SubMatrix(std::size_t aColumn, std::size_t aRow) const;
 
 	private:
 		T myCells[Width * Height];
 	};
 
 	template <std::size_t Width, std::size_t Height, typename T>
-	constexpr Matrix<Width, Height, T> Matrix<Width, Height, T>::Identity() requires(Width == Height)
+	constexpr MatrixT<Width, Height, T> MatrixT<Width, Height, T>::Identity() requires(Width == Height)
 	{
-		Matrix identityMatrix;
+		MatrixT identityMatrix;
 
 		for (std::size_t i = 0; i < Width; ++i)
 			identityMatrix.GetCell(i, i) = static_cast<T>(1.f);
@@ -158,21 +158,21 @@ namespace ROSECOMMON_MATH_NAMESPACE
 	}
 
 	template <std::size_t Width, std::size_t Height, typename T>
-	constexpr Matrix<Width, Height, T>::Matrix()
+	constexpr MatrixT<Width, Height, T>::MatrixT()
 	{
 		for (std::size_t i = 0; i < (Width * Height); ++i)
 			myCells[i] = static_cast<T>(0);
 	}
 
 	template <std::size_t Width, std::size_t Height, typename T>
-	constexpr Matrix<Width, Height, T>::Matrix(const std::array<T, Width * Height>& someCells)
+	constexpr MatrixT<Width, Height, T>::MatrixT(const std::array<T, Width * Height>& someCells)
 	{
 		for (std::size_t i = 0; i < (Width * Height); ++i)
 			myCells[i] = someCells[i];
 	}
 
 	template <std::size_t Width, std::size_t Height, typename T>
-	constexpr T& Matrix<Width, Height, T>::GetCell(std::size_t aColumn, std::size_t aRow)
+	constexpr T& MatrixT<Width, Height, T>::GetCell(std::size_t aColumn, std::size_t aRow)
 	{
 		if (aColumn >= Width || aRow >= Height)
 			throw std::out_of_range("Row or column indices out of range.");
@@ -181,7 +181,7 @@ namespace ROSECOMMON_MATH_NAMESPACE
 	}
 
 	template <std::size_t Width, std::size_t Height, typename T>
-	constexpr const T& Matrix<Width, Height, T>::GetCell(std::size_t aColumn, std::size_t aRow) const
+	constexpr const T& MatrixT<Width, Height, T>::GetCell(std::size_t aColumn, std::size_t aRow) const
 	{
 		if (aColumn >= Width || aRow >= Height)
 			throw std::out_of_range("Row or column indices out of range.");
@@ -190,9 +190,9 @@ namespace ROSECOMMON_MATH_NAMESPACE
 	}
 
 	template <std::size_t Width, std::size_t Height, typename T>
-	constexpr Matrix<Width, Height, T> Matrix<Width, Height, T>::Cofactor() const requires(Width == Height && Width > 0)
+	constexpr MatrixT<Width, Height, T> MatrixT<Width, Height, T>::Cofactor() const requires(Width == Height && Width > 0)
 	{
-		Matrix solution;
+		MatrixT solution;
 
 		for (std::size_t rowIndex = 0; rowIndex < Height; ++rowIndex)
 		{
@@ -212,7 +212,7 @@ namespace ROSECOMMON_MATH_NAMESPACE
 	}
 
 	template <std::size_t Width, std::size_t Height, typename T>
-	constexpr T Matrix<Width, Height, T>::Determinant() const requires(Width == Height && Width > 0)
+	constexpr T MatrixT<Width, Height, T>::Determinant() const requires(Width == Height && Width > 0)
 	{
 		if constexpr (Width == 1)
 		{
@@ -228,7 +228,7 @@ namespace ROSECOMMON_MATH_NAMESPACE
 			for (std::size_t i = 0; i < Width; ++i)
 			{
 				const T factor = GetCell(i, 0);
-				const Matrix<Width - 1, Height - 1, T> subMatrix = SubMatrix(i, 0);
+				const MatrixT<Width - 1, Height - 1, T> subMatrix = SubMatrix(i, 0);
 
 				determinant +=
 					static_cast<T>((i % 2 == 0) ? 1 : -1) *
@@ -241,17 +241,17 @@ namespace ROSECOMMON_MATH_NAMESPACE
 	}
 
 	template <std::size_t Width, std::size_t Height, typename T>
-	constexpr std::optional<Matrix<Width, Height, T>> Matrix<Width, Height, T>::Inverse() const requires(std::is_floating_point_v<T>&& Width == Height && Width > 0)
+	constexpr std::optional<MatrixT<Width, Height, T>> MatrixT<Width, Height, T>::Inverse() const requires(std::is_floating_point_v<T>&& Width == Height && Width > 0)
 	{
 		const T determinant = Determinant();
 		if (determinant == static_cast<T>(0))
-			return std::optional<Matrix>();
+			return std::optional<MatrixT>();
 
 		const T reciprocalDeterminant = static_cast<T>(1) / determinant;
 
 		if constexpr (Width == 2)
 		{
-			return Matrix({
+			return MatrixT({
 				reciprocalDeterminant * GetCell(1, 1),
 				reciprocalDeterminant * -GetCell(1, 0),
 				reciprocalDeterminant * -GetCell(0, 1),
@@ -260,7 +260,7 @@ namespace ROSECOMMON_MATH_NAMESPACE
 		}
 		else
 		{
-			Matrix inverse = Cofactor().Transposed();
+			MatrixT inverse = Cofactor().Transposed();
 			for (std::size_t i = 0; i < Width * Height; ++i)
 				inverse.myCells[i] *= reciprocalDeterminant;
 			return inverse;
@@ -268,9 +268,9 @@ namespace ROSECOMMON_MATH_NAMESPACE
 	}
 
 	template <std::size_t Width, std::size_t Height, typename T>
-	constexpr Matrix<Width, Height, T> Matrix<Width, Height, T>::Minor() const requires(std::is_floating_point_v<T>&& Width == Height && Width > 0)
+	constexpr MatrixT<Width, Height, T> MatrixT<Width, Height, T>::Minor() const requires(std::is_floating_point_v<T>&& Width == Height && Width > 0)
 	{
-		Matrix solution;
+		MatrixT solution;
 
 		for (std::size_t rowIndex = 0; rowIndex < Height; ++rowIndex)
 		{
@@ -285,9 +285,9 @@ namespace ROSECOMMON_MATH_NAMESPACE
 	}
 
 	template <std::size_t Width, std::size_t Height, typename T>
-	constexpr Matrix<Height, Width, T> Matrix<Width, Height, T>::Transposed() const
+	constexpr MatrixT<Height, Width, T> MatrixT<Width, Height, T>::Transposed() const
 	{
-		Matrix<Height, Width, T> transposedMatrix;
+		MatrixT<Height, Width, T> transposedMatrix;
 
 		for (std::size_t rowIndex = 0; rowIndex < Height; ++rowIndex)
 		{
@@ -301,9 +301,9 @@ namespace ROSECOMMON_MATH_NAMESPACE
 	}
 
 	template <std::size_t Width, std::size_t Height, typename T>
-	constexpr Matrix<Width - 1, Height - 1, T> Matrix<Width, Height, T>::SubMatrix(std::size_t aColumn, std::size_t aRow) const
+	constexpr MatrixT<Width - 1, Height - 1, T> MatrixT<Width, Height, T>::SubMatrix(std::size_t aColumn, std::size_t aRow) const
 	{
-		Matrix<Width - 1, Height - 1, T> subMatrix;
+		MatrixT<Width - 1, Height - 1, T> subMatrix;
 		for (std::size_t rowIndex = 0; rowIndex < Height - 1; ++rowIndex)
 		{
 			for (std::size_t columnIndex = 0; columnIndex < Width - 1; ++columnIndex)
@@ -320,9 +320,9 @@ namespace ROSECOMMON_MATH_NAMESPACE
 
 	template <std::size_t Width, std::size_t Height, typename T>
 	template <std::size_t _Width>
-	constexpr Matrix<_Width, Height, T> Matrix<Width, Height, T>::operator*(const Matrix<_Width, Width, T>& aMatrix) const
+	constexpr MatrixT<_Width, Height, T> MatrixT<Width, Height, T>::operator*(const MatrixT<_Width, Width, T>& aMatrix) const
 	{
-		Matrix<_Width, Height, T> result;
+		MatrixT<_Width, Height, T> result;
 
 		for (std::size_t rowIndex = 0; rowIndex < Height; ++rowIndex)
 		{
@@ -343,7 +343,7 @@ namespace ROSECOMMON_MATH_NAMESPACE
 	}
 
 	template <std::size_t Width, std::size_t Height, typename T>
-	constexpr bool Matrix<Width, Height, T>::operator==(const Matrix& aMatrix) const
+	constexpr bool MatrixT<Width, Height, T>::operator==(const MatrixT& aMatrix) const
 	{
 		for (std::size_t i = 0; i < (Width * Height); ++i)
 		{
@@ -355,7 +355,7 @@ namespace ROSECOMMON_MATH_NAMESPACE
 	}
 
 	template <std::size_t Width, std::size_t Height, typename T>
-	constexpr bool Matrix<Width, Height, T>::operator!=(const Matrix& aMatrix) const
+	constexpr bool MatrixT<Width, Height, T>::operator!=(const MatrixT& aMatrix) const
 	{
 		return !operator==(aMatrix);
 	}
