@@ -1,10 +1,12 @@
 #pragma once
 
+#include "../RoseCommon_Namespace.hpp"
+
 #include <exception>
 #include <limits>
 #include <type_traits>
 
-namespace RoseCommon::Math
+namespace ROSECOMMON_MATH_NAMESPACE
 {
 	/**
 	 * @brief Get the absolute value of a specified value.
@@ -44,7 +46,7 @@ namespace RoseCommon::Math
 	 */
 	template <typename T>
 	constexpr T Clamp(const T& aValue, const T& aMin, const T& aMax);
-	
+
 	/**
 	 * @brief Calculate the distance between two values.
 	 *        Requires the type to implement the less-than comparison, uniary and binary subtraction operators.
@@ -67,12 +69,12 @@ namespace RoseCommon::Math
 	template <typename T>
 	constexpr bool Equals(T aValue1, T aValue2, T aTolerance = std::numeric_limits<T>::epsilon());
 
-	 /**
-	  * @brief Calculate the largest integral value less than or equal to the specified value.
-	  * @tparam T The type of the parameter and returned value.
-	  * @param aValue A numerical value.
-	  * @return The largest integral value less than or equal to @a aValue.
-	  */
+	/**
+	 * @brief Calculate the largest integral value less than or equal to the specified value.
+	 * @tparam T The type of the parameter and returned value.
+	 * @param aValue A numerical value.
+	 * @return The largest integral value less than or equal to @a aValue.
+	 */
 	template <typename T>
 	constexpr T Floor(T aValue);
 
@@ -95,7 +97,7 @@ namespace RoseCommon::Math
 	 */
 	template <typename T>
 	constexpr bool IsZero(T aValue, T aTolerance = std::numeric_limits<T>::epsilon());
-	
+
 	/**
 	 * @brief Linearly interpolate between two values, based on a specified weight.
 	 *        Passing amount a value of 0 will cause @a aValue1 to be returned, a value of 1 will
@@ -239,7 +241,7 @@ namespace RoseCommon::Math
 	constexpr T Wrap(T aValue, T aMinimum, T aMaximum);
 }
 
-namespace RoseCommon::Math
+namespace ROSECOMMON_MATH_NAMESPACE
 {
 	template <typename T>
 	constexpr T Abs(T aValue) { return aValue < static_cast<T>(0) ? -aValue : aValue; }
@@ -255,12 +257,12 @@ namespace RoseCommon::Math
 		{
 			if (aValue > static_cast<T>(0))
 			{
-				const T truncated = Math::Truncate<T>(aValue);
+				const T truncated = ROSECOMMON_MATH_NAMESPACE::Truncate<T>(aValue);
 				return aValue == truncated ? truncated : truncated + static_cast<T>(1);
 			}
 			else
 			{
-				return -Math::Truncate<T>(-aValue);
+				return -ROSECOMMON_MATH_NAMESPACE::Truncate<T>(-aValue);
 			}
 		}
 	}
@@ -302,11 +304,11 @@ namespace RoseCommon::Math
 		{
 			if (aValue > static_cast<T>(0))
 			{
-				return Math::Truncate<T>(aValue);
+				return ROSECOMMON_MATH_NAMESPACE::Truncate<T>(aValue);
 			}
 			else
 			{
-				const T truncated = -Math::Truncate<T>(-aValue);
+				const T truncated = -ROSECOMMON_MATH_NAMESPACE::Truncate<T>(-aValue);
 				return aValue == truncated ? truncated : truncated - static_cast<T>(1);
 			}
 		}
@@ -318,7 +320,7 @@ namespace RoseCommon::Math
 	template <typename T>
 	constexpr bool IsZero(T aValue, T aTolerance)
 	{
-		return Math::Abs<T>(aValue) <= aTolerance;
+		return ROSECOMMON_MATH_NAMESPACE::Abs<T>(aValue) <= aTolerance;
 	}
 
 	template <typename T, typename S>
@@ -361,7 +363,7 @@ namespace RoseCommon::Math
 		else
 		{
 			const T divisionResult = aDividend / aDivisor;
-			return (divisionResult - Math::Floor(divisionResult)) * aDivisor;
+			return (divisionResult - ROSECOMMON_MATH_NAMESPACE::Floor(divisionResult)) * aDivisor;
 		}
 	}
 
@@ -445,7 +447,7 @@ namespace RoseCommon::Math
 			if (aValue == 0)
 				return 0;
 
-			if (Math::Abs(aValue) >= std::numeric_limits<std::uintmax_t>::max())
+			if (ROSECOMMON_MATH_NAMESPACE::Abs(aValue) >= std::numeric_limits<std::uintmax_t>::max())
 				throw std::exception("Value is too large to be truncated with the current implementation.");
 
 			if (aValue > 0)

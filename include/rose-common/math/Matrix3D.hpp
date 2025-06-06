@@ -1,10 +1,12 @@
 #pragma once
 
+#include "../RoseCommon_Namespace.hpp"
+
 #include "Matrix.hpp"
 #include "Trigonometry.hpp"
 #include "Vector.hpp"
 
-namespace RoseCommon::Math
+namespace ROSECOMMON_MATH_NAMESPACE
 {
 	/*
 	 * A note on Create-function chirality:
@@ -392,7 +394,7 @@ namespace RoseCommon::Math
 	};
 }
 
-namespace RoseCommon::Math
+namespace ROSECOMMON_MATH_NAMESPACE
 {
 	template <typename T>
 	constexpr Matrix3D<T> Matrix3D<T>::Identity()
@@ -430,7 +432,7 @@ namespace RoseCommon::Math
 		if (norm < epsilon)
 			zAxis = aDefaultDirection.has_value() ? aDefaultDirection.value() : Vector3<T>::Forward();
 		else
-			zAxis = zAxis * Math::ReciprocalSquareroot<T>(norm);
+			zAxis = zAxis * ROSECOMMON_MATH_NAMESPACE::ReciprocalSquareroot<T>(norm);
 
 		const Vector3<T> xAxis(Vector3<T>::Cross(anUpVector, zAxis).Normalized());
 		const Vector3<T> yAxis(Vector3<T>::Cross(zAxis, xAxis));
@@ -463,8 +465,8 @@ namespace RoseCommon::Math
 	template <typename T>
 	constexpr Matrix3D<T> Matrix3D<T>::CreateFromAxisAngle(const Vector3<T>& anAxis, const T& anAngle) requires(std::is_floating_point_v<T>)
 	{
-		T c = Math::Cosine<T>(-anAngle);
-		T s = Math::Sine<T>(-anAngle);
+		T c = ROSECOMMON_MATH_NAMESPACE::Cosine<T>(-anAngle);
+		T s = ROSECOMMON_MATH_NAMESPACE::Sine<T>(-anAngle);
 		T t = static_cast<T>(1) - c;
 
 		Matrix3D result = Matrix3D::Identity();
@@ -556,7 +558,7 @@ namespace RoseCommon::Math
 	template <typename T>
 	constexpr Matrix3D<T> Matrix3D<T>::CreatePerspectiveFieldOfView(const T& aFieldOfView, const T& anAspectRatio, const T& aNearPlaneDistance, const T& aFarPlaneDistance) requires(std::is_floating_point_v<T>)
 	{
-		if (aFieldOfView <= T(0) || aFieldOfView >= Math::PiT<T>)
+		if (aFieldOfView <= T(0) || aFieldOfView >= ROSECOMMON_MATH_NAMESPACE::PiT<T>)
 			throw std::out_of_range("aFieldOfView");
 
 		if (aNearPlaneDistance <= T(0))
@@ -568,7 +570,7 @@ namespace RoseCommon::Math
 		if (aNearPlaneDistance >= aFarPlaneDistance)
 			throw std::out_of_range("aNearPlaneDistance");
 
-		const T yScale = Math::Cotangent(aFieldOfView / T(2));
+		const T yScale = ROSECOMMON_MATH_NAMESPACE::Cotangent(aFieldOfView / T(2));
 		const T xScale = yScale / anAspectRatio;
 		const T scaling = aFarPlaneDistance / (aFarPlaneDistance - aNearPlaneDistance);
 
@@ -625,8 +627,8 @@ namespace RoseCommon::Math
 	template <typename T>
 	constexpr Matrix3D<T> Matrix3D<T>::CreateRotationX(const T& anAngle) requires(std::is_floating_point_v<T>)
 	{
-		T c = Math::Cosine<T>(anAngle);
-		T s = Math::Sine<T>(anAngle);
+		T c = ROSECOMMON_MATH_NAMESPACE::Cosine<T>(anAngle);
+		T s = ROSECOMMON_MATH_NAMESPACE::Sine<T>(anAngle);
 
 		Matrix3D result = Matrix3D::Identity();
 
@@ -641,8 +643,8 @@ namespace RoseCommon::Math
 	template <typename T>
 	constexpr Matrix3D<T> Matrix3D<T>::CreateRotationY(const T& anAngle) requires(std::is_floating_point_v<T>)
 	{
-		T c = Math::Cosine<T>(anAngle);
-		T s = Math::Sine<T>(anAngle);
+		T c = ROSECOMMON_MATH_NAMESPACE::Cosine<T>(anAngle);
+		T s = ROSECOMMON_MATH_NAMESPACE::Sine<T>(anAngle);
 
 		Matrix3D result = Matrix3D::Identity();
 
@@ -657,8 +659,8 @@ namespace RoseCommon::Math
 	template <typename T>
 	constexpr Matrix3D<T> Matrix3D<T>::CreateRotationZ(const T& anAngle) requires(std::is_floating_point_v<T>)
 	{
-		T c = Math::Cosine<T>(anAngle);
-		T s = Math::Sine<T>(anAngle);
+		T c = ROSECOMMON_MATH_NAMESPACE::Cosine<T>(anAngle);
+		T s = ROSECOMMON_MATH_NAMESPACE::Sine<T>(anAngle);
 
 		Matrix3D result = Matrix3D::Identity();
 
@@ -870,9 +872,9 @@ namespace RoseCommon::Math
 	{
 		outTranslation = GetTranslation();
 
-		outScale.X = Math::Squareroot((M11 * M11) + (M12 * M12) + (M13 * M13));
-		outScale.Y = Math::Squareroot((M21 * M21) + (M22 * M22) + (M23 * M23));
-		outScale.Z = Math::Squareroot((M31 * M31) + (M32 * M32) + (M33 * M33));
+		outScale.X = ROSECOMMON_MATH_NAMESPACE::Squareroot((M11 * M11) + (M12 * M12) + (M13 * M13));
+		outScale.Y = ROSECOMMON_MATH_NAMESPACE::Squareroot((M21 * M21) + (M22 * M22) + (M23 * M23));
+		outScale.Z = ROSECOMMON_MATH_NAMESPACE::Squareroot((M31 * M31) + (M32 * M32) + (M33 * M33));
 
 		Matrix rotationMatrix = (*this) * Matrix::InvertCorrect(Matrix::CreateScale(outScale) * Matrix::CreateTranslation(outTranslation));
 

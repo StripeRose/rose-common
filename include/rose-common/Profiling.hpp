@@ -1,5 +1,6 @@
 #pragma once
 
+#include "RoseCommon_Namespace.hpp"
 #include "MacroHelpers.hpp"
 
 #include <chrono>
@@ -8,7 +9,7 @@
 #include <string>
 #include <vector>
 
-namespace RoseCommon::Profiling
+namespace ROSECOMMON_NAMESPACE
 {
 	/**
 	 * @brief A profiling stack-frame.
@@ -127,7 +128,7 @@ namespace RoseCommon::Profiling
 	};
 }
 
-#define PROFILE_SCOPE_NAMED(ScopeName) RoseCommon::Profiling::Profiler::FrameSubmitScope CONCATENATE(profilerScope, __COUNTER__)(__COUNTER__, __FILE__ "(" STRINGIZE(__LINE__) ")", __func__, ScopeName)
+#define PROFILE_SCOPE_NAMED(ScopeName) ROSECOMMON_NAMESPACE::Profiler::FrameSubmitScope CONCATENATE(profilerScope, __COUNTER__)(__COUNTER__, __FILE__ "(" STRINGIZE(__LINE__) ")", __func__, ScopeName)
 #define PROFILE_SCOPE() PROFILE_SCOPE_NAMED({})
 
-#define PROFILE_MARKER(MarkerName) RoseCommon::Profiling::Profiler::SubmitMarker(__FILE__ "(" STRINGIZE(__LINE__) ")", __func__, MarkerName)
+#define PROFILE_MARKER(MarkerName) ROSECOMMON_NAMESPACE::Profiler::SubmitMarker(__FILE__ "(" STRINGIZE(__LINE__) ")", __func__, MarkerName)

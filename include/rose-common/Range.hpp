@@ -1,8 +1,10 @@
 #pragma once
 
+#include "RoseCommon_Namespace.hpp"
+
 #include <type_traits>
 
-namespace RoseCommon
+namespace ROSECOMMON_NAMESPACE
 {
     /**
      * @brief A number range which can be iterated through.

@@ -11,7 +11,7 @@
 #include <Windows.h>
 #endif
 
-namespace RoseCommon
+namespace ROSECOMMON_NAMESPACE
 {
 	namespace Debug_cpp
 	{
@@ -446,7 +446,7 @@ namespace RoseCommon
 			if (aMessage.empty())
 				return;
 
-			RoseCommon::StringUtilities::Replace<char>(aMessage, "\n", "\n                ");
+			ROSECOMMON_NAMESPACE::StringReplace<char>(aMessage, "\n", "\n                ");
 			aMessage.append("\n");
 
 			printf(aMessage.c_str());
@@ -460,7 +460,7 @@ namespace RoseCommon
 			if (aMessage.empty())
 				return;
 
-			RoseCommon::StringUtilities::Replace<wchar_t>(aMessage, L"\n", L"\n                ");
+			ROSECOMMON_NAMESPACE::StringReplace<wchar_t>(aMessage, L"\n", L"\n                ");
 			aMessage.append(L"\n");
 
 			wprintf(aMessage.c_str());

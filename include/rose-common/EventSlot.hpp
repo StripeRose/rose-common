@@ -1,9 +1,11 @@
 #pragma once
 
+#include "RoseCommon_Namespace.hpp"
+
 #include <functional>
 #include <map>
 
-namespace RoseCommon
+namespace ROSECOMMON_NAMESPACE
 {
 	/**
 	 * @brief An interface for defining events which other objects can listen for the invokation of.

@@ -1,5 +1,7 @@
 #pragma once
 
+#include "../RoseCommon_Namespace.hpp"
+
 #include <algorithm>
 #include <cwctype>
 #include <filesystem>
@@ -13,7 +15,7 @@
 
 // Based off https://github.com/SSARCandy/ini-cpp/
 
-namespace RoseCommon
+namespace ROSECOMMON_NAMESPACE
 {
 	/**
 	 * @brief A structure of an Initialization (*.ini) file.

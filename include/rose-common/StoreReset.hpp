@@ -1,6 +1,8 @@
 #pragma once
 
-namespace RoseCommon
+#include "RoseCommon_Namespace.hpp"
+
+namespace ROSECOMMON_NAMESPACE
 {
 	/**
 	 * @brief A structure which changes a value, then resets it when the object is destroyed.

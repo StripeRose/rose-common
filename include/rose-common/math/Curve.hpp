@@ -1,12 +1,14 @@
 #pragma once
 
+#include "../RoseCommon_Namespace.hpp"
+
 #include "Common.hpp"
 #include "Constants.hpp"
 
-namespace RoseCommon::Math
+namespace ROSECOMMON_MATH_NAMESPACE
 {
 	// Functions ported from https://github.com/FNA-XNA/FNA/blob/master/src/MathHelper.cs
-	
+
 	/**
 	 * @brief Calculate the Cartesian coordinate for one axis of a point that is defined by a
 	 *        given triangle and two normalized barycentric (areal) coordinates.
@@ -22,7 +24,7 @@ namespace RoseCommon::Math
 	 */
 	template <typename T>
 	constexpr T Barycentric(T aValue1, T aValue2, T aValue3, T anAmount1, T anAmount2);
-	
+
 	/**
 	 * @brief Performs a Catmull-Rom interpolation using the specified positions.
 	 */
@@ -42,7 +44,7 @@ namespace RoseCommon::Math
 	constexpr T SmoothStep(T aValue1, T aValue2, T anAmount);
 }
 
-namespace RoseCommon::Math
+namespace ROSECOMMON_MATH_NAMESPACE
 {
 	template <typename T>
 	constexpr T Barycentric(T aValue1, T aValue2, T aValue3, T anAmount1, T anAmount2)
@@ -80,11 +82,11 @@ namespace RoseCommon::Math
 		const double sSquared = s * s;
 
 		double result;
-		if (Math::IsZero(anAmount))
+		if (ROSECOMMON_MATH_NAMESPACE::IsZero(anAmount))
 		{
 			result = aValue1;
 		}
-		else if (Math::Equals(anAmount, T(1)))
+		else if (ROSECOMMON_MATH_NAMESPACE::Equals(anAmount, T(1)))
 		{
 			result = aValue2;
 		}
@@ -108,7 +110,7 @@ namespace RoseCommon::Math
 		 * If anAmount < 0, return aValue1.
 		 * If anAmount > 1, return aValue2.
 		 */
-		const T result = Math::Clamp<T>(anAmount, T(0), T(1));
+		const T result = ROSECOMMON_MATH_NAMESPACE::Clamp<T>(anAmount, T(0), T(1));
 		return Hermite<T>(aValue1, T(0), aValue2, T(0), result);
 	}
 }

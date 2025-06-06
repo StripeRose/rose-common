@@ -19,4 +19,4 @@
 //    void PrintToLog(const ProfilingData& data);
 //}
 
-std::ostream& operator<<(std::ostream& os, const RoseCommon::Profiling::ProfilingData& data);
+std::ostream& operator<<(std::ostream& os, const ROSECOMMON_NAMESPACE::ProfilingData& data);

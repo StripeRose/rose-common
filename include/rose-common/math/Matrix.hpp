@@ -1,11 +1,13 @@
 #pragma once
 
+#include "../RoseCommon_Namespace.hpp"
+
 #include <array>
 #include <optional>
 #include <stdexcept>
 #include <type_traits>
 
-namespace RoseCommon::Math
+namespace ROSECOMMON_MATH_NAMESPACE
 {
 	template <std::size_t Width, std::size_t Height, typename T>
 	class Matrix

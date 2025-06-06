@@ -1,5 +1,7 @@
 #pragma once
 
+#include "RoseCommon_Namespace.hpp"
+
 #include <algorithm>
 #include <cstdint>
 #include <map>
@@ -8,7 +10,7 @@
 #include <string_view>
 #include <vector>
 
-namespace RoseCommon
+namespace ROSECOMMON_NAMESPACE
 {
 	/**
 	 * @brief An interface for parsing and getting values off command line-style flags.

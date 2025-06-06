@@ -1,11 +1,13 @@
 #pragma once
 
+#include "../RoseCommon_Namespace.hpp"
+
 #include "Common.hpp"
 #include "Curve.hpp"
 #include "Matrix.hpp"
 #include "Trigonometry.hpp"
 
-namespace RoseCommon::Math
+namespace ROSECOMMON_MATH_NAMESPACE
 {
 	/**
 	 * @brief A mathematical vector with two components.
@@ -118,7 +120,7 @@ namespace RoseCommon::Math
 		// * Methods
 		//--------------------------------------------------
 		#pragma region Methods
-		
+
 		/**
 		 * @brief Restrict a value to be within the specified range.
 		 * @param aValue The vector to clamp.
@@ -160,7 +162,7 @@ namespace RoseCommon::Math
 		 * @return The dot product of the two vectors.
 		 */
 		static constexpr T Dot(const Vector2& aValue1, const Vector2& aValue2);
-		
+
 		/**
 		 * @brief Calculate the vector length.
 		 * @return The length of the vector.
@@ -181,7 +183,7 @@ namespace RoseCommon::Math
 		 * @return A vector containing the linear interpolation result.
 		 */
 		static constexpr Vector2 Lerp(const Vector2& aValue1, const Vector2& aValue2, const T& anAmount);
-		
+
 		/**
 		 * @brief Get the largest values for each component.
 		 * @param aValue1 Source vector.
@@ -261,7 +263,8 @@ namespace RoseCommon::Math
 
 		inline void operator*=(const Matrix<2, 2, T>& aMatrix) { (*this) = Vector2(ToRowMatrix() * aMatrix); }
 
-		inline constexpr bool operator==(const Vector2& aVector) const { return Math::Equals(X, aVector.X) && Math::Equals(Y, aVector.Y); }
+		inline constexpr bool operator==(const Vector2& aVector) const { return ROSECOMMON_MATH_NAMESPACE::Equals(X, aVector.X) && ROSECOMMON_MATH_NAMESPACE::Equals(Y, aVector.Y);
+		}
 		inline constexpr bool operator!=(const Vector2& aVector) const { return !operator==(aVector); }
 
 		template <typename U = T>
@@ -394,7 +397,7 @@ namespace RoseCommon::Math
 		 * @param aZ A value for the Z component.
 		 */
 		explicit constexpr Vector3(const Vector2<T>& aVector, const T& aZ = 0);
-		
+
 		/**
 		 * @brief Initialize the components with the values from a 1x3 matrix.
 		 * @param aColumnMatrix A column matrix to initialize with.
@@ -597,7 +600,7 @@ namespace RoseCommon::Math
 
 		inline void operator*=(const Matrix<3, 3, T>& aMatrix) { (*this) = Vector3(ToRowMatrix() * aMatrix); }
 
-		inline constexpr bool operator==(const Vector3& aVector) const { return Math::Equals(X, aVector.X) && Math::Equals(Y, aVector.Y) && Math::Equals(Z, aVector.Z); }
+		inline constexpr bool operator==(const Vector3& aVector) const { return ROSECOMMON_MATH_NAMESPACE::Equals(X, aVector.X) && ROSECOMMON_MATH_NAMESPACE::Equals(Y, aVector.Y) && ROSECOMMON_MATH_NAMESPACE::Equals(Z, aVector.Z); }
 		inline constexpr bool operator!=(const Vector3& aVector) const { return !operator==(aVector); }
 
 		constexpr std::strong_ordering operator<=>(const Vector3& aVector) const
@@ -900,7 +903,7 @@ namespace RoseCommon::Math
 
 		inline void operator*=(const Matrix<4, 4, T>& aMatrix) { (*this) = Vector4(ToRowMatrix() * aMatrix); }
 
-		inline constexpr bool operator==(const Vector4& aVector) const { return Math::Equals(X, aVector.X) && Math::Equals(Y, aVector.Y) && Math::Equals(Z, aVector.Z) && Math::Equals(W, aVector.W); }
+		inline constexpr bool operator==(const Vector4& aVector) const { return ROSECOMMON_MATH_NAMESPACE::Equals(X, aVector.X) && ROSECOMMON_MATH_NAMESPACE::Equals(Y, aVector.Y) && ROSECOMMON_MATH_NAMESPACE::Equals(Z, aVector.Z) && ROSECOMMON_MATH_NAMESPACE::Equals(W, aVector.W); }
 		inline constexpr bool operator!=(const Vector4& aVector) const { return !operator==(aVector); }
 
 		constexpr std::strong_ordering operator<=>(const Vector4& aVector) const
@@ -921,7 +924,7 @@ namespace RoseCommon::Math
 	};
 }
 
-namespace RoseCommon::Math
+namespace ROSECOMMON_MATH_NAMESPACE
 {
 	#pragma region Vector2 implementation
 
@@ -976,8 +979,8 @@ namespace RoseCommon::Math
 	constexpr Vector2<T> Vector2<T>::Clamp(const Vector2& aValue, const Vector2& aMinimum, const Vector2& aMaximum)
 	{
 		return Vector2(
-			Math::Clamp<T>(aValue.X, aMinimum.X, aMaximum.X),
-			Math::Clamp<T>(aValue.Y, aMinimum.Y, aMaximum.Y)
+			ROSECOMMON_MATH_NAMESPACE::Clamp<T>(aValue.X, aMinimum.X, aMaximum.X),
+			ROSECOMMON_MATH_NAMESPACE::Clamp<T>(aValue.Y, aMinimum.Y, aMaximum.Y)
 		);
 	}
 
@@ -1008,7 +1011,7 @@ namespace RoseCommon::Math
 	template <typename T>
 	constexpr T Vector2<T>::Length() const
 	{
-		return Math::Squareroot(LengthSquared());
+		return ROSECOMMON_MATH_NAMESPACE::Squareroot(LengthSquared());
 	}
 
 	template <typename T>
@@ -1027,8 +1030,8 @@ namespace RoseCommon::Math
 	constexpr Vector2<T> Vector2<T>::Max(const Vector2& aValue1, const Vector2& aValue2)
 	{
 		return Vector2(
-			Math::Max<T>(aValue1.X, aValue2.X),
-			Math::Max<T>(aValue1.Y, aValue2.Y)
+			ROSECOMMON_MATH_NAMESPACE::Max<T>(aValue1.X, aValue2.X),
+			ROSECOMMON_MATH_NAMESPACE::Max<T>(aValue1.Y, aValue2.Y)
 		);
 	}
 
@@ -1036,8 +1039,8 @@ namespace RoseCommon::Math
 	constexpr Vector2<T> Vector2<T>::Min(const Vector2& aValue1, const Vector2& aValue2)
 	{
 		return Vector2(
-			Math::Min<T>(aValue1.X, aValue2.X),
-			Math::Min<T>(aValue1.Y, aValue2.Y)
+			ROSECOMMON_MATH_NAMESPACE::Min<T>(aValue1.X, aValue2.X),
+			ROSECOMMON_MATH_NAMESPACE::Min<T>(aValue1.Y, aValue2.Y)
 		);
 	}
 
@@ -1056,8 +1059,8 @@ namespace RoseCommon::Math
 	constexpr Vector2<T> Vector2<T>::SmoothStep(const Vector2& aValue1, const Vector2& aValue2, const T& anAmount)
 	{
 		return Vector2(
-			Math::SmoothStep<T>(aValue1.X, aValue2.X, anAmount),
-			Math::SmoothStep<T>(aValue1.Y, aValue2.Y, anAmount)
+			ROSECOMMON_MATH_NAMESPACE::SmoothStep<T>(aValue1.X, aValue2.X, anAmount),
+			ROSECOMMON_MATH_NAMESPACE::SmoothStep<T>(aValue1.Y, aValue2.Y, anAmount)
 		);
 	}
 
@@ -1127,9 +1130,9 @@ namespace RoseCommon::Math
 	constexpr Vector3<T> Vector3<T>::Clamp(const Vector3& aVector, const Vector3& aMinimum, const Vector3& aMaximum)
 	{
 		return Vector3(
-			Math::Clamp<T>(aVector.X, aMinimum.X, aMaximum.X),
-			Math::Clamp<T>(aVector.Y, aMinimum.Y, aMaximum.Y),
-			Math::Clamp<T>(aVector.Z, aMinimum.Z, aMaximum.Z)
+			ROSECOMMON_MATH_NAMESPACE::Clamp<T>(aVector.X, aMinimum.X, aMaximum.X),
+			ROSECOMMON_MATH_NAMESPACE::Clamp<T>(aVector.Y, aMinimum.Y, aMaximum.Y),
+			ROSECOMMON_MATH_NAMESPACE::Clamp<T>(aVector.Z, aMinimum.Z, aMaximum.Z)
 		);
 	}
 
@@ -1173,7 +1176,7 @@ namespace RoseCommon::Math
 	template <typename T>
 	constexpr T Vector3<T>::Length() const
 	{
-		return Math::Squareroot(LengthSquared());
+		return ROSECOMMON_MATH_NAMESPACE::Squareroot(LengthSquared());
 	}
 
 	template <typename T>
@@ -1194,20 +1197,20 @@ namespace RoseCommon::Math
 		if (aValue1 == aValue2)
 			return aValue1;
 
-		const T dot = Math::Clamp(Dot(aValue1, aValue2), -1.f, 1.f);
-		const T theta = Math::ArcCosine(dot) * anAmount;
+		const T dot = ROSECOMMON_MATH_NAMESPACE::Clamp(Dot(aValue1, aValue2), -1.f, 1.f);
+		const T theta = ROSECOMMON_MATH_NAMESPACE::ArcCosine(dot) * anAmount;
 		Vector3 relativeVector = aValue2 - (aValue1 * dot);
 		relativeVector.Normalize();
-		return ((aValue1 * Math::Cosine(theta)) + (relativeVector * Math::Sine(theta)));
+		return ((aValue1 * ROSECOMMON_MATH_NAMESPACE::Cosine(theta)) + (relativeVector * ROSECOMMON_MATH_NAMESPACE::Sine(theta)));
 	}
 
 	template <typename T>
 	constexpr Vector3<T> Vector3<T>::Max(const Vector3& aValue1, const Vector3& aValue2)
 	{
 		return Vector3(
-			Math::Max<T>(aValue1.X, aValue2.X),
-			Math::Max<T>(aValue1.Y, aValue2.Y),
-			Math::Max<T>(aValue1.Z, aValue2.Z)
+			ROSECOMMON_MATH_NAMESPACE::Max<T>(aValue1.X, aValue2.X),
+			ROSECOMMON_MATH_NAMESPACE::Max<T>(aValue1.Y, aValue2.Y),
+			ROSECOMMON_MATH_NAMESPACE::Max<T>(aValue1.Z, aValue2.Z)
 		);
 	}
 
@@ -1215,9 +1218,9 @@ namespace RoseCommon::Math
 	constexpr Vector3<T> Vector3<T>::Min(const Vector3& aValue1, const Vector3& aValue2)
 	{
 		return Vector3(
-			Math::Min<T>(aValue1.X, aValue2.X),
-			Math::Min<T>(aValue1.Y, aValue2.Y),
-			Math::Min<T>(aValue1.Z, aValue2.Z)
+			ROSECOMMON_MATH_NAMESPACE::Min<T>(aValue1.X, aValue2.X),
+			ROSECOMMON_MATH_NAMESPACE::Min<T>(aValue1.Y, aValue2.Y),
+			ROSECOMMON_MATH_NAMESPACE::Min<T>(aValue1.Z, aValue2.Z)
 		);
 	}
 
@@ -1236,9 +1239,9 @@ namespace RoseCommon::Math
 	constexpr Vector3<T> Vector3<T>::SmoothStep(const Vector3& aValue1, const Vector3& aValue2, const T& anAmount)
 	{
 		return Vector3(
-			Math::SmoothStep<T>(aValue1.X, aValue2.X, anAmount),
-			Math::SmoothStep<T>(aValue1.Y, aValue2.Y, anAmount),
-			Math::SmoothStep<T>(aValue1.Z, aValue2.Z, anAmount)
+			ROSECOMMON_MATH_NAMESPACE::SmoothStep<T>(aValue1.X, aValue2.X, anAmount),
+			ROSECOMMON_MATH_NAMESPACE::SmoothStep<T>(aValue1.Y, aValue2.Y, anAmount),
+			ROSECOMMON_MATH_NAMESPACE::SmoothStep<T>(aValue1.Z, aValue2.Z, anAmount)
 		);
 	}
 
@@ -1319,10 +1322,10 @@ namespace RoseCommon::Math
 	constexpr Vector4<T> Vector4<T>::Clamp(const Vector4& aVector, const Vector4& aMinimum, const Vector4& aMaximum)
 	{
 		return Vector4(
-			Math::Clamp<T>(aVector.X, aMinimum.X, aMaximum.X),
-			Math::Clamp<T>(aVector.Y, aMinimum.Y, aMaximum.Y),
-			Math::Clamp<T>(aVector.Z, aMinimum.Z, aMaximum.Z),
-			Math::Clamp<T>(aVector.W, aMinimum.W, aMaximum.W)
+			ROSECOMMON_MATH_NAMESPACE::Clamp<T>(aVector.X, aMinimum.X, aMaximum.X),
+			ROSECOMMON_MATH_NAMESPACE::Clamp<T>(aVector.Y, aMinimum.Y, aMaximum.Y),
+			ROSECOMMON_MATH_NAMESPACE::Clamp<T>(aVector.Z, aMinimum.Z, aMaximum.Z),
+			ROSECOMMON_MATH_NAMESPACE::Clamp<T>(aVector.W, aMinimum.W, aMaximum.W)
 		);
 	}
 
@@ -1357,7 +1360,7 @@ namespace RoseCommon::Math
 	template <typename T>
 	constexpr T Vector4<T>::Length() const
 	{
-		return Math::Squareroot(LengthSquared());
+		return ROSECOMMON_MATH_NAMESPACE::Squareroot(LengthSquared());
 	}
 
 	template <typename T>
@@ -1376,10 +1379,10 @@ namespace RoseCommon::Math
 	constexpr Vector4<T> Vector4<T>::Max(const Vector4& aValue1, const Vector4& aValue2)
 	{
 		return Vector4(
-			Math::Max<T>(aValue1.X, aValue2.X),
-			Math::Max<T>(aValue1.Y, aValue2.Y),
-			Math::Max<T>(aValue1.Z, aValue2.Z),
-			Math::Max<T>(aValue1.W, aValue2.W)
+			ROSECOMMON_MATH_NAMESPACE::Max<T>(aValue1.X, aValue2.X),
+			ROSECOMMON_MATH_NAMESPACE::Max<T>(aValue1.Y, aValue2.Y),
+			ROSECOMMON_MATH_NAMESPACE::Max<T>(aValue1.Z, aValue2.Z),
+			ROSECOMMON_MATH_NAMESPACE::Max<T>(aValue1.W, aValue2.W)
 		);
 	}
 
@@ -1387,10 +1390,10 @@ namespace RoseCommon::Math
 	constexpr Vector4<T> Vector4<T>::Min(const Vector4& aValue1, const Vector4& aValue2)
 	{
 		return Vector4(
-			Math::Min<T>(aValue1.X, aValue2.X),
-			Math::Min<T>(aValue1.Y, aValue2.Y),
-			Math::Min<T>(aValue1.Z, aValue2.Z),
-			Math::Min<T>(aValue1.W, aValue2.W)
+			ROSECOMMON_MATH_NAMESPACE::Min<T>(aValue1.X, aValue2.X),
+			ROSECOMMON_MATH_NAMESPACE::Min<T>(aValue1.Y, aValue2.Y),
+			ROSECOMMON_MATH_NAMESPACE::Min<T>(aValue1.Z, aValue2.Z),
+			ROSECOMMON_MATH_NAMESPACE::Min<T>(aValue1.W, aValue2.W)
 		);
 	}
 
@@ -1398,10 +1401,10 @@ namespace RoseCommon::Math
 	constexpr Vector4<T> Vector4<T>::SmoothStep(const Vector4& aValue1, const Vector4& aValue2, const T& anAmount)
 	{
 		return Vector4(
-			Math::SmoothStep<T>(aValue1.X, aValue2.X, anAmount),
-			Math::SmoothStep<T>(aValue1.Y, aValue2.Y, anAmount),
-			Math::SmoothStep<T>(aValue1.Z, aValue2.Z, anAmount),
-			Math::SmoothStep<T>(aValue1.W, aValue2.W, anAmount)
+			ROSECOMMON_MATH_NAMESPACE::SmoothStep<T>(aValue1.X, aValue2.X, anAmount),
+			ROSECOMMON_MATH_NAMESPACE::SmoothStep<T>(aValue1.Y, aValue2.Y, anAmount),
+			ROSECOMMON_MATH_NAMESPACE::SmoothStep<T>(aValue1.Z, aValue2.Z, anAmount),
+			ROSECOMMON_MATH_NAMESPACE::SmoothStep<T>(aValue1.W, aValue2.W, anAmount)
 		);
 	}
 

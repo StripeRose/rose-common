@@ -6,7 +6,7 @@
 #include <map>
 #include <vector>
 
-namespace RoseCommon::Profiling
+namespace ROSECOMMON_NAMESPACE
 {
 	namespace ProfilerInternal
 	{
@@ -139,7 +139,7 @@ namespace RoseCommon::Profiling
 	}
 }
 
-namespace RoseCommon::Profiling
+namespace ROSECOMMON_NAMESPACE
 {
 	class ProfilingDataTreeFormatter
 	{
@@ -220,9 +220,9 @@ namespace RoseCommon::Profiling
 	};
 }
 
-std::ostream& operator<<(std::ostream& os, const RoseCommon::Profiling::ProfilingData& data)
+std::ostream& operator<<(std::ostream& os, const ROSECOMMON_NAMESPACE::ProfilingData& data)
 {
-	RoseCommon::Profiling::ProfilingDataTreeFormatter formatter;
+	ROSECOMMON_NAMESPACE::ProfilingDataTreeFormatter formatter;
 	formatter.Resolve(data);
 	formatter.ToStream(os);
 	return os;

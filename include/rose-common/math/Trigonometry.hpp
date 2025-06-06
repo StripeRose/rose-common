@@ -1,11 +1,13 @@
 #pragma once
 
+#include "../RoseCommon_Namespace.hpp"
+
 #include "Constants.hpp"
 #include "Common.hpp"
 
 #include <stdexcept>
 
-namespace RoseCommon::Math
+namespace ROSECOMMON_MATH_NAMESPACE
 {
 	/**
 	 * @brief Calculate the angle whose sine is the specified number.
@@ -24,7 +26,7 @@ namespace RoseCommon::Math
 	 */
 	template <typename T>
 	constexpr T ArcCosine(T aValue);
-	
+
 	/**
 	 * @brief Calculate the angle whose tangent is the specified number.
 	 * @tparam T The type of the parameter and returned value.
@@ -46,7 +48,7 @@ namespace RoseCommon::Math
 
 	template <typename T>
 	constexpr T Hill(T aValue);
-	
+
 	/**
 	 * @brief Calculate the sine of an angle.
 	 * @tparam T The type of the parameter and returned value.
@@ -82,7 +84,7 @@ namespace RoseCommon::Math
 	 */
 	template <typename T>
 	constexpr T Tangent(T aValue);
-	
+
 	/**
 	 * @brief Convert an angle in radians to the same angle in degrees.
 	 * @tparam T The type of the parameter and returned value.
@@ -120,7 +122,7 @@ namespace RoseCommon::Math
 	constexpr T WrapDegrees(const T& anAngleInDegrees);
 }
 
-namespace RoseCommon::Math
+namespace ROSECOMMON_MATH_NAMESPACE
 {
 	template <typename T>
 	constexpr T ArcSine(T aValue)
@@ -146,8 +148,8 @@ namespace RoseCommon::Math
 			};
 
 		auto tail = [](T x) -> T {
-			return static_cast<T>(Math::HalfPiT<T> +
-				Math::Squareroot(T(1) - x)
+			return static_cast<T>(ROSECOMMON_MATH_NAMESPACE::HalfPiT<T> +
+				ROSECOMMON_MATH_NAMESPACE::Squareroot(T(1) - x)
 				* (((((((((((((
 					+-0.0000121189820098929624806) * x
 					+ 0.0001307564187657962919394) * x
@@ -182,7 +184,7 @@ namespace RoseCommon::Math
 		if (aValue == T(1))
 			return T(0);
 		else
-			return Math::HalfPiT<T> -ArcSine(aValue);
+			return ROSECOMMON_MATH_NAMESPACE::HalfPiT<T> -ArcSine(aValue);
 	}
 
 	namespace _impl
@@ -225,13 +227,13 @@ namespace RoseCommon::Math
 		if (anX > T(0))
 			return ArcTangent(aY / anX);
 		else if (aY >= T(0) && anX < T(0))
-			return ArcTangent(aY / anX) + Math::PiT<T>;
+			return ArcTangent(aY / anX) + ROSECOMMON_MATH_NAMESPACE::PiT<T>;
 		else if (aY < T(0) && anX < T(0))
-			return ArcTangent(aY / anX) - Math::PiT<T>;
+			return ArcTangent(aY / anX) - ROSECOMMON_MATH_NAMESPACE::PiT<T>;
 		else if (aY > T(0) && anX == T(0))
-			return Math::PiT<T> / T(2.01);
+			return ROSECOMMON_MATH_NAMESPACE::PiT<T> / T(2.01);
 		else if (aY < T(0) && anX == T(0))
-			return -(Math::PiT<T> / T(2.01));
+			return -(ROSECOMMON_MATH_NAMESPACE::PiT<T> / T(2.01));
 		else
 			throw std::exception();
 	}
@@ -240,9 +242,9 @@ namespace RoseCommon::Math
 	constexpr T Hill(T aValue)
 	{
 		const T a0 = static_cast<T>(1.0f);
-		const T a2 = (static_cast<T>(2.0f) / Math::PiT<T>) - (static_cast<T>(12.0f) / (Math::PiT<T> *Math::PiT<T>));
-		const T a3 = (static_cast<T>(16.0f) / (Math::PiT<T> *Math::PiT<T> *Math::PiT<T>))
-			- (static_cast<T>(4.0f) / (Math::PiT<T> *Math::PiT<T>));
+		const T a2 = (static_cast<T>(2.0f) / ROSECOMMON_MATH_NAMESPACE::PiT<T>) - (static_cast<T>(12.0f) / (ROSECOMMON_MATH_NAMESPACE::PiT<T> *ROSECOMMON_MATH_NAMESPACE::PiT<T>));
+		const T a3 = (static_cast<T>(16.0f) / (ROSECOMMON_MATH_NAMESPACE::PiT<T> *ROSECOMMON_MATH_NAMESPACE::PiT<T> *ROSECOMMON_MATH_NAMESPACE::PiT<T>))
+			- (static_cast<T>(4.0f) / (ROSECOMMON_MATH_NAMESPACE::PiT<T> *ROSECOMMON_MATH_NAMESPACE::PiT<T>));
 		const T xx = aValue * aValue;
 		const T xxx = xx * aValue;
 
@@ -252,35 +254,35 @@ namespace RoseCommon::Math
 	template <typename T>
 	constexpr T Sine(T aValue)
 	{
-		const T a = aValue * Math::ReciprocalTwoPiT<T>;
-		aValue -= static_cast<int>(a) * Math::TwoPiT<T>;
+		const T a = aValue * ROSECOMMON_MATH_NAMESPACE::ReciprocalTwoPiT<T>;
+		aValue -= static_cast<int>(a) * ROSECOMMON_MATH_NAMESPACE::TwoPiT<T>;
 		if (aValue < static_cast<T>(0))
 		{
-			aValue += Math::TwoPiT<T>;
+			aValue += ROSECOMMON_MATH_NAMESPACE::TwoPiT<T>;
 		}
 
-		if (aValue < Math::HalfPiT<T>)
+		if (aValue < ROSECOMMON_MATH_NAMESPACE::HalfPiT<T>)
 		{
-			return Hill(Math::HalfPiT<T> - aValue);
+			return Hill(ROSECOMMON_MATH_NAMESPACE::HalfPiT<T> -aValue);
 		}
-		else if (aValue < Math::PiT<T>)
+		else if (aValue < ROSECOMMON_MATH_NAMESPACE::PiT<T>)
 		{
-			return Hill(aValue - Math::HalfPiT<T>);
+			return Hill(aValue - ROSECOMMON_MATH_NAMESPACE::HalfPiT<T>);
 		}
-		else if (aValue < static_cast<T>(3) * Math::HalfPiT<T>)
+		else if (aValue < static_cast<T>(3) * ROSECOMMON_MATH_NAMESPACE::HalfPiT<T>)
 		{
-			return -Hill((static_cast<T>(3) * Math::HalfPiT<T>) - aValue);
+			return -Hill((static_cast<T>(3) * ROSECOMMON_MATH_NAMESPACE::HalfPiT<T>) - aValue);
 		}
 		else
 		{
-			return -Hill(aValue - (static_cast<T>(3) * Math::HalfPiT<T>));
+			return -Hill(aValue - (static_cast<T>(3) * ROSECOMMON_MATH_NAMESPACE::HalfPiT<T>));
 		}
 	}
 
 	template <typename T>
 	constexpr T Cosine(T aValue)
 	{
-		return Sine(aValue + Math::HalfPiT<T>);
+		return Sine(aValue + ROSECOMMON_MATH_NAMESPACE::HalfPiT<T>);
 	}
 
 	template <typename T>
@@ -298,24 +300,24 @@ namespace RoseCommon::Math
 	template <typename T>
 	constexpr T ToDegrees(T anAngleInRadians)
 	{
-		return (static_cast<T>(180) / Math::PiT<T>) * anAngleInRadians;
+		return (static_cast<T>(180) / ROSECOMMON_MATH_NAMESPACE::PiT<T>) * anAngleInRadians;
 	}
 
 	template <typename T>
 	constexpr T ToRadians(T anAngleInDegrees)
 	{
-		return (Math::PiT<T> / static_cast<T>(180)) * anAngleInDegrees;
+		return (ROSECOMMON_MATH_NAMESPACE::PiT<T> / static_cast<T>(180)) * anAngleInDegrees;
 	}
 
 	template <typename T>
 	constexpr T WrapRadians(T anAngleInRadians)
 	{
-		return Math::Wrap<T>(anAngleInRadians, -Math::PiT<T>, Math::PiT<T>);
+		return ROSECOMMON_MATH_NAMESPACE::Wrap<T>(anAngleInRadians, -ROSECOMMON_MATH_NAMESPACE::PiT<T>, ROSECOMMON_MATH_NAMESPACE::PiT<T>);
 	}
 
 	template <typename T>
 	constexpr T WrapDegrees(const T& anAngleInDegrees)
 	{
-		return Math::Modulo<T>(anAngleInDegrees, T(360));
+		return ROSECOMMON_MATH_NAMESPACE::Modulo<T>(anAngleInDegrees, T(360));
 	}
 }

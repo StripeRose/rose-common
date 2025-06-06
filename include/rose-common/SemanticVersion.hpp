@@ -1,10 +1,12 @@
 #pragma once
 
+#include "RoseCommon_Namespace.hpp"
+
 #include <sstream>
 #include <string>
 #include <vector>
 
-namespace RoseCommon
+namespace ROSECOMMON_NAMESPACE
 {
 	/**
 	 * @brief A version identifier, following the http://semver.org/ standard.

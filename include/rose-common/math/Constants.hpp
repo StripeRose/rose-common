@@ -1,6 +1,8 @@
 #pragma once
 
-namespace RoseCommon::Math
+#include "../RoseCommon_Namespace.hpp"
+
+namespace ROSECOMMON_MATH_NAMESPACE
 {
 	/**
 	 * @brief Templated constant for Pi.

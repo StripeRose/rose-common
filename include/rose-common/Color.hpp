@@ -1,5 +1,6 @@
 #pragma once
 
+#include "RoseCommon_Namespace.hpp"
 #include "math/Common.hpp"
 
 #include <cmath>
@@ -7,7 +8,7 @@
 #include <cstdint>
 #include <utility>
 
-namespace RoseCommon
+namespace ROSECOMMON_NAMESPACE
 {
 	/**
 	 * @brief A straight four-component color using red, green, blue, and alpha data.
@@ -218,7 +219,7 @@ namespace RoseCommon
 
 		float hue = 0.f;
 		if (r == max) {
-			hue = Math::Modulo<float>((g - b) / delta, 6);
+			hue = ROSECOMMON_MATH_NAMESPACE::Modulo<float>((g - b) / delta, 6);
 		}
 		else if (g == max) {
 			hue = 2 + (b - r) / delta;
@@ -253,9 +254,9 @@ namespace RoseCommon
 	{
 		return Color<T>(
 			A,
-			Math::Clamp<T>(R, 0, ourSDRUpperBound),
-			Math::Clamp<T>(G, 0, ourSDRUpperBound),
-			Math::Clamp<T>(B, 0, ourSDRUpperBound)
+			ROSECOMMON_MATH_NAMESPACE::Clamp<T>(R, 0, ourSDRUpperBound),
+			ROSECOMMON_MATH_NAMESPACE::Clamp<T>(G, 0, ourSDRUpperBound),
+			ROSECOMMON_MATH_NAMESPACE::Clamp<T>(B, 0, ourSDRUpperBound)
 		);
 	}
 
@@ -334,7 +335,7 @@ namespace RoseCommon
 	{
 		if constexpr (std::is_floating_point_v<T>)
 		{
-			A = Math::Clamp<T>(A + aColor.A, 0, 1);
+			A = ROSECOMMON_MATH_NAMESPACE::Clamp<T>(A + aColor.A, 0, 1);
 			R += aColor.R;
 			G += aColor.G;
 			B += aColor.B;
@@ -360,7 +361,7 @@ namespace RoseCommon
 	{
 		if constexpr (std::is_floating_point_v<T>)
 		{
-			A = Math::Clamp<T>(A - aColor.A, 0, 1);
+			A = ROSECOMMON_MATH_NAMESPACE::Clamp<T>(A - aColor.A, 0, 1);
 			R -= aColor.R;
 			G -= aColor.G;
 			B -= aColor.B;
@@ -386,7 +387,7 @@ namespace RoseCommon
 	{
 		if constexpr (std::is_floating_point_v<T>)
 		{
-			A = Math::Clamp<T>(A * aColor.A, 0, 1);
+			A = ROSECOMMON_MATH_NAMESPACE::Clamp<T>(A * aColor.A, 0, 1);
 			R *= aColor.R;
 			G *= aColor.G;
 			B *= aColor.B;

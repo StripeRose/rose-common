@@ -1,10 +1,12 @@
 #pragma once
 
+#include "../RoseCommon_Namespace.hpp"
+
 #include "Matrix.hpp"
 #include "Trigonometry.hpp"
 #include "Vector.hpp"
 
-namespace RoseCommon::Math
+namespace ROSECOMMON_MATH_NAMESPACE
 {
 	//template <typename T>
 	//class Quaternion
@@ -23,13 +25,13 @@ namespace RoseCommon::Math
 	//	static constexpr Quaternion CreateFromAxisAngle(const Vector3<T>& anAxis, const T& anAngle)
 	//	{
 	//		const T halfAngle = anAngle / 2;
-	//		const T s = Math::Sine(halfAngle);
+	//		const T s = ROSECOMMON_MATH_NAMESPACE::Sine(halfAngle);
 
 	//		return Quaternion(
 	//			anAxis.X * s,
 	//			anAxis.Y * s,
 	//			anAxis.Z * s,
-	//			Math::Cosine(halfAngle)
+	//			ROSECOMMON_MATH_NAMESPACE::Cosine(halfAngle)
 	//		);
 	//	}
 
@@ -118,10 +120,10 @@ namespace RoseCommon::Math
 
 	//		if (angle <= (1 - threshold)) // spherical interpolation
 	//		{
-	//			const T theta = Math::ArcCosine(angle);
-	//			const T invsintheta = Math::Reciprocal(Math::Sine(theta));
-	//			const T scale = Math::Sine(theta * (1.0f - anAmount)) * invsintheta;
-	//			const T invscale = Math::Sine(theta * anAmount) * invsintheta;
+	//			const T theta = ROSECOMMON_MATH_NAMESPACE::ArcCosine(angle);
+	//			const T invsintheta = ROSECOMMON_MATH_NAMESPACE::Reciprocal(ROSECOMMON_MATH_NAMESPACE::Sine(theta));
+	//			const T scale = ROSECOMMON_MATH_NAMESPACE::Sine(theta * (1.0f - anAmount)) * invsintheta;
+	//			const T invscale = ROSECOMMON_MATH_NAMESPACE::Sine(theta * anAmount) * invsintheta;
 
 	//			Quaternion quaternion((q1 * scale) + (q2 * invscale));
 	//			return quaternion;
@@ -165,7 +167,7 @@ namespace RoseCommon::Math
 
 	//	void Normalize()
 	//	{
-	//		operator*=(Math::ReciprocalSquareroot(Quaternion::Dot(*this, *this)));
+	//		operator*=(ROSECOMMON_MATH_NAMESPACE::ReciprocalSquareroot(Quaternion::Dot(*this, *this)));
 	//	}
 
 	//	void Set(const T& anX, const T& aY, const T& aZ)
@@ -173,16 +175,16 @@ namespace RoseCommon::Math
 	//		Float64 angle;
 
 	//		angle = static_cast<Float64>(anX) * static_cast<Float64>(0.5);
-	//		const Float64 sr = Math::Sine(angle);
-	//		const Float64 cr = Math::Cosine(angle);
+	//		const Float64 sr = ROSECOMMON_MATH_NAMESPACE::Sine(angle);
+	//		const Float64 cr = ROSECOMMON_MATH_NAMESPACE::Cosine(angle);
 
 	//		angle = static_cast<Float64>(aY) * static_cast<Float64>(0.5);
-	//		const Float64 sp = Math::Sine(angle);
-	//		const Float64 cp = Math::Cosine(angle);
+	//		const Float64 sp = ROSECOMMON_MATH_NAMESPACE::Sine(angle);
+	//		const Float64 cp = ROSECOMMON_MATH_NAMESPACE::Cosine(angle);
 
 	//		angle = static_cast<Float64>(aZ) * static_cast<Float64>(0.5);
-	//		const Float64 sy = Math::Sine(angle);
-	//		const Float64 cy = Math::Cosine(angle);
+	//		const Float64 sy = ROSECOMMON_MATH_NAMESPACE::Sine(angle);
+	//		const Float64 cy = ROSECOMMON_MATH_NAMESPACE::Cosine(angle);
 
 	//		const Float64 cpcy = cp * cy;
 	//		const Float64 spcy = sp * cy;
@@ -199,9 +201,9 @@ namespace RoseCommon::Math
 
 	//	void ToAxisAngle(Vector3& anAxisOut, Float32& anAngleOut) const
 	//	{
-	//		const Float32 scale = Math::Squareroot(X * X + Y * Y + Z * Z);
+	//		const Float32 scale = ROSECOMMON_MATH_NAMESPACE::Squareroot(X * X + Y * Y + Z * Z);
 
-	//		if (Math::IsZero(scale) || W > static_cast<Float32>(1.0) || W < static_cast<Float32>(-1.0))
+	//		if (ROSECOMMON_MATH_NAMESPACE::IsZero(scale) || W > static_cast<Float32>(1.0) || W < static_cast<Float32>(-1.0))
 	//		{
 	//			anAngleOut = static_cast<Float32>(0);
 	//			anAxisOut.X = static_cast<Float32>(0);
@@ -210,9 +212,9 @@ namespace RoseCommon::Math
 	//		}
 	//		else
 	//		{
-	//			const Float32 invscale = Math::Reciprocal(scale);
+	//			const Float32 invscale = ROSECOMMON_MATH_NAMESPACE::Reciprocal(scale);
 
-	//			anAngleOut = static_cast<Float32>(2.0 * Math::ArcCosine(W));
+	//			anAngleOut = static_cast<Float32>(2.0 * ROSECOMMON_MATH_NAMESPACE::ArcCosine(W));
 	//			anAxisOut.X = static_cast<Float32>(X * invscale);
 	//			anAxisOut.Y = static_cast<Float32>(Y * invscale);
 	//			anAxisOut.Z = static_cast<Float32>(Z * invscale);
@@ -227,32 +229,32 @@ namespace RoseCommon::Math
 	//		const Float64 sqz = Z * Z;
 	//		const Float64 test = 2.0 * (Y * W - X * Z);
 
-	//		if (Math::Equals(test, static_cast<Float64>(1), static_cast<Float64>(0.000001)))
+	//		if (ROSECOMMON_MATH_NAMESPACE::Equals(test, static_cast<Float64>(1), static_cast<Float64>(0.000001)))
 	//		{
 	//			// heading = rotation about z-axis
-	//			anEulerOut.Z = (Float32)(-2.0 * Math::ArcTangent2(X, W));
+	//			anEulerOut.Z = (Float32)(-2.0 * ROSECOMMON_MATH_NAMESPACE::ArcTangent2(X, W));
 	//			// bank = rotation about x-axis
 	//			anEulerOut.X = 0;
 	//			// attitude = rotation about y-axis
-	//			anEulerOut.Y = (Float32)(Math::Pi64 / 2.0);
+	//			anEulerOut.Y = (Float32)(ROSECOMMON_MATH_NAMESPACE::Pi64 / 2.0);
 	//		}
-	//		else if (Math::Equals(test, static_cast<Float64>(-1), static_cast<Float64>(0.000001)))
+	//		else if (ROSECOMMON_MATH_NAMESPACE::Equals(test, static_cast<Float64>(-1), static_cast<Float64>(0.000001)))
 	//		{
 	//			// heading = rotation about z-axis
-	//			anEulerOut.Z = (Float32)(2.0 * Math::ArcTangent2(X, W));
+	//			anEulerOut.Z = (Float32)(2.0 * ROSECOMMON_MATH_NAMESPACE::ArcTangent2(X, W));
 	//			// bank = rotation about x-axis
 	//			anEulerOut.X = 0;
 	//			// attitude = rotation about y-axis
-	//			anEulerOut.Y = (Float32)(Math::Pi64 / -2.0);
+	//			anEulerOut.Y = (Float32)(ROSECOMMON_MATH_NAMESPACE::Pi64 / -2.0);
 	//		}
 	//		else
 	//		{
 	//			// heading = rotation about z-axis
-	//			anEulerOut.Z = (Float32)Math::ArcTangent2(2.0 * (X * Y + Z * W), (sqx - sqy - sqz + sqw));
+	//			anEulerOut.Z = (Float32)ROSECOMMON_MATH_NAMESPACE::ArcTangent2(2.0 * (X * Y + Z * W), (sqx - sqy - sqz + sqw));
 	//			// bank = rotation about x-axis
-	//			anEulerOut.X = (Float32)Math::ArcTangent2(2.0 * (Y * Z + X * W), (-sqx - sqy + sqz + sqw));
+	//			anEulerOut.X = (Float32)ROSECOMMON_MATH_NAMESPACE::ArcTangent2(2.0 * (Y * Z + X * W), (-sqx - sqy + sqz + sqw));
 	//			// attitude = rotation about y-axis
-	//			anEulerOut.Y = (Float32)Math::ArcSine(Math::Clamp(test, -1.0, 1.0));
+	//			anEulerOut.Y = (Float32)ROSECOMMON_MATH_NAMESPACE::ArcSine(ROSECOMMON_MATH_NAMESPACE::Clamp(test, -1.0, 1.0));
 	//		}
 	//	}
 
@@ -305,10 +307,10 @@ namespace RoseCommon::Math
 
 	//	bool operator==(const Quaternion& b) const
 	//	{
-	//		return Math::Equals(X, b.X)
-	//			&& Math::Equals(Y, b.Y)
-	//			&& Math::Equals(Z, b.Z)
-	//			&& Math::Equals(W, b.W);
+	//		return ROSECOMMON_MATH_NAMESPACE::Equals(X, b.X)
+	//			&& ROSECOMMON_MATH_NAMESPACE::Equals(Y, b.Y)
+	//			&& ROSECOMMON_MATH_NAMESPACE::Equals(Z, b.Z)
+	//			&& ROSECOMMON_MATH_NAMESPACE::Equals(W, b.W);
 	//	}
 
 	//	bool operator!=(const Quaternion& b) const

@@ -1,5 +1,7 @@
 #pragma once
 
+#include "RoseCommon_Namespace.hpp"
+
 #include <assert.h>
 #include <string>
 
@@ -12,7 +14,7 @@
 
 namespace std { class thread; }
 
-namespace RoseCommon
+namespace ROSECOMMON_NAMESPACE
 {
 	/**
 	 * @brief Provides an interface to debug logging.

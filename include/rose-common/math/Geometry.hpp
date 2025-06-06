@@ -1,11 +1,13 @@
 #pragma once
 
+#include "../RoseCommon_Namespace.hpp"
+
 #include "Matrix.hpp"
 #include "Vector.hpp"
 
 #include <optional>
 
-namespace RoseCommon::Math
+namespace ROSECOMMON_MATH_NAMESPACE
 {
 	/**
 	 * @brief An x- and y-coordinate pair in two-dimensional space.
@@ -50,7 +52,7 @@ namespace RoseCommon::Math
 		 * @brief The Y-coordinate of the point.
 		 */
 		T Y;
-		
+
 		#pragma endregion
 
 		//--------------------------------------------------
@@ -173,7 +175,7 @@ namespace RoseCommon::Math
 		 * @param aPoint An initial position of the top left corner.
 		 * @param aSize An initial size of the rectangle.
 		 */
-		constexpr Rectangle(const Point<T>& aPoint, const Math::Size<T>& aSize) noexcept;
+		constexpr Rectangle(const Point<T>& aPoint, const ROSECOMMON_MATH_NAMESPACE::Size<T>& aSize) noexcept;
 
 		/**
 		 * @brief Initialize to contain a point, and the sum of the point and a vector.
@@ -186,7 +188,7 @@ namespace RoseCommon::Math
 		 * @brief Initialize to the specified size, located at (0, 0).
 		 * @param aSize An initial size of the rectangle.
 		 */
-		constexpr explicit Rectangle(const Math::Size<T>& aSize) noexcept;
+		constexpr explicit Rectangle(const ROSECOMMON_MATH_NAMESPACE::Size<T>& aSize) noexcept;
 
 		#pragma endregion
 
@@ -264,7 +266,7 @@ namespace RoseCommon::Math
 		 * @brief Get the position of the rectangle's top-left corner.
 		 */
 		constexpr Point<T> TopLeft() const;
-		
+
 		/**
 		 * @brief Get the position of the rectangle's top-right corner.
 		 */
@@ -302,7 +304,7 @@ namespace RoseCommon::Math
 		 * @brief Expand or shrink the rectangle by the specified width and height, in each direction.
 		 * @param aSize An amount by which to expand the sides of the rectangle.
 		 */
-		void Inflate(const Math::Size<T>& aSize);
+		void Inflate(const ROSECOMMON_MATH_NAMESPACE::Size<T>& aSize);
 
 		/**
 		 * @brief Find the intersection of two rectangles.
@@ -349,14 +351,14 @@ namespace RoseCommon::Math
 		//--------------------------------------------------
 		#pragma region Operators
 
-		constexpr bool operator==(const RoseCommon::Math::Size<T>& aSize) const;
-		constexpr bool operator!=(const RoseCommon::Math::Size<T>& aSize) const;
+		constexpr bool operator==(const ROSECOMMON_MATH_NAMESPACE::Size<T>& aSize) const;
+		constexpr bool operator!=(const ROSECOMMON_MATH_NAMESPACE::Size<T>& aSize) const;
 
 		#pragma endregion
 	};
 }
 
-namespace RoseCommon::Math
+namespace ROSECOMMON_MATH_NAMESPACE
 {
 	template <typename T>
 	constexpr Point<T>::Point(T anX, T aY) noexcept
@@ -475,20 +477,20 @@ namespace RoseCommon::Math
 	template <typename T>
 	constexpr Rectangle<T>::Rectangle(const Point<T>& aPointA, const Point<T>& aPointB) noexcept
 	{
-		X = Math::Min<T>(aPointA.X, aPointB.X);
-		Y = Math::Min<T>(aPointA.Y, aPointB.Y);
-		Width = Math::Max<T>(aPointA.X, aPointB.X) - X;
-		Height = Math::Max<T>(aPointA.Y, aPointB.Y) - Y;
+		X = ROSECOMMON_MATH_NAMESPACE::Min<T>(aPointA.X, aPointB.X);
+		Y = ROSECOMMON_MATH_NAMESPACE::Min<T>(aPointA.Y, aPointB.Y);
+		Width = ROSECOMMON_MATH_NAMESPACE::Max<T>(aPointA.X, aPointB.X) - X;
+		Height = ROSECOMMON_MATH_NAMESPACE::Max<T>(aPointA.Y, aPointB.Y) - Y;
 	}
 
 	template <typename T>
-	constexpr Rectangle<T>::Rectangle(const Point<T>& aPoint, const Math::Size<T>& aSize) noexcept
+	constexpr Rectangle<T>::Rectangle(const Point<T>& aPoint, const ROSECOMMON_MATH_NAMESPACE::Size<T>& aSize) noexcept
 		: X(aPoint.X)
 		, Y(aPoint.Y)
 		, Width(aSize.Width)
 		, Height(aSize.Height)
 	{
-		
+
 	}
 
 	template <typename T>
@@ -499,7 +501,7 @@ namespace RoseCommon::Math
 	}
 
 	template <typename T>
-	constexpr Rectangle<T>::Rectangle(const Math::Size<T>& aSize) noexcept
+	constexpr Rectangle<T>::Rectangle(const ROSECOMMON_MATH_NAMESPACE::Size<T>& aSize) noexcept
 		: X(0)
 		, Y(0)
 		, Width(aSize.Width)
@@ -553,7 +555,7 @@ namespace RoseCommon::Math
 	template<typename T>
 	constexpr Size<T> Rectangle<T>::Size() const
 	{
-		return Math::Size<T>(Width, Height);
+		return ROSECOMMON_MATH_NAMESPACE::Size<T>(Width, Height);
 	}
 
 	template<typename T>
@@ -602,7 +604,7 @@ namespace RoseCommon::Math
 	}
 
 	template <typename T>
-	void Rectangle<T>::Inflate(const Math::Size<T>& aSize)
+	void Rectangle<T>::Inflate(const ROSECOMMON_MATH_NAMESPACE::Size<T>& aSize)
 	{
 		Inflate(aSize.Width, aSize.Height);
 	}
@@ -610,10 +612,10 @@ namespace RoseCommon::Math
 	template <typename T>
 	constexpr std::optional<Rectangle<T>> Rectangle<T>::Intersection(const Rectangle<T>& aRectangle) const
 	{
-		const T top = Math::Max<T>(Top(), aRectangle.Top());
-		const T left = Math::Max<T>(Left(), aRectangle.Left());
-		const T right = Math::Min<T>(Right(), aRectangle.Right());
-		const T bottom = Math::Min<T>(Bottom(), aRectangle.Bottom());
+		const T top = ROSECOMMON_MATH_NAMESPACE::Max<T>(Top(), aRectangle.Top());
+		const T left = ROSECOMMON_MATH_NAMESPACE::Max<T>(Left(), aRectangle.Left());
+		const T right = ROSECOMMON_MATH_NAMESPACE::Min<T>(Right(), aRectangle.Right());
+		const T bottom = ROSECOMMON_MATH_NAMESPACE::Min<T>(Bottom(), aRectangle.Bottom());
 
 		if (bottom <= top || right <= left)
 			return { };
@@ -647,18 +649,18 @@ namespace RoseCommon::Math
 	template <typename T>
 	void Rectangle<T>::Union(const Point<T>& aPoint)
 	{
-		X = Math::Min<T>(X, aPoint.X);
-		Y = Math::Min<T>(Y, aPoint.Y);
-		Width = Math::Max<T>(X + Width, aPoint.X) - X;
-		Height = Math::Max<T>(Y + Height, aPoint.Y) - Y;
+		X = ROSECOMMON_MATH_NAMESPACE::Min<T>(X, aPoint.X);
+		Y = ROSECOMMON_MATH_NAMESPACE::Min<T>(Y, aPoint.Y);
+		Width = ROSECOMMON_MATH_NAMESPACE::Max<T>(X + Width, aPoint.X) - X;
+		Height = ROSECOMMON_MATH_NAMESPACE::Max<T>(Y + Height, aPoint.Y) - Y;
 	}
 
 	template <typename T>
 	void Rectangle<T>::Union(const Rectangle<T>& aRectangle)
 	{
-		X = Math::Min<T>(X, aRectangle.X);
-		Y = Math::Min<T>(Y, aRectangle.Y);
-		Width = Math::Max<T>(X + Width, aRectangle.X + aRectangle.Width) - X;
-		Height = Math::Max<T>(Y + Height, aRectangle.Y + aRectangle.Height) - Y;
+		X = ROSECOMMON_MATH_NAMESPACE::Min<T>(X, aRectangle.X);
+		Y = ROSECOMMON_MATH_NAMESPACE::Min<T>(Y, aRectangle.Y);
+		Width = ROSECOMMON_MATH_NAMESPACE::Max<T>(X + Width, aRectangle.X + aRectangle.Width) - X;
+		Height = ROSECOMMON_MATH_NAMESPACE::Max<T>(Y + Height, aRectangle.Y + aRectangle.Height) - Y;
 	}
 }
