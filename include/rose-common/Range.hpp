@@ -59,7 +59,10 @@ namespace ROSECOMMON_NAMESPACE
         }
 
         Iterator begin() const noexcept { return myFirst; }
-        Iterator end() const noexcept { return myLast; }
+        Iterator end() const noexcept { return myLast + 1; }
+
+        T front() const noexcept { return myFirst; }
+        T back() const noexcept { return myLast; }
 
     private:
         T myFirst;
