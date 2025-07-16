@@ -1,1 +1,9 @@
+# Any dot-folder
 .*/
+
+tests/generated/
+tools/Catch2_build/
+
+*.sln
+*.vcxproj
+*.vcxproj.filters
