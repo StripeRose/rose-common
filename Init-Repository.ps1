@@ -15,12 +15,12 @@ Start-Job -ScriptBlock {
 	dotnet build "./Sharpmake/Sharpmake.sln" -c "Release" --nologo
 
 	# Prepare Catch2
-	if (Test-Path "./Catch2_build") {
-		Remove-Item "./Catch2_build" -Force -Recurse
-	}
-	New-Item -Name "Catch2_build" -ItemType "Directory"
-	Push-Location -Path "./Catch2_build"
-	cmake "../Catch2/"
-	Pop-Location
+	# if (Test-Path "./Catch2_build") {
+	# 	Remove-Item "./Catch2_build" -Force -Recurse
+	# }
+	# New-Item -Name "Catch2_build" -ItemType "Directory"
+	# Push-Location -Path "./Catch2_build"
+	# cmake "../Catch2/"
+	# Pop-Location
 	Pop-Location
 } | Receive-Job -Wait -AutoRemoveJob
