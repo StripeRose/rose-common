@@ -274,10 +274,10 @@ namespace ROSECOMMON_NAMESPACE
 		}
 		else
 		{
-			a = A;
-			r = R;
-			g = G;
-			b = B;
+			a = static_cast<std::uint8_t>(A);
+			r = static_cast<std::uint8_t>(R);
+			g = static_cast<std::uint8_t>(G);
+			b = static_cast<std::uint8_t>(B);
 		}
 
 		return (
