@@ -1,0 +1,35 @@
+name: Generate "catch_user_config.hpp"
+
+on:
+  workflow_call:
+    inputs:
+      os:
+        required: true
+        type: string
+
+jobs:
+  build:
+    runs-on: ${{ inputs.os }}
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4.2.2
+        with:
+          submodules: true
+        
+      - name: Create branch on pull request from framework
+        if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.fork
+        run: git checkout -b ${{ github.ref_name }}
+      
+      - name: Let CMake configure Catch2
+        uses: threeal/cmake-action@v2.1.0
+        with:
+          source-dir: ./tools/Catch2/
+          build-dir: ./tools/Catch2_build/
+          run-build: false
+
+      - name: Upload ${{ runner.os }} user-config
+        uses: actions/upload-artifact@v4
+        with:
+          name: 'catch_user_config-${{ runner.os }}-${{ github.sha }}'
+          path: ./tools/Catch2_build/generated-includes/catch2/catch_user_config.hpp

@@ -1,5 +1,10 @@
-# Any dot-folder
-.*/
+# Any dot-directory or file in the root directory
+/.*
+
+# Except a few specific dot-files
+!.gitignore
+!.gitmodules
+!.github/
 
 tests/generated/
 tools/Catch2_build/

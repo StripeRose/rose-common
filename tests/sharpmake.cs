@@ -1,13 +1,49 @@
 using System.IO;
 using Sharpmake;
 
+public static class Settings
+{
+	public static Platform GetDefaultPlatform()
+	{
+		switch (Util.GetExecutingPlatform())
+		{
+			case Platform.win32:
+				return Platform.win32;
+			case Platform.win64:
+				return Platform.win64;
+			case Platform.mac:
+				return Platform.mac;
+			case Platform.linux:
+				return Platform.linux;
+			default:
+				throw new System.NotSupportedException("Unknown platform.");
+		}
+	}
+
+	public static DevEnv GetDefaultDevEnvs()
+	{
+		switch (Util.GetExecutingPlatform())
+		{
+			case Platform.win32:
+			case Platform.win64:
+				return DevEnv.vs2022;
+			case Platform.mac:
+				return DevEnv.xcode;
+			case Platform.linux:
+				return DevEnv.make;
+			default:
+				throw new System.NotSupportedException("Unknown platform.");
+		}
+	}
+}
+
 public class BasicProject : Project
 {
 	public BasicProject()
 	{
 		AddTargets(new Target(
-			Platform.win32 | Platform.win64,
-			DevEnv.vs2022,
+			Settings.GetDefaultPlatform(),
+			Settings.GetDefaultDevEnvs(),
 			Optimization.Debug | Optimization.Release
 		));
 	}
@@ -103,8 +139,8 @@ public class TestsSolution : Solution
 		Name = "rosecommon_tests";
 
 		AddTargets(new Target(
-			Platform.win32 | Platform.win64,
-			DevEnv.vs2022,
+			Settings.GetDefaultPlatform(),
+			Settings.GetDefaultDevEnvs(),
 			Optimization.Debug | Optimization.Release
 		));
 	}

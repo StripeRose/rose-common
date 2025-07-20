@@ -1,0 +1,97 @@
+name: Run unit tests
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+    branches: ["**"]
+  workflow_dispatch:
+
+env:
+  DOTNET_CLI_TELEMETRY_OPTOUT: 1
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
+  DOTNET_NOLOGO: true
+
+jobs:
+  build_sharpmake:
+    name: Compile Sharpmake
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-2022]
+        framework: [net6.0]
+        configuration: [Release]
+    uses: ./.github/workflows/build_sharpmake.yml
+    with:
+      os: ${{ matrix.os }}
+      framework: ${{ matrix.framework }}
+      configuration: ${{ matrix.configuration }}
+
+  # Todo: Check with Catch2 documentation if we really need one per OS.
+  # Might be enough with just one common file for all.
+  generate_catch2_user_config:
+    name: Generate catch_user_config.hpp
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-2022]
+    uses: ./.github/workflows/generate_catch2_user_config.yml
+    with:
+      os: ${{ matrix.os }}
+
+  run_tests:
+    name: Run tests
+    needs: ["build_sharpmake", "generate_catch2_user_config"]
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-2022]
+        sharpmake-framework: [net6.0]
+        tests-configuration: [Release]
+    
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v4.2.2
+        with:
+          submodules: true
+      
+      - name: Download Sharpmake binary
+        uses: actions/download-artifact@v4
+        with:
+          name: 'Sharpmake-${{ matrix.sharpmake-framework }}-${{ runner.os }}-${{ github.sha }}'
+          path: ./tools/Sharpmake/Sharpmake.Application/bin/Release/${{ matrix.sharpmake-framework }}
+      
+      - name: Download Catch2 config
+        uses: actions/download-artifact@v4
+        with:
+          name: 'catch_user_config-${{ runner.os }}-${{ github.sha }}'
+          path: ./tools/Catch2_build/generated-includes/catch2/
+      
+      - name: Generate tests-solution using Sharpmake
+        shell: pwsh
+        run: |
+          ./tools/Sharpmake/Sharpmake.Application/bin/Release/${{ matrix.sharpmake-framework }}/Sharpmake.Application.exe "/sources('./tests/sharpmake.cs')"
+
+      - name: Add msbuild to PATH - Windows
+        if: runner.os == 'Windows'
+        uses: microsoft/setup-msbuild@v2
+
+      - name: Build generated solutions - Windows
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          $slnlist = Get-ChildItem "./tests/generated/" -Filter "*.sln"
+          foreach ($sln in $slnlist)
+          {
+            msbuild -t:rebuild -restore $sln.FullName /verbosity:normal /p:Configuration=Release /maxcpucount
+          }
+
+      - name: Execute built executables - Windows
+        shell: pwsh
+        run: |
+          $exelist = Get-ChildItem "./tests/generated/output" -Filter "*.exe" -Recurse
+          foreach ($exe in $exelist)
+          {
+            & $exe.FullName
+          }
