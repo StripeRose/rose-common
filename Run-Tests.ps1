@@ -12,7 +12,7 @@ Start-Job -ScriptBlock {
 	& "$PSScriptRoot/tools/Launch-VsDevShell.ps1" -Lates
 	$slnlist = Get-ChildItem "$PSScriptRoot/tests/generated/" -Filter "*.sln" -Recurse
 	foreach ($sln in $slnlist) {
-		msbuild -t:rebuild -restore $sln.FullName /nologo /verbosity:m /p:Configuration="Release" /maxcpucount
+		msbuild -restore $sln.FullName /nologo /verbosity:m /p:Configuration="Release" /maxcpucount
 	}
 
 } | Receive-Job -Wait -AutoRemoveJob
