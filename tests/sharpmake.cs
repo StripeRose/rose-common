@@ -3,8 +3,6 @@ using Sharpmake;
 
 public static class Settings
 {
-	public static bool UseAmalgamatedCatch2 = true;
-
 	public static Platform GetDefaultPlatform()
 	{
 		switch (Util.GetExecutingPlatform())
@@ -122,18 +120,13 @@ public class TestsExecutable : BasicProject
 		Name = "Tests";
 		SourceRootPath = "[project.SharpmakeCsPath]/";
 		AdditionalSourceRootPaths.Add("[project.SharpmakeCsPath]/tests");
-		if (Settings.UseAmalgamatedCatch2)
-			AdditionalSourceRootPaths.Add("[project.SharpmakeCsPath]/../tools/Catch2/extras");
 	}
 
 	public override void ConfigureAll(Configuration conf, Target target)
 	{
 		base.ConfigureAll(conf, target);
 
-		if (Settings.UseAmalgamatedCatch2)
-			conf.IncludePaths.Add("[project.SharpmakeCsPath]/../tools/Catch2/extras");
-		else
-			conf.AddPrivateDependency<Catch2>(target);
+		conf.AddPrivateDependency<Catch2>(target);
 		conf.AddPrivateDependency<RoseCommon>(target);
 	}
 }

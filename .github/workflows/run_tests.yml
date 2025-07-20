@@ -29,19 +29,19 @@ jobs:
 
   # Todo: Check with Catch2 documentation if we really need one per OS.
   # Might be enough with just one common file for all.
-  # generate_catch2_user_config:
-  #   name: Generate catch_user_config.hpp
-  #   strategy:
-  #     fail-fast: false
-  #     matrix:
-  #       os: [windows-2022]
-  #   uses: ./.github/workflows/generate_catch2_user_config.yml
-  #   with:
-  #     os: ${{ matrix.os }}
+  generate_catch2_user_config:
+    name: Generate catch_user_config.hpp
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-2022]
+    uses: ./.github/workflows/generate_catch2_user_config.yml
+    with:
+      os: ${{ matrix.os }}
 
   run_tests:
     name: Run tests
-    needs: ["build_sharpmake"]
+    needs: ["build_sharpmake", "generate_catch2_user_config"]
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
@@ -62,11 +62,11 @@ jobs:
           name: 'Sharpmake-${{ matrix.sharpmake-framework }}-${{ runner.os }}-${{ github.sha }}'
           path: ./tools/Sharpmake/Sharpmake.Application/bin/Release/${{ matrix.sharpmake-framework }}
       
-      # - name: Download Catch2 config
-      #   uses: actions/download-artifact@v4
-      #   with:
-      #     name: 'catch_user_config-${{ runner.os }}-${{ github.sha }}'
-      #     path: ./tools/Catch2_build/generated-includes/catch2/
+      - name: Download Catch2 config
+        uses: actions/download-artifact@v4
+        with:
+          name: 'catch_user_config-${{ runner.os }}-${{ github.sha }}'
+          path: ./tools/Catch2_build/generated-includes/catch2/
       
       - name: Generate tests-solution using Sharpmake
         shell: pwsh
