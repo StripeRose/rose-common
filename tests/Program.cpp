@@ -1,39 +1,32 @@
-#include <catch2/catch_test_macros.hpp>
-#include <catch2/matchers/catch_matchers_floating_point.hpp>
-#include <rose-common/Color.hpp>
+// Main source file, which includes all test-headers.
+// The main function is handled by Catch2.
 
-using namespace Catch;
-using namespace Catch::Matchers;
+// First we define some extra extensions that aren't available in Catch2.
+#define TEMPLATE_SCENARIO(...) TEMPLATE_TEST_CASE("Scenario: " __VA_ARGS__)
+#define TEMPLATE_LIST_SCENARIO(...) TEMPLATE_LIST_TEST_CASE("Scenario: " __VA_ARGS__)
 
-TEST_CASE("ColorT<>/Constructor/Unpacking")
-{
-	SECTION("8-bit integer")
-	{
-		constexpr RoseCommon::ColorT<std::uint8_t> staticColor(0x12345678);
-		STATIC_REQUIRE(staticColor.A == 0x12);
-		STATIC_REQUIRE(staticColor.R == 0x34);
-		STATIC_REQUIRE(staticColor.G == 0x56);
-		STATIC_REQUIRE(staticColor.B == 0x78);
+#include <Test_Color.hpp>
+// #include <Test_CommandLineParser.hpp>
+// #include <Test_Debug.hpp>
+// #include <Test_Enum.hpp>
+// #include <Test_EventSlot.hpp>
+// #include <Test_MacroHelpers.hpp>
+// #include <Test_Profiling.hpp>
+// #include <Test_Range.hpp>
+// #include <Test_SemanticVersion.hpp>
+// #include <Test_StoreReset.hpp>
+// #include <Test_StringUtilities.hpp>
 
-		RoseCommon::ColorT<std::uint8_t> color(0x12345678);
-		REQUIRE(color.A == 0x12);
-		REQUIRE(color.R == 0x34);
-		REQUIRE(color.G == 0x56);
-		REQUIRE(color.B == 0x78);
-	}
+// File format
+// #include <fileformat/Test_Ini.hpp>
 
-	SECTION("32-bit floating point")
-	{
-		constexpr RoseCommon::ColorT<float> staticColor(0x12345678);
-		STATIC_REQUIRE(staticColor.A == static_cast<float>(0x12) / 255.f);
-		STATIC_REQUIRE(staticColor.R == static_cast<float>(0x34) / 255.f);
-		STATIC_REQUIRE(staticColor.G == static_cast<float>(0x56) / 255.f);
-		STATIC_REQUIRE(staticColor.B == static_cast<float>(0x78) / 255.f);
-
-		RoseCommon::ColorT<float> color(0x12345678);
-		REQUIRE_THAT(color.A, WithinAbs(static_cast<float>(0x12) / 255.f, 0.001f));
-		REQUIRE_THAT(color.R, WithinAbs(static_cast<float>(0x34) / 255.f, 0.001f));
-		REQUIRE_THAT(color.G, WithinAbs(static_cast<float>(0x56) / 255.f, 0.001f));
-		REQUIRE_THAT(color.B, WithinAbs(static_cast<float>(0x78) / 255.f, 0.001f));
-	}
-}
+// Math
+// #include <math/Test_Common.hpp>
+// #include <math/Test_Constants.hpp>
+// #include <math/Test_Curve.hpp>
+// #include <math/Test_Geometry.hpp>
+// #include <math/Test_Matrix.hpp>
+// #include <math/Test_Matrix3D.hpp>
+// #include <math/Test_Quaternion.hpp>
+// #include <math/Test_Trigonometry.hpp>
+// #include <math/Test_Vector.hpp>

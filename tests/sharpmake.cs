@@ -128,6 +128,8 @@ public class TestsExecutable : BasicProject
 
 		conf.AddPrivateDependency<Catch2>(target);
 		conf.AddPrivateDependency<RoseCommon>(target);
+
+		conf.IncludePaths.Add("[project.SourceRootPath]");
 	}
 }
 
