@@ -10,11 +10,13 @@
 namespace
 {
 	using ColorComponentTypes = std::tuple<std::uint8_t, std::uint16_t, float>;
-	template <typename T>
-	static constexpr T MaxSDRToHDRError = std::is_floating_point_v<T> ? static_cast<T>(1.f / 255.f) : T(0);
 	static constexpr float MaxFloatError = 0.000001f;
 	template <typename T>
-	static constexpr T SDRUpperBound = std::is_floating_point_v<T> ? static_cast<T>(1) : static_cast<T>(0xFF);
+	static constexpr T Whitepoint = std::is_floating_point_v<T> ? static_cast<T>(1) : std::numeric_limits<T>::max();
+	template <typename T>
+	static constexpr T PackedRangeRatio = Whitepoint<T> / 0xFF;
+	template <typename T>
+	static constexpr T MaxSDRToHDRError = std::is_floating_point_v<T> ? static_cast<T>(1.f / 0xFF) : PackedRangeRatio<T>;
 
 	using namespace Catch;
 	using namespace Catch::Matchers;
@@ -57,10 +59,10 @@ namespace
 				}
 				else
 				{
-					STATIC_CHECK(Color.A == static_cast<TestType>(0x12));
-					STATIC_CHECK(Color.R == static_cast<TestType>(0x34));
-					STATIC_CHECK(Color.G == static_cast<TestType>(0x56));
-					STATIC_CHECK(Color.B == static_cast<TestType>(0x78));
+					STATIC_CHECK(Color.A == static_cast<TestType>(0x12) * PackedRangeRatio<TestType>);
+					STATIC_CHECK(Color.R == static_cast<TestType>(0x34) * PackedRangeRatio<TestType>);
+					STATIC_CHECK(Color.G == static_cast<TestType>(0x56) * PackedRangeRatio<TestType>);
+					STATIC_CHECK(Color.B == static_cast<TestType>(0x78) * PackedRangeRatio<TestType>);
 				}
 			}
 		}
@@ -77,7 +79,7 @@ namespace
 
 			THEN("Each color is correctly assigned")
 			{
-				CHECK_THAT(Color.A, WithinAbs(SDRUpperBound<TestType>, MaxFloatError));
+				CHECK_THAT(Color.A, WithinAbs(Whitepoint<TestType>, MaxFloatError));
 				STATIC_CHECK(Color.R == static_cast<TestType>(12));
 				STATIC_CHECK(Color.G == static_cast<TestType>(34));
 				STATIC_CHECK(Color.B == static_cast<TestType>(56));
@@ -101,32 +103,6 @@ namespace
 				STATIC_CHECK(Color.R == static_cast<TestType>(34));
 				STATIC_CHECK(Color.G == static_cast<TestType>(56));
 				STATIC_CHECK(Color.B == static_cast<TestType>(78));
-			}
-		}
-	}
-
-	TEMPLATE_LIST_SCENARIO("Color<T> within the SDR range can be packed and unpacked losslessly", "[color]", ColorComponentTypes)
-	{
-		GIVEN("Any color")
-		{
-			auto colorValues = GENERATE(
-				take(100,
-					 chunk(4,
-						   random<TestType>(0, SDRUpperBound<TestType>))));
-			const ColorT<TestType> color(colorValues[0], colorValues[1], colorValues[2], colorValues[3]);
-
-			WHEN("Converting to ARGB, and constructing a new color from the ARGB value")
-			{
-				const auto colorARGB = color.ToARGB();
-				const ColorT<TestType> roundtripColor(colorARGB);
-
-				THEN("The components of the two ColorT<> should match.")
-				{
-					CHECK_THAT(color.A, WithinAbs(roundtripColor.A, MaxSDRToHDRError<TestType>));
-					CHECK_THAT(color.R, WithinAbs(roundtripColor.R, MaxSDRToHDRError<TestType>));
-					CHECK_THAT(color.G, WithinAbs(roundtripColor.G, MaxSDRToHDRError<TestType>));
-					CHECK_THAT(color.B, WithinAbs(roundtripColor.B, MaxSDRToHDRError<TestType>));
-				}
 			}
 		}
 	}

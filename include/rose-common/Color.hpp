@@ -17,7 +17,8 @@ namespace ROSECOMMON_NAMESPACE
 	template <typename T>
 	class ColorT
 	{
-		static constexpr T ourSDRUpperBound = std::is_floating_point_v<T> ? static_cast<T>(1) : static_cast<T>(0xFF);
+		static constexpr T ourWhitepoint = std::is_floating_point_v<T> ? static_cast<T>(1) : std::numeric_limits<T>::max();
+		static constexpr T ourPackedRangeRatio = ourWhitepoint / 0xFF;
 	public:
 
 		//--------------------------------------------------
@@ -163,26 +164,21 @@ namespace ROSECOMMON_NAMESPACE
 
 	template<typename T>
 	constexpr ColorT<T>::ColorT(const std::uint32_t aPackedArgbValue)
-		: A(static_cast<T>((aPackedArgbValue >> 24) & 0xFF))
-		, R(static_cast<T>((aPackedArgbValue >> 16) & 0xFF))
-		, G(static_cast<T>((aPackedArgbValue >> 8) & 0xFF))
-		, B(static_cast<T>((aPackedArgbValue >> 0) & 0xFF))
 	{
-		if constexpr (std::is_floating_point_v<T>)
-		{
-			A /= 0xFF;
-			R /= 0xFF;
-			G /= 0xFF;
-			B /= 0xFF;
-		}
+		const std::uint8_t a = static_cast<std::uint8_t>((aPackedArgbValue >> 24) & 0xFF);
+		const std::uint8_t r = static_cast<std::uint8_t>((aPackedArgbValue >> 16) & 0xFF);
+		const std::uint8_t g = static_cast<std::uint8_t>((aPackedArgbValue >>  8) & 0xFF);
+		const std::uint8_t b = static_cast<std::uint8_t>((aPackedArgbValue >>  0) & 0xFF);
+
+		A = static_cast<T>(a) * ourPackedRangeRatio;
+		R = static_cast<T>(r) * ourPackedRangeRatio;
+		G = static_cast<T>(g) * ourPackedRangeRatio;
+		B = static_cast<T>(b) * ourPackedRangeRatio;
 	}
 
-	template<typename T>
+	template <typename T>
 	constexpr ColorT<T>::ColorT(T aRedValue, T aGreenValue, T aBlueValue)
-		: A(ourSDRUpperBound)
-		, R(aRedValue)
-		, G(aGreenValue)
-		, B(aBlueValue)
+		: A(ourWhitepoint), R(aRedValue), G(aGreenValue), B(aBlueValue)
 	{ }
 
 	template<typename T>
@@ -196,9 +192,9 @@ namespace ROSECOMMON_NAMESPACE
 	template<typename T>
 	constexpr float ColorT<T>::GetBrightness() const
 	{
-		const float r = static_cast<float>(R) / ourSDRUpperBound;
-		const float g = static_cast<float>(G) / ourSDRUpperBound;
-		const float b = static_cast<float>(B) / ourSDRUpperBound;
+		const float r = static_cast<float>(R) / ourWhitepoint;
+		const float g = static_cast<float>(G) / ourWhitepoint;
+		const float b = static_cast<float>(B) / ourWhitepoint;
 
 		return std::max({ r, g, b });
 	}
@@ -209,9 +205,9 @@ namespace ROSECOMMON_NAMESPACE
 		if (R == G && G == B)
 			return 0.f;
 
-		const float r = static_cast<float>(R) / ourSDRUpperBound;
-		const float g = static_cast<float>(G) / ourSDRUpperBound;
-		const float b = static_cast<float>(B) / ourSDRUpperBound;
+		const float r = static_cast<float>(R) / ourWhitepoint;
+		const float g = static_cast<float>(G) / ourWhitepoint;
+		const float b = static_cast<float>(B) / ourWhitepoint;
 
 		const float max = std::max({ r, g, b });
 		const float min = std::min({ r, g, b });
@@ -235,9 +231,9 @@ namespace ROSECOMMON_NAMESPACE
 	template<typename T>
 	constexpr float ColorT<T>::GetSaturation() const
 	{
-		const float r = static_cast<float>(R) / ourSDRUpperBound;
-		const float g = static_cast<float>(G) / ourSDRUpperBound;
-		const float b = static_cast<float>(B) / ourSDRUpperBound;
+		const float r = static_cast<float>(R) / ourWhitepoint;
+		const float g = static_cast<float>(G) / ourWhitepoint;
+		const float b = static_cast<float>(B) / ourWhitepoint;
 
 		const float max = std::max({ r, g, b });
 		const float min = std::min({ r, g, b });
@@ -254,9 +250,9 @@ namespace ROSECOMMON_NAMESPACE
 	{
 		return ColorT<T>(
 			A,
-			ROSECOMMON_MATH_NAMESPACE::Clamp<T>(R, 0, ourSDRUpperBound),
-			ROSECOMMON_MATH_NAMESPACE::Clamp<T>(G, 0, ourSDRUpperBound),
-			ROSECOMMON_MATH_NAMESPACE::Clamp<T>(B, 0, ourSDRUpperBound)
+			ROSECOMMON_MATH_NAMESPACE::Clamp<T>(R, 0, ourWhitepoint),
+			ROSECOMMON_MATH_NAMESPACE::Clamp<T>(G, 0, ourWhitepoint),
+			ROSECOMMON_MATH_NAMESPACE::Clamp<T>(B, 0, ourWhitepoint)
 		);
 	}
 
@@ -267,17 +263,17 @@ namespace ROSECOMMON_NAMESPACE
 
 		if constexpr (std::is_floating_point_v<T>)
 		{
-			a = static_cast<std::uint8_t>(A * 0xFF);
-			r = static_cast<std::uint8_t>(R * 0xFF);
-			g = static_cast<std::uint8_t>(G * 0xFF);
-			b = static_cast<std::uint8_t>(B * 0xFF);
+			a = static_cast<std::uint8_t>(ROSECOMMON_MATH_NAMESPACE::Clamp<T>(A, 0, ourWhitepoint) * 0xFF);
+			r = static_cast<std::uint8_t>(ROSECOMMON_MATH_NAMESPACE::Clamp<T>(R, 0, ourWhitepoint) * 0xFF);
+			g = static_cast<std::uint8_t>(ROSECOMMON_MATH_NAMESPACE::Clamp<T>(G, 0, ourWhitepoint) * 0xFF);
+			b = static_cast<std::uint8_t>(ROSECOMMON_MATH_NAMESPACE::Clamp<T>(B, 0, ourWhitepoint) * 0xFF);
 		}
 		else
 		{
-			a = static_cast<std::uint8_t>(A);
-			r = static_cast<std::uint8_t>(R);
-			g = static_cast<std::uint8_t>(G);
-			b = static_cast<std::uint8_t>(B);
+			a = static_cast<std::uint8_t>(A / ourPackedRangeRatio);
+			r = static_cast<std::uint8_t>(R / ourPackedRangeRatio);
+			g = static_cast<std::uint8_t>(G / ourPackedRangeRatio);
+			b = static_cast<std::uint8_t>(B / ourPackedRangeRatio);
 		}
 
 		return (
@@ -413,10 +409,10 @@ namespace ROSECOMMON_NAMESPACE
 			));
 		else
 			operator*=(ColorT(
-				static_cast<std::uint8_t>(aScalar * ourSDRUpperBound),
-				static_cast<std::uint8_t>(aScalar * ourSDRUpperBound),
-				static_cast<std::uint8_t>(aScalar * ourSDRUpperBound),
-				static_cast<std::uint8_t>(aScalar * ourSDRUpperBound)
+				static_cast<std::uint8_t>(aScalar * ourWhitepoint),
+				static_cast<std::uint8_t>(aScalar * ourWhitepoint),
+				static_cast<std::uint8_t>(aScalar * ourWhitepoint),
+				static_cast<std::uint8_t>(aScalar * ourWhitepoint)
 			));
 	}
 
