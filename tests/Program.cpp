@@ -14,7 +14,7 @@
 // #include <Test_Profiling.hpp>
 // #include <Test_Range.hpp>
 // #include <Test_SemanticVersion.hpp>
-// #include <Test_StoreReset.hpp>
+#include <Test_StoreReset.hpp>
 // #include <Test_StringUtilities.hpp>
 
 // File format
