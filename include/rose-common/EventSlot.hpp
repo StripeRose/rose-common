@@ -66,7 +66,7 @@ namespace ROSECOMMON_NAMESPACE
 	 * @brief An interface for defining events which other objects can listen for the invokation of.
 	 */
 	template <>
-	class EventSlot<>
+	class EventSlot<void>
 	{
 	public:
 		/**
