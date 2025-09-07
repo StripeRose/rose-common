@@ -9,7 +9,7 @@
 // #include <Test_CommandLineParser.hpp>
 // #include <Test_Debug.hpp>
 // #include <Test_Enum.hpp>
-// #include <Test_EventSlot.hpp>
+#include <Test_EventSlot.hpp>
 // #include <Test_MacroHelpers.hpp>
 // #include <Test_Profiling.hpp>
 // #include <Test_Range.hpp>
