@@ -68,7 +68,7 @@ namespace ROSECOMMON_MATH_NAMESPACE
 		 * @brief Initialize both components to the specified value.
 		 * @param aValue The value both components should have.
 		 */
-		constexpr Vector2T(const T& aValue);
+		explicit constexpr Vector2T(const T& aValue);
 
 		/**
 		 * @brief Initialize each component to the specified value.
@@ -263,6 +263,11 @@ namespace ROSECOMMON_MATH_NAMESPACE
 
 		inline void operator*=(const MatrixT<2, 2, T>& aMatrix) { (*this) = Vector2T(ToRowMatrix() * aMatrix); }
 
+		inline constexpr Vector2T operator*(const T& aScalar) const { return Vector2T(X * aScalar, Y * aScalar); }
+		inline constexpr Vector2T operator/(const T& aScalar) const { return Vector2T(X / aScalar, Y / aScalar); }
+		inline void operator*=(const T& aScalar) { X *= aScalar; Y *= aScalar; }
+		inline void operator/=(const T& aScalar) { X /= aScalar; Y /= aScalar; }
+
 		inline constexpr bool operator==(const Vector2T& aVector) const { return ROSECOMMON_MATH_NAMESPACE::Equals(X, aVector.X) && ROSECOMMON_MATH_NAMESPACE::Equals(Y, aVector.Y); }
 		inline constexpr bool operator!=(const Vector2T& aVector) const { return !operator==(aVector); }
 
@@ -372,7 +377,7 @@ namespace ROSECOMMON_MATH_NAMESPACE
 		 * @brief Initialize the components to the specified value.
 		 * @param aValue The value all components should have.
 		 */
-		constexpr Vector3T(const T& aValue);
+		explicit constexpr Vector3T(const T& aValue);
 
 		/**
 		 * @brief Initialize each component to the specified value.
@@ -599,6 +604,11 @@ namespace ROSECOMMON_MATH_NAMESPACE
 
 		inline void operator*=(const MatrixT<3, 3, T>& aMatrix) { (*this) = Vector3T(ToRowMatrix() * aMatrix); }
 
+		inline constexpr Vector3T operator*(const T& aScalar) const { return Vector3T(X * aScalar, Y * aScalar, Z * aScalar); }
+		inline constexpr Vector3T operator/(const T& aScalar) const { return Vector3T(X / aScalar, Y / aScalar, Z / aScalar); }
+		inline void operator*=(const T& aScalar) { X *= aScalar; Y *= aScalar; Z *= aScalar; }
+		inline void operator/=(const T& aScalar) { X /= aScalar; Y /= aScalar; Z /= aScalar; }
+
 		inline constexpr bool operator==(const Vector3T& aVector) const { return ROSECOMMON_MATH_NAMESPACE::Equals(X, aVector.X) && ROSECOMMON_MATH_NAMESPACE::Equals(Y, aVector.Y) && ROSECOMMON_MATH_NAMESPACE::Equals(Z, aVector.Z); }
 		inline constexpr bool operator!=(const Vector3T& aVector) const { return !operator==(aVector); }
 
@@ -685,7 +695,7 @@ namespace ROSECOMMON_MATH_NAMESPACE
 		 * @brief Initialize the components to the specified value.
 		 * @param aValue The value all components should have.
 		 */
-		constexpr Vector4T(const T& aValue);
+		explicit constexpr Vector4T(const T& aValue);
 
 		/**
 		 * @brief Initialize each component to the specified value.
@@ -901,6 +911,11 @@ namespace ROSECOMMON_MATH_NAMESPACE
 		inline void operator/=(const Vector4T& aVector) { X /= aVector.X; Y /= aVector.Y; Z /= aVector.Z; W /= aVector.W; }
 
 		inline void operator*=(const MatrixT<4, 4, T>& aMatrix) { (*this) = Vector4T(ToRowMatrix() * aMatrix); }
+
+		inline constexpr Vector4T operator*(const T& aScalar) const { return Vector4T(X * aScalar, Y * aScalar, Z * aScalar, W * aScalar); }
+		inline constexpr Vector4T operator/(const T& aScalar) const { return Vector4T(X / aScalar, Y / aScalar, Z / aScalar, W / aScalar); }
+		inline void operator*=(const T& aScalar) { X *= aScalar; Y *= aScalar; Z *= aScalar; W *= aScalar; }
+		inline void operator/=(const T& aScalar) { X /= aScalar; Y /= aScalar; Z /= aScalar; W /= aScalar; }
 
 		inline constexpr bool operator==(const Vector4T& aVector) const { return ROSECOMMON_MATH_NAMESPACE::Equals(X, aVector.X) && ROSECOMMON_MATH_NAMESPACE::Equals(Y, aVector.Y) && ROSECOMMON_MATH_NAMESPACE::Equals(Z, aVector.Z) && ROSECOMMON_MATH_NAMESPACE::Equals(W, aVector.W); }
 		inline constexpr bool operator!=(const Vector4T& aVector) const { return !operator==(aVector); }
@@ -1250,7 +1265,7 @@ namespace ROSECOMMON_MATH_NAMESPACE
 
 	template <typename T>
 	constexpr Vector4T<T>::Vector4T()
-		: Vector4T(0, 0, 0)
+		: Vector4T(0, 0, 0, 0)
 	{
 
 	}
