@@ -81,7 +81,7 @@ jobs:
         if: runner.os == 'Windows'
         shell: pwsh
         run: |
-          $slnlist = Get-ChildItem "./tests/generated/" -Filter "*.sln"
+          $slnlist = Get-ChildItem "./generated/" -Filter "*.sln"
           foreach ($sln in $slnlist)
           {
             msbuild -t:rebuild -restore $sln.FullName /verbosity:normal /p:Configuration=Release /maxcpucount
@@ -90,7 +90,7 @@ jobs:
       - name: Execute built executables - Windows
         shell: pwsh
         run: |
-          $exelist = Get-ChildItem "./tests/generated/output" -Filter "*.exe" -Recurse
+          $exelist = Get-ChildItem "./generated/output" -Filter "*.exe" -Recurse
           foreach ($exe in $exelist)
           {
             & $exe.FullName
