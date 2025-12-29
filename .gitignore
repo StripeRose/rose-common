@@ -6,7 +6,7 @@
 !.gitmodules
 !.github/
 
-tests/generated/
+generated/
 tools/Catch2_build/
 
 *.sln

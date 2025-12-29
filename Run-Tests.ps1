@@ -5,7 +5,7 @@ if ($LASTEXITCODE -ne 0) {
 	Exit($LASTEXITCODE)
 }
 
-Push-Location -Path "$PSScriptRoot/tests/generated"
+Push-Location -Path "$PSScriptRoot/generated"
 
 if (Test-Path "./output") {
 	Remove-Item "./output" -Force -Recurse
@@ -14,7 +14,7 @@ if (Test-Path "./output") {
 Start-Job -ScriptBlock {
 	$PSScriptRoot = "$using:PSScriptRoot"
 	& "$PSScriptRoot/tools/Launch-VsDevShell.ps1" -Lates
-	$slnlist = Get-ChildItem "$PSScriptRoot/tests/generated/" -Filter "*.sln" -Recurse
+	$slnlist = Get-ChildItem "$PSScriptRoot/generated/" -Filter "*.sln" -Recurse
 	foreach ($sln in $slnlist) {
 		msbuild -restore $sln.FullName /nologo /verbosity:m /p:Configuration="Release" /maxcpucount
 	}

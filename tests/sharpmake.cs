@@ -54,7 +54,7 @@ public class BasicProject : Project
 		conf.Name = "[project.Name]_[target.Optimization]_[target.Platform]";
 
 		conf.ProjectFileName = "[project.Name]_[target.DevEnv]_[target.Platform]";
-		conf.ProjectPath = "[project.SharpmakeCsPath]/generated";
+		conf.ProjectPath = "[project.SharpmakeCsPath]/../generated";
 
 		conf.IntermediatePath = Path.Combine(conf.IntermediatePath, "[project.Name]");
 		conf.TargetFileName = @"[conf.Name]";
@@ -151,7 +151,7 @@ public class TestsSolution : Solution
 	public void ConfigureAll(Solution.Configuration conf, Target target)
 	{
 		conf.SolutionFileName = "[solution.Name]_[target.DevEnv]_[target.Platform]";
-		conf.SolutionPath = "[solution.SharpmakeCsPath]/generated";
+		conf.SolutionPath = "[solution.SharpmakeCsPath]/../generated";
 		conf.AddProject<TestsExecutable>(target);
 	}
 }
