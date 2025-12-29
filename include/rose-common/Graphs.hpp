@@ -91,6 +91,8 @@ namespace ROSECOMMON_NAMESPACE
 
 	/**
 	 * @brief Sort a list of vertices in a directed acyclic graph into a linear order.
+	 * Does not currently have a definition for graphs which do not meet the requirements.
+	 * 
 	 * @tparam RandomIt Type of the random access iterator used to access vertices.
 	 * @param aFirst, aLast The pair of iterators defining the range of elements to sort.
 	 * @param aHasEdge A callable used to determine if a particular directed edge exist between two vertices.
