@@ -1423,4 +1423,12 @@ namespace ROSECOMMON_MATH_NAMESPACE
 	}
 
 	#pragma endregion
+
+	template <int N, typename T> struct Vector_T;
+	template <typename T> struct Vector_T<2, T> { using type = Vector2T<T>; };
+	template <typename T> struct Vector_T<3, T> { using type = Vector3T<T>; };
+	template <typename T> struct Vector_T<4, T> { using type = Vector4T<T>; };
+
+	template <int N, typename T>
+	using VectorNT = typename Vector_T<N, T>::type;
 }
