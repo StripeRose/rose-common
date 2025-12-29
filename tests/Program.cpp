@@ -3,6 +3,7 @@
 
 // First we define some extra extensions that aren't available in Catch2.
 #define TEMPLATE_SCENARIO(...) TEMPLATE_TEST_CASE("Scenario: " __VA_ARGS__)
+#define TEMPLATE_PRODUCT_SCENARIO(...) TEMPLATE_PRODUCT_TEST_CASE("Scenario: " __VA_ARGS__)
 #define TEMPLATE_LIST_SCENARIO(...) TEMPLATE_LIST_TEST_CASE("Scenario: " __VA_ARGS__)
 
 #include <Test_Color.hpp>
@@ -22,6 +23,7 @@
 // #include <fileformat/Test_Ini.hpp>
 
 // Math
+#include <math/Test_Intersection.hpp>
 // #include <math/Test_Common.hpp>
 // #include <math/Test_Constants.hpp>
 // #include <math/Test_Curve.hpp>
