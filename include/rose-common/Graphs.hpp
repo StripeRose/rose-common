@@ -2,8 +2,93 @@
 
 #include "RoseCommon_Namespace.hpp"
 
+#include <optional>
+#include <vector>
+#include <map>
+
 namespace ROSECOMMON_NAMESPACE
 {
+	/**
+	 * @brief Finds one of the shortest paths in a graph, using Dijkstra's algorithm.
+	 * @tparam NodeT Type used for each node in the graph.
+	 * @tparam DistanceT Type used for distances between nodes in the graph. Must allow addition and less-than comparisons.
+	 * @param aStart The initial node to search from.
+	 * @param aDestination The destination node to get the shortest path to.
+	 * @param aGetNeighbors Functor to fetch a list of neighbors of a given node. Result should be an iteratable which can be bound into [node, distance].
+	 * @param aRouteOut If specified, the shortest path found will be appended to the vector.
+	 * @return The distance between the start and destination nodes, or nullopt.
+	 */
+	template <typename NodeT, typename DistanceT, typename NeighborFunctor>
+	std::optional<DistanceT> Pathfind_Dijkstra(NodeT aStart, NodeT aDestination, NeighborFunctor aGetNeighbors, std::vector<NodeT>* aRouteOut = nullptr)
+	{
+		struct NodeInfo
+		{
+			std::optional<NodeT> myPreviousNode;
+			std::optional<DistanceT> myCost;
+			bool myWasVisited = false;
+		};
+
+		std::vector<NodeT> nodeQueue;
+		std::map<NodeT, NodeInfo> nodeInfo;
+
+		nodeQueue.emplace_back(aStart);
+		nodeInfo[aStart].myCost = DistanceT(0);
+
+		while (!nodeQueue.empty())
+		{
+			NodeT currentNode = nodeQueue[0];
+			nodeQueue.erase(nodeQueue.begin());
+
+			if (currentNode == aDestination)
+				break;
+
+			NodeInfo& currentNodeInfo = nodeInfo[currentNode];
+			if (currentNodeInfo.myWasVisited)
+				continue;
+
+			currentNodeInfo.myWasVisited = true;
+
+			for (const auto& [node, distance] : aGetNeighbors(currentNode))
+			{
+				const DistanceT costToNeighbor = currentNodeInfo.myCost.value() + distance;
+				auto neighborInfo = nodeInfo.find(node);
+				if (neighborInfo == nodeInfo.end())
+				{
+					NodeInfo& newInfo = nodeInfo[node];
+					newInfo.myCost = costToNeighbor;
+					newInfo.myPreviousNode = currentNode;
+				}
+				else if (!neighborInfo->second.myWasVisited && (!neighborInfo->second.myCost.has_value() || costToNeighbor < neighborInfo->second.myCost.value()))
+				{
+					neighborInfo->second.myCost = costToNeighbor;
+					neighborInfo->second.myPreviousNode = currentNode;
+				}
+
+				nodeQueue.push_back(node);
+			}
+		}
+
+		auto destinationInfo = nodeInfo.find(aDestination);
+		const bool foundPath = (destinationInfo != nodeInfo.end());
+
+		if (aRouteOut != nullptr && foundPath)
+		{
+			NodeT currentNode = aDestination;
+			auto currentNodeInfo = nodeInfo.find(currentNode)->second;
+			do
+			{
+				currentNodeInfo = nodeInfo.find(currentNode)->second;
+				aRouteOut->push_back(currentNode);
+				if (currentNodeInfo.myPreviousNode.has_value())
+					currentNode = currentNodeInfo.myPreviousNode.value();
+			} while (currentNodeInfo.myPreviousNode.has_value());
+
+			std::reverse(aRouteOut->begin(), aRouteOut->end());
+		}
+
+		return foundPath ? destinationInfo->second.myCost : std::optional<DistanceT>();
+	}
+
 	/**
 	 * @brief Sort a list of vertices in a directed acyclic graph into a linear order.
 	 * @tparam RandomIt Type of the random access iterator used to access vertices.
