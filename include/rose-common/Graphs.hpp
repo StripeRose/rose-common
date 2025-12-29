@@ -13,7 +13,7 @@ namespace ROSECOMMON_NAMESPACE
 	template <typename RandomIt, typename EdgeFunctor>
 	void TopologicalSort(RandomIt aFirst, RandomIt aLast, EdgeFunctor aHasEdge)
 	{
-        // Sourced from: https://cpp.bioweapon.dev/2023/11/03/topological-sort.html
+		// Sourced from: https://biowpn.github.io/bioweapon/2023/11/03/topological-sort.html
 
         const std::size_t n = std::ranges::distance(aFirst, aLast);
         std::vector<std::size_t> in_degree(n);
