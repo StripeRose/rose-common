@@ -14,7 +14,7 @@ namespace ROSECOMMON_MATH_NAMESPACE
 	 * @tparam T A type used for each component.
 	 */
 	template <typename T>
-	class Vector2T
+	class Vector2
 	{
 	public:
 
@@ -35,22 +35,22 @@ namespace ROSECOMMON_MATH_NAMESPACE
 		/**
 		 * @brief Create a vector with both of its components set to one.
 		 */
-		inline static constexpr Vector2T One() { return { 1, 1 }; }
+		inline static constexpr Vector2 One() { return { 1, 1 }; }
 
 		/**
 		 * @brief Create a unit-vector for the X-axis.
 		 */
-		inline static constexpr Vector2T UnitX() { return { 1, 0 }; }
+		inline static constexpr Vector2 UnitX() { return { 1, 0 }; }
 
 		/**
 		 * @brief Create a unit vector for the Y-axis.
 		 */
-		inline static constexpr Vector2T UnitY() { return { 0, 1 }; }
+		inline static constexpr Vector2 UnitY() { return { 0, 1 }; }
 
 		/**
 		 * @brief Create a vector with both of its components set to zero.
 		 */
-		inline static constexpr Vector2T Zero() { return { 0, 0 }; }
+		inline static constexpr Vector2 Zero() { return { 0, 0 }; }
 
 		#pragma endregion
 
@@ -62,20 +62,20 @@ namespace ROSECOMMON_MATH_NAMESPACE
 		/**
 		 * @brief Initialize both components to be zero.
 		 */
-		constexpr Vector2T();
+		constexpr Vector2();
 
 		/**
 		 * @brief Initialize both components to the specified value.
 		 * @param aValue The value both components should have.
 		 */
-		explicit constexpr Vector2T(const T& aValue);
+		explicit constexpr Vector2(const T& aValue);
 
 		/**
 		 * @brief Initialize each component to the specified value.
 		 * @param anX Value of the X component.
 		 * @param aY Value of the Y component.
 		 */
-		constexpr Vector2T(const T& anX, const T& aY);
+		constexpr Vector2(const T& anX, const T& aY);
 
 		/**
 		 * @brief Initialize the components with values from another type of vector.
@@ -83,19 +83,19 @@ namespace ROSECOMMON_MATH_NAMESPACE
 		 * @param aVector A vector to convert the values from.
 		 */
 		template <typename U = T>
-		explicit constexpr Vector2T(const Vector2T<U>& aVector);
+		explicit constexpr Vector2(const Vector2<U>& aVector);
 
 		/**
 		 * @brief Initialize the components with the values from a 1x2 matrix.
 		 * @param aColumnMatrix A column matrix to initialize with.
 		 */
-		explicit constexpr Vector2T(const MatrixT<1, 2, T>& aColumnMatrix);
+		explicit constexpr Vector2(const Matrix<1, 2, T>& aColumnMatrix);
 
 		/**
 		 * @brief Initialize the components with the values from a 2x1 matrix.
 		 * @param aRowMatrix A row matrix to initialize with.
 		 */
-		explicit constexpr Vector2T(const MatrixT<2, 1, T>& aRowMatrix);
+		explicit constexpr Vector2(const Matrix<2, 1, T>& aRowMatrix);
 
 		#pragma endregion
 
@@ -128,7 +128,7 @@ namespace ROSECOMMON_MATH_NAMESPACE
 		 * @param aMaximum The maximum clamp value.
 		 * @return The clamped vector.
 		 */
-		static constexpr Vector2T Clamp(const Vector2T& aValue, const Vector2T& aMinimum, const Vector2T& aMaximum);
+		static constexpr Vector2 Clamp(const Vector2& aValue, const Vector2& aMinimum, const Vector2& aMaximum);
 
 		/**
 		 * @brief Assuming the vector defines the size of a box, calculate its area.
@@ -142,7 +142,7 @@ namespace ROSECOMMON_MATH_NAMESPACE
 		 * @param aValue2 Source vector.
 		 * @return The distance between the points.
 		 */
-		static constexpr T Distance(const Vector2T& aValue1, const Vector2T& aValue2);
+		static constexpr T Distance(const Vector2& aValue1, const Vector2& aValue2);
 
 		/**
 		 * @brief Calculate the distance between two points squared.
@@ -150,7 +150,7 @@ namespace ROSECOMMON_MATH_NAMESPACE
 		 * @param aValue2 Source vector.
 		 * @return The squared distance between the points.
 		 */
-		static constexpr T DistanceSquared(const Vector2T& aValue1, const Vector2T& aValue2);
+		static constexpr T DistanceSquared(const Vector2& aValue1, const Vector2& aValue2);
 
 		/**
 		 * @brief Calculate the dot product of the two vectors. If the two vectors are unit vectors,
@@ -161,7 +161,7 @@ namespace ROSECOMMON_MATH_NAMESPACE
 		 * @param aValue2 The second vector.
 		 * @return The dot product of the two vectors.
 		 */
-		static constexpr T Dot(const Vector2T& aValue1, const Vector2T& aValue2);
+		static constexpr T Dot(const Vector2& aValue1, const Vector2& aValue2);
 
 		/**
 		 * @brief Calculate the vector length.
@@ -182,7 +182,7 @@ namespace ROSECOMMON_MATH_NAMESPACE
 		 * @param anAmount Value between 0 and 1 indicating the weight of the second vector.
 		 * @return A vector containing the linear interpolation result.
 		 */
-		static constexpr Vector2T Lerp(const Vector2T& aValue1, const Vector2T& aValue2, const T& anAmount);
+		static constexpr Vector2 Lerp(const Vector2& aValue1, const Vector2& aValue2, const T& anAmount);
 
 		/**
 		 * @brief Get the largest values for each component.
@@ -190,7 +190,7 @@ namespace ROSECOMMON_MATH_NAMESPACE
 		 * @param aValue2 Source vector.
 		 * @return A vector that contains the highest value from each matching pair of components.
 		 */
-		static constexpr Vector2T Max(const Vector2T& aValue1, const Vector2T& aValue2);
+		static constexpr Vector2 Max(const Vector2& aValue1, const Vector2& aValue2);
 
 		/**
 		 * @brief Get the smallest values for each component.
@@ -198,13 +198,13 @@ namespace ROSECOMMON_MATH_NAMESPACE
 		 * @param aValue2 Source vector.
 		 * @return A vector that contains the lowest value from each matching pair of components.
 		 */
-		static constexpr Vector2T Min(const Vector2T& aValue1, const Vector2T& aValue2);
+		static constexpr Vector2 Min(const Vector2& aValue1, const Vector2& aValue2);
 
 		/**
 		 * @brief Create a unit vector from the specified vector with the same direction as the original vector.
 		 * @return The unit vector.
 		 */
-		inline constexpr Vector2T Normalized() const { return (*this) / Length(); }
+		inline constexpr Vector2 Normalized() const { return (*this) / Length(); }
 
 		/**
 		 * @brief Modify the vector into a unit vector with the same direction as the original vector.
@@ -217,7 +217,7 @@ namespace ROSECOMMON_MATH_NAMESPACE
 		 * @param aNormal A normal about which the vector should be reflected.
 		 * @return A vector containing the reflected direction.
 		 */
-		static constexpr Vector2T Reflect(const Vector2T& aVector, const Vector2T& aNormal);
+		static constexpr Vector2 Reflect(const Vector2& aVector, const Vector2& aNormal);
 
 		/**
 		 * @brief Smoothly interpolate two vectors using cubic interpolation.
@@ -226,19 +226,19 @@ namespace ROSECOMMON_MATH_NAMESPACE
 		 * @param anAmount Value between 0 and 1 indicating the weight of the second vector in the interpolation.
 		 * @return A vector containing the cubic interpolation result.
 		 */
-		static constexpr Vector2T SmoothStep(const Vector2T& aValue1, const Vector2T& aValue2, const T& anAmount);
+		static constexpr Vector2 SmoothStep(const Vector2& aValue1, const Vector2& aValue2, const T& anAmount);
 
 		/**
 		 * @brief Create a 1x2 column-matrix from the vector.
 		 * @return A matrix with the same component values as the vector.
 		 */
-		inline constexpr MatrixT<1, 2, T> ToColumnMatrix() const { return MatrixT<1, 2, T>({ X, Y }); }
+		inline constexpr Matrix<1, 2, T> ToColumnMatrix() const { return Matrix<1, 2, T>({ X, Y }); }
 
 		/**
 		 * @brief Create a 2x1 row-matrix from the vector.
 		 * @return A matrix with the same component values as the vector.
 		 */
-		inline constexpr MatrixT<2, 1, T> ToRowMatrix() const { return MatrixT<2, 1, T>({ X, Y }); }
+		inline constexpr Matrix<2, 1, T> ToRowMatrix() const { return Matrix<2, 1, T>({ X, Y }); }
 
 		#pragma endregion
 
@@ -247,32 +247,32 @@ namespace ROSECOMMON_MATH_NAMESPACE
 		//--------------------------------------------------
 		#pragma region Operators
 
-		inline constexpr Vector2T operator-() const { return Vector2T(-X, -Y); }
+		inline constexpr Vector2 operator-() const { return Vector2(-X, -Y); }
 
-		inline constexpr Vector2T operator+(const Vector2T& aVector) const { return Vector2T(X + aVector.X, Y + aVector.Y); }
-		inline constexpr Vector2T operator-(const Vector2T& aVector) const { return Vector2T(X - aVector.X, Y - aVector.Y); }
-		inline constexpr Vector2T operator*(const Vector2T& aVector) const { return Vector2T(X * aVector.X, Y * aVector.Y); }
-		inline constexpr Vector2T operator/(const Vector2T& aVector) const { return Vector2T(X / aVector.X, Y / aVector.Y); }
+		inline constexpr Vector2 operator+(const Vector2& aVector) const { return Vector2(X + aVector.X, Y + aVector.Y); }
+		inline constexpr Vector2 operator-(const Vector2& aVector) const { return Vector2(X - aVector.X, Y - aVector.Y); }
+		inline constexpr Vector2 operator*(const Vector2& aVector) const { return Vector2(X * aVector.X, Y * aVector.Y); }
+		inline constexpr Vector2 operator/(const Vector2& aVector) const { return Vector2(X / aVector.X, Y / aVector.Y); }
 
-		inline constexpr Vector2T operator*(const MatrixT<2, 2, T>& aMatrix) const { return Vector2T(ToRowMatrix() * aMatrix); }
+		inline constexpr Vector2 operator*(const Matrix<2, 2, T>& aMatrix) const { return Vector2(ToRowMatrix() * aMatrix); }
 
-		inline void operator+=(const Vector2T& aVector) { X += aVector.X; Y += aVector.Y; }
-		inline void operator-=(const Vector2T& aVector) { X -= aVector.X; Y -= aVector.Y; }
-		inline void operator*=(const Vector2T& aVector) { X *= aVector.X; Y *= aVector.Y; }
-		inline void operator/=(const Vector2T& aVector) { X /= aVector.X; Y /= aVector.Y; }
+		inline void operator+=(const Vector2& aVector) { X += aVector.X; Y += aVector.Y; }
+		inline void operator-=(const Vector2& aVector) { X -= aVector.X; Y -= aVector.Y; }
+		inline void operator*=(const Vector2& aVector) { X *= aVector.X; Y *= aVector.Y; }
+		inline void operator/=(const Vector2& aVector) { X /= aVector.X; Y /= aVector.Y; }
 
-		inline void operator*=(const MatrixT<2, 2, T>& aMatrix) { (*this) = Vector2T(ToRowMatrix() * aMatrix); }
+		inline void operator*=(const Matrix<2, 2, T>& aMatrix) { (*this) = Vector2(ToRowMatrix() * aMatrix); }
 
-		inline constexpr Vector2T operator*(const T& aScalar) const { return Vector2T(X * aScalar, Y * aScalar); }
-		inline constexpr Vector2T operator/(const T& aScalar) const { return Vector2T(X / aScalar, Y / aScalar); }
+		inline constexpr Vector2 operator*(const T& aScalar) const { return Vector2(X * aScalar, Y * aScalar); }
+		inline constexpr Vector2 operator/(const T& aScalar) const { return Vector2(X / aScalar, Y / aScalar); }
 		inline void operator*=(const T& aScalar) { X *= aScalar; Y *= aScalar; }
 		inline void operator/=(const T& aScalar) { X /= aScalar; Y /= aScalar; }
 
-		inline constexpr bool operator==(const Vector2T& aVector) const { return ROSECOMMON_MATH_NAMESPACE::Equals(X, aVector.X) && ROSECOMMON_MATH_NAMESPACE::Equals(Y, aVector.Y); }
-		inline constexpr bool operator!=(const Vector2T& aVector) const { return !operator==(aVector); }
+		inline constexpr bool operator==(const Vector2& aVector) const { return ROSECOMMON_MATH_NAMESPACE::Equals(X, aVector.X) && ROSECOMMON_MATH_NAMESPACE::Equals(Y, aVector.Y); }
+		inline constexpr bool operator!=(const Vector2& aVector) const { return !operator==(aVector); }
 
 		template <typename U = T>
-		constexpr std::strong_ordering operator<=>(const Vector2T<U>& aVector) const
+		constexpr std::strong_ordering operator<=>(const Vector2<U>& aVector) const
 		{
 			std::strong_ordering order = std::strong_order(X, aVector.X);
 			if (order != std::strong_ordering::equal)
@@ -288,7 +288,7 @@ namespace ROSECOMMON_MATH_NAMESPACE
 	 * @tparam T A type used for each component.
 	 */
 	template <typename T>
-	class Vector3T
+	class Vector3
 	{
 	public:
 
@@ -309,57 +309,57 @@ namespace ROSECOMMON_MATH_NAMESPACE
 		/**
 		 * @brief Create a unit-vector designating backward in a left-handed coordinate system.
 		 */
-		inline static constexpr Vector3T Backward() { return -UnitZ(); }
+		inline static constexpr Vector3 Backward() { return -UnitZ(); }
 
 		/**
 		 * @brief Create a unit-vector designating down.
 		 */
-		inline static constexpr Vector3T Down() { return -UnitY(); }
+		inline static constexpr Vector3 Down() { return -UnitY(); }
 
 		/**
 		  * @brief Create a unit-vector designating forward in a left-handed coordinate system.
 		  */
-		inline static constexpr Vector3T Forward() { return UnitZ(); }
+		inline static constexpr Vector3 Forward() { return UnitZ(); }
 
 		/**
 		  * @brief Create a unit-vector designating left in a left-handed coordinate system.
 		  */
-		inline static constexpr Vector3T Left() { return -UnitX(); }
+		inline static constexpr Vector3 Left() { return -UnitX(); }
 
 		/**
 		  * @brief Create a vector with all of its components set to one.
 		  */
-		inline static constexpr Vector3T One() { return { 1, 1, 1 }; }
+		inline static constexpr Vector3 One() { return { 1, 1, 1 }; }
 
 		/**
 		  * @brief Create a unit-vector designating right in a left-handed coordinate system.
 		  */
-		inline static constexpr Vector3T Right() { return UnitX(); }
+		inline static constexpr Vector3 Right() { return UnitX(); }
 
 		/**
 		  * @brief Create a unit-vector for the X-axis.
 		  */
-		inline static constexpr Vector3T UnitX() { return { 1, 0, 0 }; }
+		inline static constexpr Vector3 UnitX() { return { 1, 0, 0 }; }
 
 		/**
 		  * @brief Create a unit-vector for the Y-axis.
 		  */
-		inline static constexpr Vector3T UnitY() { return { 0, 1, 0 }; }
+		inline static constexpr Vector3 UnitY() { return { 0, 1, 0 }; }
 
 		/**
 		  * @brief Create a unit-vector for the Z-axis.
 		  */
-		inline static constexpr Vector3T UnitZ() { return { 0, 0, 1 }; }
+		inline static constexpr Vector3 UnitZ() { return { 0, 0, 1 }; }
 
 		/**
 		  * @brief Create a unit-vector designating up.
 		  */
-		inline static constexpr Vector3T Up() { return UnitY(); }
+		inline static constexpr Vector3 Up() { return UnitY(); }
 
 		/**
 		  * @brief Create a vector with all of its components set to zero.
 		  */
-		inline static constexpr Vector3T Zero() { return { 0, 0, 0 }; }
+		inline static constexpr Vector3 Zero() { return { 0, 0, 0 }; }
 
 		#pragma endregion
 
@@ -371,13 +371,13 @@ namespace ROSECOMMON_MATH_NAMESPACE
 		/**
 		 * @brief Initialize the components to be zero.
 		 */
-		constexpr Vector3T();
+		constexpr Vector3();
 
 		/**
 		 * @brief Initialize the components to the specified value.
 		 * @param aValue The value all components should have.
 		 */
-		explicit constexpr Vector3T(const T& aValue);
+		explicit constexpr Vector3(const T& aValue);
 
 		/**
 		 * @brief Initialize each component to the specified value.
@@ -385,7 +385,7 @@ namespace ROSECOMMON_MATH_NAMESPACE
 		 * @param aY Value of the Y component.
 		 * @param aZ Value of the Z component.
 		 */
-		constexpr Vector3T(const T& anX, const T& aY, const T& aZ);
+		constexpr Vector3(const T& anX, const T& aY, const T& aZ);
 
 		/**
 		 * @brief Initialize the components with values from another type of vector.
@@ -393,26 +393,26 @@ namespace ROSECOMMON_MATH_NAMESPACE
 		 * @param aVector A vector to convert the values from.
 		 */
 		template <typename U = T>
-		explicit constexpr Vector3T(const Vector3T<U>& aVector);
+		explicit constexpr Vector3(const Vector3<U>& aVector);
 
 		/**
-		 * @brief Initialize the components from a Vector2T and a Z value.
+		 * @brief Initialize the components from a Vector2 and a Z value.
 		 * @param aVector A vector containing the values for X and Y components.
 		 * @param aZ A value for the Z component.
 		 */
-		explicit constexpr Vector3T(const Vector2T<T>& aVector, const T& aZ = 0);
+		explicit constexpr Vector3(const Vector2<T>& aVector, const T& aZ = 0);
 
 		/**
 		 * @brief Initialize the components with the values from a 1x3 matrix.
 		 * @param aColumnMatrix A column matrix to initialize with.
 		 */
-		explicit constexpr Vector3T(const MatrixT<1, 3, T>& aColumnMatrix);
+		explicit constexpr Vector3(const Matrix<1, 3, T>& aColumnMatrix);
 
 		/**
 		 * @brief Initialize the components with the values from a 3x1 matrix.
 		 * @param aRowMatrix A row matrix to initialize with.
 		 */
-		explicit constexpr Vector3T(const MatrixT<3, 1, T>& aRowMatrix);
+		explicit constexpr Vector3(const Matrix<3, 1, T>& aRowMatrix);
 
 		#pragma endregion
 
@@ -450,7 +450,7 @@ namespace ROSECOMMON_MATH_NAMESPACE
 		 * @param aMaximum The maximum clamp value.
 		 * @return The clamped vector.
 		 */
-		static constexpr Vector3T Clamp(const Vector3T& aVector, const Vector3T& aMinimum, const Vector3T& aMaximum);
+		static constexpr Vector3 Clamp(const Vector3& aVector, const Vector3& aMinimum, const Vector3& aMaximum);
 
 		/**
 		 * @brief Assuming the vector defines the size of a box, calculate the volume.
@@ -464,7 +464,7 @@ namespace ROSECOMMON_MATH_NAMESPACE
 		 * @param aValue2 Source vector.
 		 * @return The cross-product of the two vectors.
 		 */
-		static constexpr Vector3T Cross(const Vector3T& aValue1, const Vector3T& aValue2);
+		static constexpr Vector3 Cross(const Vector3& aValue1, const Vector3& aValue2);
 
 		/**
 		 * @brief Calculate the distance between two points.
@@ -472,7 +472,7 @@ namespace ROSECOMMON_MATH_NAMESPACE
 		 * @param aValue2 Source vector.
 		 * @return The distance between the points.
 		 */
-		static constexpr T Distance(const Vector3T& aValue1, const Vector3T& aValue2);
+		static constexpr T Distance(const Vector3& aValue1, const Vector3& aValue2);
 
 		/**
 		 * @brief Calculate the distance between two points squared.
@@ -480,7 +480,7 @@ namespace ROSECOMMON_MATH_NAMESPACE
 		 * @param aValue2 Source vector.
 		 * @return The squared distance between the points.
 		 */
-		static constexpr T DistanceSquared(const Vector3T& aValue1, const Vector3T& aValue2);
+		static constexpr T DistanceSquared(const Vector3& aValue1, const Vector3& aValue2);
 
 		/**
 		 * @brief Calculate the dot product of the two vectors. If the two vectors are unit vectors,
@@ -491,7 +491,7 @@ namespace ROSECOMMON_MATH_NAMESPACE
 		 * @param aValue2 The second vector.
 		 * @return The dot product of the two vectors.
 		 */
-		static constexpr T Dot(const Vector3T& aValue1, const Vector3T& aValue2);
+		static constexpr T Dot(const Vector3& aValue1, const Vector3& aValue2);
 
 		/**
 		 * @brief Calculate the vector length.
@@ -512,7 +512,7 @@ namespace ROSECOMMON_MATH_NAMESPACE
 		 * @param anAmount Value between 0 and 1 indicating the weight of the second vector.
 		 * @return A vector containing the linear interpolation result.
 		 */
-		static constexpr Vector3T Lerp(const Vector3T& aValue1, const Vector3T& aValue2, const T& anAmount);
+		static constexpr Vector3 Lerp(const Vector3& aValue1, const Vector3& aValue2, const T& anAmount);
 
 		/**
 		 * @brief Spherically interpolate between two vectors.
@@ -521,7 +521,7 @@ namespace ROSECOMMON_MATH_NAMESPACE
 		 * @param anAmount Value between 0 and 1 indicating the weight of the second vector.
 		 * @return The spherical interpolation of the two vectors.
 		 */
-		static constexpr Vector3T Slerp(const Vector3T& aValue1, const Vector3T& aValue2, const T& anAmount);
+		static constexpr Vector3 Slerp(const Vector3& aValue1, const Vector3& aValue2, const T& anAmount);
 
 		/**
 		 * @brief Get the largest values for each component.
@@ -529,7 +529,7 @@ namespace ROSECOMMON_MATH_NAMESPACE
 		 * @param aValue2 Source vector.
 		 * @return A vector that contains the highest value from each matching pair of components.
 		 */
-		static constexpr Vector3T Max(const Vector3T& aValue1, const Vector3T& aValue2);
+		static constexpr Vector3 Max(const Vector3& aValue1, const Vector3& aValue2);
 
 		/**
 		 * @brief Get the smallest values for each component.
@@ -537,13 +537,13 @@ namespace ROSECOMMON_MATH_NAMESPACE
 		 * @param aValue2 Source vector.
 		 * @return A vector that contains the lowest value from each matching pair of components.
 		 */
-		static constexpr Vector3T Min(const Vector3T& aValue1, const Vector3T& aValue2);
+		static constexpr Vector3 Min(const Vector3& aValue1, const Vector3& aValue2);
 
 		/**
 		 * @brief Create a unit vector from the specified vector with the same direction as the original vector.
 		 * @return The unit vector.
 		 */
-		inline constexpr Vector3T Normalized() const { return (*this) / Length(); }
+		inline constexpr Vector3 Normalized() const { return (*this) / Length(); }
 
 		/**
 		 * @brief Modify the vector into a unit vector with the same direction as the original vector.
@@ -556,7 +556,7 @@ namespace ROSECOMMON_MATH_NAMESPACE
 		 * @param aNormal A normal about which the vector should be reflected.
 		 * @return A vector containing the reflected direction.
 		 */
-		static constexpr Vector3T Reflect(const Vector3T& aVector, const Vector3T& aNormal);
+		static constexpr Vector3 Reflect(const Vector3& aVector, const Vector3& aNormal);
 
 		/**
 		 * @brief Smoothly interpolate two vectors using cubic interpolation.
@@ -565,19 +565,19 @@ namespace ROSECOMMON_MATH_NAMESPACE
 		 * @param anAmount Value between 0 and 1 indicating the weight of the second vector in the interpolation.
 		 * @return A vector containing the cubic interpolation result.
 		 */
-		static constexpr Vector3T SmoothStep(const Vector3T& aValue1, const Vector3T& aValue2, const T& anAmount);
+		static constexpr Vector3 SmoothStep(const Vector3& aValue1, const Vector3& aValue2, const T& anAmount);
 
 		/**
 		 * @brief Create a 1x3 column-matrix from the vector.
 		 * @return A matrix with the same component values as the vector.
 		 */
-		inline constexpr MatrixT<1, 3, T> ToColumnMatrix() const { return MatrixT<1, 3, T>({ X, Y, Z }); }
+		inline constexpr Matrix<1, 3, T> ToColumnMatrix() const { return Matrix<1, 3, T>({ X, Y, Z }); }
 
 		/**
 		 * @brief Create a 3x1 row-matrix from the vector.
 		 * @return A matrix with the same component values as the vector.
 		 */
-		inline constexpr MatrixT<3, 1, T> ToRowMatrix() const { return MatrixT<3, 1, T>({ X, Y, Z }); }
+		inline constexpr Matrix<3, 1, T> ToRowMatrix() const { return Matrix<3, 1, T>({ X, Y, Z }); }
 
 		#pragma endregion
 
@@ -586,33 +586,33 @@ namespace ROSECOMMON_MATH_NAMESPACE
 		//--------------------------------------------------
 		#pragma region Operators
 
-		inline explicit constexpr operator Vector2T<T>() const { return Vector2T<T>(X, Y); }
+		inline explicit constexpr operator Vector2<T>() const { return Vector2<T>(X, Y); }
 
-		inline constexpr Vector3T operator-() const { return Vector3T(-X, -Y, -Z); }
+		inline constexpr Vector3 operator-() const { return Vector3(-X, -Y, -Z); }
 
-		inline constexpr Vector3T operator+(const Vector3T& aVector) const { return Vector3T(X + aVector.X, Y + aVector.Y, Z + aVector.Z); }
-		inline constexpr Vector3T operator-(const Vector3T& aVector) const { return Vector3T(X - aVector.X, Y - aVector.Y, Z - aVector.Z); }
-		inline constexpr Vector3T operator*(const Vector3T& aVector) const { return Vector3T(X * aVector.X, Y * aVector.Y, Z * aVector.Z); }
-		inline constexpr Vector3T operator/(const Vector3T& aVector) const { return Vector3T(X / aVector.X, Y / aVector.Y, Z / aVector.Z); }
+		inline constexpr Vector3 operator+(const Vector3& aVector) const { return Vector3(X + aVector.X, Y + aVector.Y, Z + aVector.Z); }
+		inline constexpr Vector3 operator-(const Vector3& aVector) const { return Vector3(X - aVector.X, Y - aVector.Y, Z - aVector.Z); }
+		inline constexpr Vector3 operator*(const Vector3& aVector) const { return Vector3(X * aVector.X, Y * aVector.Y, Z * aVector.Z); }
+		inline constexpr Vector3 operator/(const Vector3& aVector) const { return Vector3(X / aVector.X, Y / aVector.Y, Z / aVector.Z); }
 
-		inline constexpr Vector3T operator*(const MatrixT<3, 3, T>& aMatrix) const { return Vector3T(ToRowMatrix() * aMatrix); }
+		inline constexpr Vector3 operator*(const Matrix<3, 3, T>& aMatrix) const { return Vector3(ToRowMatrix() * aMatrix); }
 
-		inline void operator+=(const Vector3T& aVector) { X += aVector.X; Y += aVector.Y; Z += aVector.Z; }
-		inline void operator-=(const Vector3T& aVector) { X -= aVector.X; Y -= aVector.Y; Z -= aVector.Z; }
-		inline void operator*=(const Vector3T& aVector) { X *= aVector.X; Y *= aVector.Y; Z *= aVector.Z; }
-		inline void operator/=(const Vector3T& aVector) { X /= aVector.X; Y /= aVector.Y; Z /= aVector.Z; }
+		inline void operator+=(const Vector3& aVector) { X += aVector.X; Y += aVector.Y; Z += aVector.Z; }
+		inline void operator-=(const Vector3& aVector) { X -= aVector.X; Y -= aVector.Y; Z -= aVector.Z; }
+		inline void operator*=(const Vector3& aVector) { X *= aVector.X; Y *= aVector.Y; Z *= aVector.Z; }
+		inline void operator/=(const Vector3& aVector) { X /= aVector.X; Y /= aVector.Y; Z /= aVector.Z; }
 
-		inline void operator*=(const MatrixT<3, 3, T>& aMatrix) { (*this) = Vector3T(ToRowMatrix() * aMatrix); }
+		inline void operator*=(const Matrix<3, 3, T>& aMatrix) { (*this) = Vector3(ToRowMatrix() * aMatrix); }
 
-		inline constexpr Vector3T operator*(const T& aScalar) const { return Vector3T(X * aScalar, Y * aScalar, Z * aScalar); }
-		inline constexpr Vector3T operator/(const T& aScalar) const { return Vector3T(X / aScalar, Y / aScalar, Z / aScalar); }
+		inline constexpr Vector3 operator*(const T& aScalar) const { return Vector3(X * aScalar, Y * aScalar, Z * aScalar); }
+		inline constexpr Vector3 operator/(const T& aScalar) const { return Vector3(X / aScalar, Y / aScalar, Z / aScalar); }
 		inline void operator*=(const T& aScalar) { X *= aScalar; Y *= aScalar; Z *= aScalar; }
 		inline void operator/=(const T& aScalar) { X /= aScalar; Y /= aScalar; Z /= aScalar; }
 
-		inline constexpr bool operator==(const Vector3T& aVector) const { return ROSECOMMON_MATH_NAMESPACE::Equals(X, aVector.X) && ROSECOMMON_MATH_NAMESPACE::Equals(Y, aVector.Y) && ROSECOMMON_MATH_NAMESPACE::Equals(Z, aVector.Z); }
-		inline constexpr bool operator!=(const Vector3T& aVector) const { return !operator==(aVector); }
+		inline constexpr bool operator==(const Vector3& aVector) const { return ROSECOMMON_MATH_NAMESPACE::Equals(X, aVector.X) && ROSECOMMON_MATH_NAMESPACE::Equals(Y, aVector.Y) && ROSECOMMON_MATH_NAMESPACE::Equals(Z, aVector.Z); }
+		inline constexpr bool operator!=(const Vector3& aVector) const { return !operator==(aVector); }
 
-		constexpr std::strong_ordering operator<=>(const Vector3T& aVector) const
+		constexpr std::strong_ordering operator<=>(const Vector3& aVector) const
 		{
 			std::strong_ordering order = std::strong_order(X, aVector.X);
 			if (order != std::strong_ordering::equal)
@@ -631,7 +631,7 @@ namespace ROSECOMMON_MATH_NAMESPACE
 	 * @tparam T A type used for each component.
 	 */
 	template <typename T>
-	class Vector4T
+	class Vector4
 	{
 	public:
 
@@ -652,32 +652,32 @@ namespace ROSECOMMON_MATH_NAMESPACE
 		/**
 		  * @brief Create a vector with all of its components set to one.
 		  */
-		static constexpr Vector4T One() { return { 1, 1, 1, 1 }; }
+		static constexpr Vector4 One() { return { 1, 1, 1, 1 }; }
 
 		/**
 		  * @brief Create a unit-vector for the X-axis.
 		  */
-		static constexpr Vector4T UnitX() { return { 1, 0, 0, 0 }; }
+		static constexpr Vector4 UnitX() { return { 1, 0, 0, 0 }; }
 
 		/**
 		  * @brief Create a unit-vector for the Y-axis.
 		  */
-		static constexpr Vector4T UnitY() { return { 0, 1, 0, 0 }; }
+		static constexpr Vector4 UnitY() { return { 0, 1, 0, 0 }; }
 
 		/**
 		  * @brief Create a unit-vector for the Z-axis.
 		  */
-		static constexpr Vector4T UnitZ() { return { 0, 0, 1, 0 }; }
+		static constexpr Vector4 UnitZ() { return { 0, 0, 1, 0 }; }
 
 		/**
 		  * @brief Create a unit-vector for the W-axis.
 		  */
-		static constexpr Vector4T UnitW() { return { 0, 0, 0, 1 }; }
+		static constexpr Vector4 UnitW() { return { 0, 0, 0, 1 }; }
 
 		/**
 		  * @brief Create a vector with all of its components set to zero.
 		  */
-		static constexpr Vector4T Zero() { return { 0, 0, 0, 0 }; }
+		static constexpr Vector4 Zero() { return { 0, 0, 0, 0 }; }
 
 		#pragma endregion
 
@@ -689,13 +689,13 @@ namespace ROSECOMMON_MATH_NAMESPACE
 		/**
 		 * @brief Initialize the components to be zero.
 		 */
-		constexpr Vector4T();
+		constexpr Vector4();
 
 		/**
 		 * @brief Initialize the components to the specified value.
 		 * @param aValue The value all components should have.
 		 */
-		explicit constexpr Vector4T(const T& aValue);
+		explicit constexpr Vector4(const T& aValue);
 
 		/**
 		 * @brief Initialize each component to the specified value.
@@ -704,7 +704,7 @@ namespace ROSECOMMON_MATH_NAMESPACE
 		 * @param aZ Value of the Z component.
 		 * @param aW Value of the W component.
 		 */
-		constexpr Vector4T(const T& anX, const T& aY, const T& aZ, const T& aW);
+		constexpr Vector4(const T& anX, const T& aY, const T& aZ, const T& aW);
 
 		/**
 		 * @brief Initialize the components with values from another type of vector.
@@ -712,34 +712,34 @@ namespace ROSECOMMON_MATH_NAMESPACE
 		 * @param aVector A vector to convert the values from.
 		 */
 		template <typename U = T>
-		explicit constexpr Vector4T(const Vector4T<U>& aVector);
+		explicit constexpr Vector4(const Vector4<U>& aVector);
 
 		/**
-		 * @brief Initialize the components from a Vector2T, a Z value and a W value.
+		 * @brief Initialize the components from a Vector2, a Z value and a W value.
 		 * @param aVector A vector containing the values for X and Y components.
 		 * @param aZ A value for the Z component.
 		 * @param aW A value for the W component.
 		 */
-		explicit constexpr Vector4T(const Vector2T<T>& aVector, const T& aZ = 0, const T& aW = 1);
+		explicit constexpr Vector4(const Vector2<T>& aVector, const T& aZ = 0, const T& aW = 1);
 
 		/**
-		 * @brief Initialize the components from a Vector3T, and a W value.
+		 * @brief Initialize the components from a Vector3, and a W value.
 		 * @param aVector A vector containing the values for X, Y and Z components.
 		 * @param aW A value for the W component.
 		 */
-		explicit constexpr Vector4T(const Vector3T<T>& aVector, const T& aW = 1);
+		explicit constexpr Vector4(const Vector3<T>& aVector, const T& aW = 1);
 
 		/**
 		 * @brief Initialize the components with the values from a 1x4 matrix.
 		 * @param aColumnMatrix A column matrix to initialize with.
 		 */
-		explicit constexpr Vector4T(const MatrixT<1, 4, T>& aColumnMatrix);
+		explicit constexpr Vector4(const Matrix<1, 4, T>& aColumnMatrix);
 
 		/**
 		 * @brief Initialize the components with the values from a 4x1 matrix.
 		 * @param aRowMatrix A row matrix to initialize with.
 		 */
-		explicit constexpr Vector4T(const MatrixT<4, 1, T>& aRowMatrix);
+		explicit constexpr Vector4(const Matrix<4, 1, T>& aRowMatrix);
 
 		#pragma endregion
 
@@ -782,7 +782,7 @@ namespace ROSECOMMON_MATH_NAMESPACE
 		 * @param aMaximum The maximum clamp value.
 		 * @return The clamped vector.
 		 */
-		static constexpr Vector4T Clamp(const Vector4T& aVector, const Vector4T& aMinimum, const Vector4T& aMaximum);
+		static constexpr Vector4 Clamp(const Vector4& aVector, const Vector4& aMinimum, const Vector4& aMaximum);
 
 		/**
 		 * @brief Assuming the vector defines the size of a fourth-dimensional box, calculate its volume.
@@ -796,7 +796,7 @@ namespace ROSECOMMON_MATH_NAMESPACE
 		 * @param aValue2 Source vector.
 		 * @return The distance between the points.
 		 */
-		static constexpr T Distance(const Vector4T& aValue1, const Vector4T& aValue2);
+		static constexpr T Distance(const Vector4& aValue1, const Vector4& aValue2);
 
 		/**
 		 * @brief Calculate the distance between two points squared.
@@ -804,7 +804,7 @@ namespace ROSECOMMON_MATH_NAMESPACE
 		 * @param aValue2 Source vector.
 		 * @return The squared distance between the points.
 		 */
-		static constexpr T DistanceSquared(const Vector4T& aValue1, const Vector4T& aValue2);
+		static constexpr T DistanceSquared(const Vector4& aValue1, const Vector4& aValue2);
 
 		/**
 		 * @brief Calculate the dot product of the two vectors. If the two vectors are unit vectors,
@@ -815,7 +815,7 @@ namespace ROSECOMMON_MATH_NAMESPACE
 		 * @param aValue2 The second vector.
 		 * @return The dot product of the two vectors.
 		 */
-		static constexpr T Dot(const Vector4T& aValue1, const Vector4T& aValue2);
+		static constexpr T Dot(const Vector4& aValue1, const Vector4& aValue2);
 
 		/**
 		 * @brief Calculate the vector length.
@@ -836,7 +836,7 @@ namespace ROSECOMMON_MATH_NAMESPACE
 		 * @param anAmount Value between 0 and 1 indicating the weight of the second vector.
 		 * @return A vector containing the linear interpolation result.
 		 */
-		static constexpr Vector4T Lerp(const Vector4T& aValue1, const Vector4T& aValue2, const T& anAmount);
+		static constexpr Vector4 Lerp(const Vector4& aValue1, const Vector4& aValue2, const T& anAmount);
 
 		/**
 		 * @brief Get the largest values for each component.
@@ -844,7 +844,7 @@ namespace ROSECOMMON_MATH_NAMESPACE
 		 * @param aValue2 Source vector.
 		 * @return A vector that contains the highest value from each matching pair of components.
 		 */
-		static constexpr Vector4T Max(const Vector4T& aValue1, const Vector4T& aValue2);
+		static constexpr Vector4 Max(const Vector4& aValue1, const Vector4& aValue2);
 
 		/**
 		 * @brief Get the smallest values for each component.
@@ -852,13 +852,13 @@ namespace ROSECOMMON_MATH_NAMESPACE
 		 * @param aValue2 Source vector.
 		 * @return A vector that contains the lowest value from each matching pair of components.
 		 */
-		static constexpr Vector4T Min(const Vector4T& aValue1, const Vector4T& aValue2);
+		static constexpr Vector4 Min(const Vector4& aValue1, const Vector4& aValue2);
 
 		/**
 		 * @brief Create a unit vector from the specified vector with the same direction as the original vector.
 		 * @return The unit vector.
 		 */
-		inline constexpr Vector4T Normalized() const { return (*this) / Length(); }
+		inline constexpr Vector4 Normalized() const { return (*this) / Length(); }
 
 		/**
 		 * @brief Modify the vector into a unit vector with the same direction as the original vector.
@@ -872,19 +872,19 @@ namespace ROSECOMMON_MATH_NAMESPACE
 		 * @param anAmount Value between 0 and 1 indicating the weight of the second vector in the interpolation.
 		 * @return A vector containing the cubic interpolation result.
 		 */
-		static constexpr Vector4T SmoothStep(const Vector4T& aValue1, const Vector4T& aValue2, const T& anAmount);
+		static constexpr Vector4 SmoothStep(const Vector4& aValue1, const Vector4& aValue2, const T& anAmount);
 
 		/**
 		 * @brief Create a 1x4 column-matrix from the vector.
 		 * @return A matrix with the same component values as the vector.
 		 */
-		constexpr MatrixT<1, 4, T> ToColumnMatrix() const { return MatrixT<1, 4, T>({ X, Y, Z, W }); }
+		constexpr Matrix<1, 4, T> ToColumnMatrix() const { return Matrix<1, 4, T>({ X, Y, Z, W }); }
 
 		/**
 		 * @brief Create a 4x1 row-matrix from the vector.
 		 * @return A matrix with the same component values as the vector.
 		 */
-		constexpr MatrixT<4, 1, T> ToRowMatrix() const { return MatrixT<4, 1, T>({ X, Y, Z, W }); }
+		constexpr Matrix<4, 1, T> ToRowMatrix() const { return Matrix<4, 1, T>({ X, Y, Z, W }); }
 
 		#pragma endregion
 
@@ -893,34 +893,34 @@ namespace ROSECOMMON_MATH_NAMESPACE
 		//--------------------------------------------------
 		#pragma region Operators
 
-		inline explicit constexpr operator Vector2T<T>() const { return Vector2T<T>(X, Y); }
-		inline explicit constexpr operator Vector3T<T>() const { return Vector3T<T>(X, Y, Z); }
+		inline explicit constexpr operator Vector2<T>() const { return Vector2<T>(X, Y); }
+		inline explicit constexpr operator Vector3<T>() const { return Vector3<T>(X, Y, Z); }
 
-		inline constexpr Vector4T operator-() const { return Vector4T(-X, -Y, -Z, -W); }
+		inline constexpr Vector4 operator-() const { return Vector4(-X, -Y, -Z, -W); }
 
-		inline constexpr Vector4T operator+(const Vector4T& aVector) const { return Vector4T(X + aVector.X, Y + aVector.Y, Z + aVector.Z, W + aVector.W); }
-		inline constexpr Vector4T operator-(const Vector4T& aVector) const { return Vector4T(X - aVector.X, Y - aVector.Y, Z - aVector.Z, W - aVector.W); }
-		inline constexpr Vector4T operator*(const Vector4T& aVector) const { return Vector4T(X * aVector.X, Y * aVector.Y, Z * aVector.Z, W * aVector.W); }
-		inline constexpr Vector4T operator/(const Vector4T& aVector) const { return Vector4T(X / aVector.X, Y / aVector.Y, Z / aVector.Z, W / aVector.W); }
+		inline constexpr Vector4 operator+(const Vector4& aVector) const { return Vector4(X + aVector.X, Y + aVector.Y, Z + aVector.Z, W + aVector.W); }
+		inline constexpr Vector4 operator-(const Vector4& aVector) const { return Vector4(X - aVector.X, Y - aVector.Y, Z - aVector.Z, W - aVector.W); }
+		inline constexpr Vector4 operator*(const Vector4& aVector) const { return Vector4(X * aVector.X, Y * aVector.Y, Z * aVector.Z, W * aVector.W); }
+		inline constexpr Vector4 operator/(const Vector4& aVector) const { return Vector4(X / aVector.X, Y / aVector.Y, Z / aVector.Z, W / aVector.W); }
 
-		inline constexpr Vector4T operator*(const MatrixT<4, 4, T>& aMatrix) const { return Vector4T(ToRowMatrix() * aMatrix); }
+		inline constexpr Vector4 operator*(const Matrix<4, 4, T>& aMatrix) const { return Vector4(ToRowMatrix() * aMatrix); }
 
-		inline void operator+=(const Vector4T& aVector) { X += aVector.X; Y += aVector.Y; Z += aVector.Z; W += aVector.W; }
-		inline void operator-=(const Vector4T& aVector) { X -= aVector.X; Y -= aVector.Y; Z -= aVector.Z; W -= aVector.W; }
-		inline void operator*=(const Vector4T& aVector) { X *= aVector.X; Y *= aVector.Y; Z *= aVector.Z; W *= aVector.W; }
-		inline void operator/=(const Vector4T& aVector) { X /= aVector.X; Y /= aVector.Y; Z /= aVector.Z; W /= aVector.W; }
+		inline void operator+=(const Vector4& aVector) { X += aVector.X; Y += aVector.Y; Z += aVector.Z; W += aVector.W; }
+		inline void operator-=(const Vector4& aVector) { X -= aVector.X; Y -= aVector.Y; Z -= aVector.Z; W -= aVector.W; }
+		inline void operator*=(const Vector4& aVector) { X *= aVector.X; Y *= aVector.Y; Z *= aVector.Z; W *= aVector.W; }
+		inline void operator/=(const Vector4& aVector) { X /= aVector.X; Y /= aVector.Y; Z /= aVector.Z; W /= aVector.W; }
 
-		inline void operator*=(const MatrixT<4, 4, T>& aMatrix) { (*this) = Vector4T(ToRowMatrix() * aMatrix); }
+		inline void operator*=(const Matrix<4, 4, T>& aMatrix) { (*this) = Vector4(ToRowMatrix() * aMatrix); }
 
-		inline constexpr Vector4T operator*(const T& aScalar) const { return Vector4T(X * aScalar, Y * aScalar, Z * aScalar, W * aScalar); }
-		inline constexpr Vector4T operator/(const T& aScalar) const { return Vector4T(X / aScalar, Y / aScalar, Z / aScalar, W / aScalar); }
+		inline constexpr Vector4 operator*(const T& aScalar) const { return Vector4(X * aScalar, Y * aScalar, Z * aScalar, W * aScalar); }
+		inline constexpr Vector4 operator/(const T& aScalar) const { return Vector4(X / aScalar, Y / aScalar, Z / aScalar, W / aScalar); }
 		inline void operator*=(const T& aScalar) { X *= aScalar; Y *= aScalar; Z *= aScalar; W *= aScalar; }
 		inline void operator/=(const T& aScalar) { X /= aScalar; Y /= aScalar; Z /= aScalar; W /= aScalar; }
 
-		inline constexpr bool operator==(const Vector4T& aVector) const { return ROSECOMMON_MATH_NAMESPACE::Equals(X, aVector.X) && ROSECOMMON_MATH_NAMESPACE::Equals(Y, aVector.Y) && ROSECOMMON_MATH_NAMESPACE::Equals(Z, aVector.Z) && ROSECOMMON_MATH_NAMESPACE::Equals(W, aVector.W); }
-		inline constexpr bool operator!=(const Vector4T& aVector) const { return !operator==(aVector); }
+		inline constexpr bool operator==(const Vector4& aVector) const { return ROSECOMMON_MATH_NAMESPACE::Equals(X, aVector.X) && ROSECOMMON_MATH_NAMESPACE::Equals(Y, aVector.Y) && ROSECOMMON_MATH_NAMESPACE::Equals(Z, aVector.Z) && ROSECOMMON_MATH_NAMESPACE::Equals(W, aVector.W); }
+		inline constexpr bool operator!=(const Vector4& aVector) const { return !operator==(aVector); }
 
-		constexpr std::strong_ordering operator<=>(const Vector4T& aVector) const
+		constexpr std::strong_ordering operator<=>(const Vector4& aVector) const
 		{
 			std::strong_ordering order = std::strong_order(X, aVector.X);
 			if (order != std::strong_ordering::equal)
@@ -940,24 +940,24 @@ namespace ROSECOMMON_MATH_NAMESPACE
 
 namespace ROSECOMMON_MATH_NAMESPACE
 {
-	#pragma region Vector2T implementation
+	#pragma region Vector2 implementation
 
 	template <typename T>
-	constexpr Vector2T<T>::Vector2T()
-		: Vector2T(0, 0)
+	constexpr Vector2<T>::Vector2()
+		: Vector2(0, 0)
 	{
 
 	}
 
 	template <typename T>
-	constexpr Vector2T<T>::Vector2T(const T& aValue)
-		: Vector2T(aValue, aValue)
+	constexpr Vector2<T>::Vector2(const T& aValue)
+		: Vector2(aValue, aValue)
 	{
 
 	}
 
 	template <typename T>
-	constexpr Vector2T<T>::Vector2T(const T& anX, const T& aY)
+	constexpr Vector2<T>::Vector2(const T& anX, const T& aY)
 		: X(anX)
 		, Y(aY)
 	{
@@ -966,7 +966,7 @@ namespace ROSECOMMON_MATH_NAMESPACE
 
 	template <typename T>
 	template <typename U>
-	constexpr Vector2T<T>::Vector2T(const Vector2T<U>& aVector)
+	constexpr Vector2<T>::Vector2(const Vector2<U>& aVector)
 		: X(static_cast<T>(aVector.X))
 		, Y(static_cast<T>(aVector.Y))
 	{
@@ -974,7 +974,7 @@ namespace ROSECOMMON_MATH_NAMESPACE
 	}
 
 	template <typename T>
-	constexpr Vector2T<T>::Vector2T(const MatrixT<1, 2, T>& aColumnMatrix)
+	constexpr Vector2<T>::Vector2(const Matrix<1, 2, T>& aColumnMatrix)
 		: X(aColumnMatrix.GetCell(0, 0))
 		, Y(aColumnMatrix.GetCell(0, 1))
 	{
@@ -982,7 +982,7 @@ namespace ROSECOMMON_MATH_NAMESPACE
 	}
 
 	template <typename T>
-	constexpr Vector2T<T>::Vector2T(const MatrixT<2, 1, T>& aRowMatrix)
+	constexpr Vector2<T>::Vector2(const Matrix<2, 1, T>& aRowMatrix)
 		: X(aRowMatrix.GetCell(0, 0))
 		, Y(aRowMatrix.GetCell(1, 0))
 	{
@@ -990,89 +990,89 @@ namespace ROSECOMMON_MATH_NAMESPACE
 	}
 
 	template <typename T>
-	constexpr Vector2T<T> Vector2T<T>::Clamp(const Vector2T& aValue, const Vector2T& aMinimum, const Vector2T& aMaximum)
+	constexpr Vector2<T> Vector2<T>::Clamp(const Vector2& aValue, const Vector2& aMinimum, const Vector2& aMaximum)
 	{
-		return Vector2T(
+		return Vector2(
 			ROSECOMMON_MATH_NAMESPACE::Clamp<T>(aValue.X, aMinimum.X, aMaximum.X),
 			ROSECOMMON_MATH_NAMESPACE::Clamp<T>(aValue.Y, aMinimum.Y, aMaximum.Y)
 		);
 	}
 
 	template <typename T>
-	constexpr T Vector2T<T>::Content() const
+	constexpr T Vector2<T>::Content() const
 	{
 		return X * Y;
 	}
 
 	template <typename T>
-	constexpr T Vector2T<T>::Distance(const Vector2T& aValue1, const Vector2T& aValue2)
+	constexpr T Vector2<T>::Distance(const Vector2& aValue1, const Vector2& aValue2)
 	{
 		return (aValue1 - aValue2).Length();
 	}
 
 	template <typename T>
-	constexpr T Vector2T<T>::DistanceSquared(const Vector2T& aValue1, const Vector2T& aValue2)
+	constexpr T Vector2<T>::DistanceSquared(const Vector2& aValue1, const Vector2& aValue2)
 	{
 		return (aValue1 - aValue2).LengthSquared();
 	}
 
 	template <typename T>
-	constexpr T Vector2T<T>::Dot(const Vector2T& aValue1, const Vector2T& aValue2)
+	constexpr T Vector2<T>::Dot(const Vector2& aValue1, const Vector2& aValue2)
 	{
 		return (aValue1.X * aValue2.X) + (aValue1.Y * aValue2.Y);
 	}
 
 	template <typename T>
-	constexpr T Vector2T<T>::Length() const
+	constexpr T Vector2<T>::Length() const
 	{
 		return ROSECOMMON_MATH_NAMESPACE::Squareroot(LengthSquared());
 	}
 
 	template <typename T>
-	constexpr T Vector2T<T>::LengthSquared() const
+	constexpr T Vector2<T>::LengthSquared() const
 	{
 		return (X * X) + (Y * Y);
 	}
 
 	template <typename T>
-	constexpr Vector2T<T> Vector2T<T>::Lerp(const Vector2T& aValue1, const Vector2T& aValue2, const T& anAmount)
+	constexpr Vector2<T> Vector2<T>::Lerp(const Vector2& aValue1, const Vector2& aValue2, const T& anAmount)
 	{
 		return (aValue1 + ((aValue2 - aValue1) * anAmount));
 	}
 
 	template <typename T>
-	constexpr Vector2T<T> Vector2T<T>::Max(const Vector2T& aValue1, const Vector2T& aValue2)
+	constexpr Vector2<T> Vector2<T>::Max(const Vector2& aValue1, const Vector2& aValue2)
 	{
-		return Vector2T(
+		return Vector2(
 			ROSECOMMON_MATH_NAMESPACE::Max<T>(aValue1.X, aValue2.X),
 			ROSECOMMON_MATH_NAMESPACE::Max<T>(aValue1.Y, aValue2.Y)
 		);
 	}
 
 	template <typename T>
-	constexpr Vector2T<T> Vector2T<T>::Min(const Vector2T& aValue1, const Vector2T& aValue2)
+	constexpr Vector2<T> Vector2<T>::Min(const Vector2& aValue1, const Vector2& aValue2)
 	{
-		return Vector2T(
+		return Vector2(
 			ROSECOMMON_MATH_NAMESPACE::Min<T>(aValue1.X, aValue2.X),
 			ROSECOMMON_MATH_NAMESPACE::Min<T>(aValue1.Y, aValue2.Y)
 		);
 	}
 
 	template <typename T>
-	constexpr Vector2T<T> Vector2T<T>::Reflect(const Vector2T& aVector, const Vector2T& aNormal)
+	constexpr Vector2<T> Vector2<T>::Reflect(const Vector2& aVector, const Vector2& aNormal)
 	{
 		const T dotProduct = Dot(aVector, aNormal);
 
-		return Vector2T(
+		return Vector2(
 			aVector.X - (2.0f * aNormal.X) * dotProduct,
 			aVector.Y - (2.0f * aNormal.Y) * dotProduct
 		);
 	}
 
 	template <typename T>
-	constexpr Vector2T<T> Vector2T<T>::SmoothStep(const Vector2T& aValue1, const Vector2T& aValue2, const T& anAmount)
+	constexpr Vector2<T> Vector2<T>::SmoothStep(const Vector2& aValue1, const Vector2& aValue2, const T& anAmount)
 	{
-		return Vector2T(
+		return Vector2(
 			ROSECOMMON_MATH_NAMESPACE::SmoothStep<T>(aValue1.X, aValue2.X, anAmount),
 			ROSECOMMON_MATH_NAMESPACE::SmoothStep<T>(aValue1.Y, aValue2.Y, anAmount)
 		);
@@ -1080,24 +1080,24 @@ namespace ROSECOMMON_MATH_NAMESPACE
 
 	#pragma endregion
 
-	#pragma region Vector3T implementation
+	#pragma region Vector3 implementation
 
 	template <typename T>
-	constexpr Vector3T<T>::Vector3T()
-		: Vector3T(0, 0, 0)
+	constexpr Vector3<T>::Vector3()
+		: Vector3(0, 0, 0)
 	{
 
 	}
 
 	template <typename T>
-	constexpr Vector3T<T>::Vector3T(const T& aValue)
-		: Vector3T(aValue, aValue, aValue)
+	constexpr Vector3<T>::Vector3(const T& aValue)
+		: Vector3(aValue, aValue, aValue)
 	{
 
 	}
 
 	template <typename T>
-	constexpr Vector3T<T>::Vector3T(const T& anX, const T& aY, const T& aZ)
+	constexpr Vector3<T>::Vector3(const T& anX, const T& aY, const T& aZ)
 		: X(anX)
 		, Y(aY)
 		, Z(aZ)
@@ -1107,7 +1107,7 @@ namespace ROSECOMMON_MATH_NAMESPACE
 
 	template <typename T>
 	template <typename U>
-	constexpr Vector3T<T>::Vector3T(const Vector3T<U>& aVector)
+	constexpr Vector3<T>::Vector3(const Vector3<U>& aVector)
 		: X(static_cast<T>(aVector.X))
 		, Y(static_cast<T>(aVector.Y))
 		, Z(static_cast<T>(aVector.Z))
@@ -1116,14 +1116,14 @@ namespace ROSECOMMON_MATH_NAMESPACE
 	}
 
 	template <typename T>
-	constexpr Vector3T<T>::Vector3T(const Vector2T<T>& aVector, const T& aZ)
-		: Vector3T(aVector.X, aVector.Y, aZ)
+	constexpr Vector3<T>::Vector3(const Vector2<T>& aVector, const T& aZ)
+		: Vector3(aVector.X, aVector.Y, aZ)
 	{
 
 	}
 
 	template <typename T>
-	constexpr Vector3T<T>::Vector3T(const MatrixT<1, 3, T>& aColumnMatrix)
+	constexpr Vector3<T>::Vector3(const Matrix<1, 3, T>& aColumnMatrix)
 		: X(aColumnMatrix.GetCell(0, 0))
 		, Y(aColumnMatrix.GetCell(0, 1))
 		, Z(aColumnMatrix.GetCell(0, 2))
@@ -1132,7 +1132,7 @@ namespace ROSECOMMON_MATH_NAMESPACE
 	}
 
 	template <typename T>
-	constexpr Vector3T<T>::Vector3T(const MatrixT<3, 1, T>& aRowMatrix)
+	constexpr Vector3<T>::Vector3(const Matrix<3, 1, T>& aRowMatrix)
 		: X(aRowMatrix.GetCell(0, 0))
 		, Y(aRowMatrix.GetCell(1, 0))
 		, Z(aRowMatrix.GetCell(2, 0))
@@ -1141,9 +1141,9 @@ namespace ROSECOMMON_MATH_NAMESPACE
 	}
 
 	template <typename T>
-	constexpr Vector3T<T> Vector3T<T>::Clamp(const Vector3T& aVector, const Vector3T& aMinimum, const Vector3T& aMaximum)
+	constexpr Vector3<T> Vector3<T>::Clamp(const Vector3& aVector, const Vector3& aMinimum, const Vector3& aMaximum)
 	{
-		return Vector3T(
+		return Vector3(
 			ROSECOMMON_MATH_NAMESPACE::Clamp<T>(aVector.X, aMinimum.X, aMaximum.X),
 			ROSECOMMON_MATH_NAMESPACE::Clamp<T>(aVector.Y, aMinimum.Y, aMaximum.Y),
 			ROSECOMMON_MATH_NAMESPACE::Clamp<T>(aVector.Z, aMinimum.Z, aMaximum.Z)
@@ -1151,15 +1151,15 @@ namespace ROSECOMMON_MATH_NAMESPACE
 	}
 
 	template <typename T>
-	inline constexpr T Vector3T<T>::Content() const
+	inline constexpr T Vector3<T>::Content() const
 	{
 		return X * Y * Z;
 	}
 
 	template <typename T>
-	constexpr Vector3T<T> Vector3T<T>::Cross(const Vector3T& aValue1, const Vector3T& aValue2)
+	constexpr Vector3<T> Vector3<T>::Cross(const Vector3& aValue1, const Vector3& aValue2)
 	{
-		return Vector3T(
+		return Vector3(
 			aValue1.Y * aValue2.Z - aValue1.Z * aValue2.Y,
 			aValue1.Z * aValue2.X - aValue1.X * aValue2.Z,
 			aValue1.X * aValue2.Y - aValue1.Y * aValue2.X
@@ -1167,19 +1167,19 @@ namespace ROSECOMMON_MATH_NAMESPACE
 	}
 
 	template <typename T>
-	constexpr T Vector3T<T>::Distance(const Vector3T& aValue1, const Vector3T& aValue2)
+	constexpr T Vector3<T>::Distance(const Vector3& aValue1, const Vector3& aValue2)
 	{
 		return (aValue1 - aValue2).Length();
 	}
 
 	template <typename T>
-	constexpr T Vector3T<T>::DistanceSquared(const Vector3T& aValue1, const Vector3T& aValue2)
+	constexpr T Vector3<T>::DistanceSquared(const Vector3& aValue1, const Vector3& aValue2)
 	{
 		return (aValue1 - aValue2).LengthSquared();
 	}
 
 	template <typename T>
-	constexpr T Vector3T<T>::Dot(const Vector3T& aValue1, const Vector3T& aValue2)
+	constexpr T Vector3<T>::Dot(const Vector3& aValue1, const Vector3& aValue2)
 	{
 		return
 			(aValue1.X * aValue2.X) +
@@ -1188,40 +1188,40 @@ namespace ROSECOMMON_MATH_NAMESPACE
 	}
 
 	template <typename T>
-	constexpr T Vector3T<T>::Length() const
+	constexpr T Vector3<T>::Length() const
 	{
 		return ROSECOMMON_MATH_NAMESPACE::Squareroot(LengthSquared());
 	}
 
 	template <typename T>
-	constexpr T Vector3T<T>::LengthSquared() const
+	constexpr T Vector3<T>::LengthSquared() const
 	{
 		return (X * X) + (Y * Y) + (Z * Z);
 	}
 
 	template <typename T>
-	constexpr Vector3T<T> Vector3T<T>::Lerp(const Vector3T& aValue1, const Vector3T& aValue2, const T& anAmount)
+	constexpr Vector3<T> Vector3<T>::Lerp(const Vector3& aValue1, const Vector3& aValue2, const T& anAmount)
 	{
 		return (aValue1 + ((aValue2 - aValue1) * anAmount));
 	}
 
 	template <typename T>
-	constexpr Vector3T<T> Vector3T<T>::Slerp(const Vector3T& aValue1, const Vector3T& aValue2, const T& anAmount)
+	constexpr Vector3<T> Vector3<T>::Slerp(const Vector3& aValue1, const Vector3& aValue2, const T& anAmount)
 	{
 		if (aValue1 == aValue2)
 			return aValue1;
 
 		const T dot = ROSECOMMON_MATH_NAMESPACE::Clamp(Dot(aValue1, aValue2), -1.f, 1.f);
 		const T theta = ROSECOMMON_MATH_NAMESPACE::ArcCosine(dot) * anAmount;
-		Vector3T relativeVector = aValue2 - (aValue1 * dot);
+		Vector3 relativeVector = aValue2 - (aValue1 * dot);
 		relativeVector.Normalize();
 		return ((aValue1 * ROSECOMMON_MATH_NAMESPACE::Cosine(theta)) + (relativeVector * ROSECOMMON_MATH_NAMESPACE::Sine(theta)));
 	}
 
 	template <typename T>
-	constexpr Vector3T<T> Vector3T<T>::Max(const Vector3T& aValue1, const Vector3T& aValue2)
+	constexpr Vector3<T> Vector3<T>::Max(const Vector3& aValue1, const Vector3& aValue2)
 	{
-		return Vector3T(
+		return Vector3(
 			ROSECOMMON_MATH_NAMESPACE::Max<T>(aValue1.X, aValue2.X),
 			ROSECOMMON_MATH_NAMESPACE::Max<T>(aValue1.Y, aValue2.Y),
 			ROSECOMMON_MATH_NAMESPACE::Max<T>(aValue1.Z, aValue2.Z)
@@ -1229,9 +1229,9 @@ namespace ROSECOMMON_MATH_NAMESPACE
 	}
 
 	template <typename T>
-	constexpr Vector3T<T> Vector3T<T>::Min(const Vector3T& aValue1, const Vector3T& aValue2)
+	constexpr Vector3<T> Vector3<T>::Min(const Vector3& aValue1, const Vector3& aValue2)
 	{
-		return Vector3T(
+		return Vector3(
 			ROSECOMMON_MATH_NAMESPACE::Min<T>(aValue1.X, aValue2.X),
 			ROSECOMMON_MATH_NAMESPACE::Min<T>(aValue1.Y, aValue2.Y),
 			ROSECOMMON_MATH_NAMESPACE::Min<T>(aValue1.Z, aValue2.Z)
@@ -1239,9 +1239,9 @@ namespace ROSECOMMON_MATH_NAMESPACE
 	}
 
 	template <typename T>
-	constexpr Vector3T<T> Vector3T<T>::Reflect(const Vector3T& aVector, const Vector3T& aNormal)
+	constexpr Vector3<T> Vector3<T>::Reflect(const Vector3& aVector, const Vector3& aNormal)
 	{
-		Vector3T result;
+		Vector3 result;
 		const T dotProduct = Dot(aVector, aNormal);
 		result.X = aVector.X - (2.0f * aNormal.X) * dotProduct;
 		result.Y = aVector.Y - (2.0f * aNormal.Y) * dotProduct;
@@ -1250,9 +1250,9 @@ namespace ROSECOMMON_MATH_NAMESPACE
 	}
 
 	template <typename T>
-	constexpr Vector3T<T> Vector3T<T>::SmoothStep(const Vector3T& aValue1, const Vector3T& aValue2, const T& anAmount)
+	constexpr Vector3<T> Vector3<T>::SmoothStep(const Vector3& aValue1, const Vector3& aValue2, const T& anAmount)
 	{
-		return Vector3T(
+		return Vector3(
 			ROSECOMMON_MATH_NAMESPACE::SmoothStep<T>(aValue1.X, aValue2.X, anAmount),
 			ROSECOMMON_MATH_NAMESPACE::SmoothStep<T>(aValue1.Y, aValue2.Y, anAmount),
 			ROSECOMMON_MATH_NAMESPACE::SmoothStep<T>(aValue1.Z, aValue2.Z, anAmount)
@@ -1261,24 +1261,24 @@ namespace ROSECOMMON_MATH_NAMESPACE
 
 	#pragma endregion
 
-	#pragma region Vector4T implementation
+	#pragma region Vector4 implementation
 
 	template <typename T>
-	constexpr Vector4T<T>::Vector4T()
-		: Vector4T(0, 0, 0, 0)
+	constexpr Vector4<T>::Vector4()
+		: Vector4(0, 0, 0, 0)
 	{
 
 	}
 
 	template <typename T>
-	constexpr Vector4T<T>::Vector4T(const T& aValue)
-		: Vector4T(aValue, aValue, aValue, aValue)
+	constexpr Vector4<T>::Vector4(const T& aValue)
+		: Vector4(aValue, aValue, aValue, aValue)
 	{
 
 	}
 
 	template <typename T>
-	constexpr Vector4T<T>::Vector4T(const T& anX, const T& aY, const T& aZ, const T& aW)
+	constexpr Vector4<T>::Vector4(const T& anX, const T& aY, const T& aZ, const T& aW)
 		: X(anX)
 		, Y(aY)
 		, Z(aZ)
@@ -1289,7 +1289,7 @@ namespace ROSECOMMON_MATH_NAMESPACE
 
 	template <typename T>
 	template <typename U>
-	constexpr Vector4T<T>::Vector4T(const Vector4T<U>& aVector)
+	constexpr Vector4<T>::Vector4(const Vector4<U>& aVector)
 		: X(static_cast<T>(aVector.X))
 		, Y(static_cast<T>(aVector.Y))
 		, Z(static_cast<T>(aVector.Z))
@@ -1299,21 +1299,21 @@ namespace ROSECOMMON_MATH_NAMESPACE
 	}
 
 	template <typename T>
-	constexpr Vector4T<T>::Vector4T(const Vector2T<T>& aVector, const T& aZ, const T& aW)
-		: Vector4T(aVector.X, aVector.Y, aZ, aW)
+	constexpr Vector4<T>::Vector4(const Vector2<T>& aVector, const T& aZ, const T& aW)
+		: Vector4(aVector.X, aVector.Y, aZ, aW)
 	{
 
 	}
 
 	template <typename T>
-	constexpr Vector4T<T>::Vector4T(const Vector3T<T>& aVector, const T& aW)
-		: Vector4T(aVector.X, aVector.Y, aVector.Z, aW)
+	constexpr Vector4<T>::Vector4(const Vector3<T>& aVector, const T& aW)
+		: Vector4(aVector.X, aVector.Y, aVector.Z, aW)
 	{
 
 	}
 
 	template <typename T>
-	constexpr Vector4T<T>::Vector4T(const MatrixT<1, 4, T>& aColumnMatrix)
+	constexpr Vector4<T>::Vector4(const Matrix<1, 4, T>& aColumnMatrix)
 		: X(aColumnMatrix.GetCell(0, 0))
 		, Y(aColumnMatrix.GetCell(0, 1))
 		, Z(aColumnMatrix.GetCell(0, 2))
@@ -1323,7 +1323,7 @@ namespace ROSECOMMON_MATH_NAMESPACE
 	}
 
 	template <typename T>
-	constexpr Vector4T<T>::Vector4T(const MatrixT<4, 1, T>& aRowMatrix)
+	constexpr Vector4<T>::Vector4(const Matrix<4, 1, T>& aRowMatrix)
 		: X(aRowMatrix.GetCell(0, 0))
 		, Y(aRowMatrix.GetCell(1, 0))
 		, Z(aRowMatrix.GetCell(2, 0))
@@ -1333,9 +1333,9 @@ namespace ROSECOMMON_MATH_NAMESPACE
 	}
 
 	template <typename T>
-	constexpr Vector4T<T> Vector4T<T>::Clamp(const Vector4T& aVector, const Vector4T& aMinimum, const Vector4T& aMaximum)
+	constexpr Vector4<T> Vector4<T>::Clamp(const Vector4& aVector, const Vector4& aMinimum, const Vector4& aMaximum)
 	{
-		return Vector4T(
+		return Vector4(
 			ROSECOMMON_MATH_NAMESPACE::Clamp<T>(aVector.X, aMinimum.X, aMaximum.X),
 			ROSECOMMON_MATH_NAMESPACE::Clamp<T>(aVector.Y, aMinimum.Y, aMaximum.Y),
 			ROSECOMMON_MATH_NAMESPACE::Clamp<T>(aVector.Z, aMinimum.Z, aMaximum.Z),
@@ -1344,25 +1344,25 @@ namespace ROSECOMMON_MATH_NAMESPACE
 	}
 
 	template <typename T>
-	constexpr T Vector4T<T>::Content() const
+	constexpr T Vector4<T>::Content() const
 	{
 		return X * Y * Z * W;
 	}
 
 	template <typename T>
-	constexpr T Vector4T<T>::Distance(const Vector4T& aValue1, const Vector4T& aValue2)
+	constexpr T Vector4<T>::Distance(const Vector4& aValue1, const Vector4& aValue2)
 	{
 		return (aValue1 - aValue2).Length();
 	}
 
 	template <typename T>
-	constexpr T Vector4T<T>::DistanceSquared(const Vector4T& aValue1, const Vector4T& aValue2)
+	constexpr T Vector4<T>::DistanceSquared(const Vector4& aValue1, const Vector4& aValue2)
 	{
 		return (aValue1 - aValue2).LengthSquared();
 	}
 
 	template <typename T>
-	constexpr T Vector4T<T>::Dot(const Vector4T& aValue1, const Vector4T& aValue2)
+	constexpr T Vector4<T>::Dot(const Vector4& aValue1, const Vector4& aValue2)
 	{
 		return
 			(aValue1.X * aValue2.X) +
@@ -1372,27 +1372,27 @@ namespace ROSECOMMON_MATH_NAMESPACE
 	}
 
 	template <typename T>
-	constexpr T Vector4T<T>::Length() const
+	constexpr T Vector4<T>::Length() const
 	{
 		return ROSECOMMON_MATH_NAMESPACE::Squareroot(LengthSquared());
 	}
 
 	template <typename T>
-	constexpr T Vector4T<T>::LengthSquared() const
+	constexpr T Vector4<T>::LengthSquared() const
 	{
 		return (X * X) + (Y * Y) + (Z * Z) + (W * W);
 	}
 
 	template <typename T>
-	constexpr Vector4T<T> Vector4T<T>::Lerp(const Vector4T& aValue1, const Vector4T& aValue2, const T& anAmount)
+	constexpr Vector4<T> Vector4<T>::Lerp(const Vector4& aValue1, const Vector4& aValue2, const T& anAmount)
 	{
 		return (aValue1 + ((aValue2 - aValue1) * anAmount));
 	}
 
 	template <typename T>
-	constexpr Vector4T<T> Vector4T<T>::Max(const Vector4T& aValue1, const Vector4T& aValue2)
+	constexpr Vector4<T> Vector4<T>::Max(const Vector4& aValue1, const Vector4& aValue2)
 	{
-		return Vector4T(
+		return Vector4(
 			ROSECOMMON_MATH_NAMESPACE::Max<T>(aValue1.X, aValue2.X),
 			ROSECOMMON_MATH_NAMESPACE::Max<T>(aValue1.Y, aValue2.Y),
 			ROSECOMMON_MATH_NAMESPACE::Max<T>(aValue1.Z, aValue2.Z),
@@ -1401,9 +1401,9 @@ namespace ROSECOMMON_MATH_NAMESPACE
 	}
 
 	template <typename T>
-	constexpr Vector4T<T> Vector4T<T>::Min(const Vector4T& aValue1, const Vector4T& aValue2)
+	constexpr Vector4<T> Vector4<T>::Min(const Vector4& aValue1, const Vector4& aValue2)
 	{
-		return Vector4T(
+		return Vector4(
 			ROSECOMMON_MATH_NAMESPACE::Min<T>(aValue1.X, aValue2.X),
 			ROSECOMMON_MATH_NAMESPACE::Min<T>(aValue1.Y, aValue2.Y),
 			ROSECOMMON_MATH_NAMESPACE::Min<T>(aValue1.Z, aValue2.Z),
@@ -1412,9 +1412,9 @@ namespace ROSECOMMON_MATH_NAMESPACE
 	}
 
 	template <typename T>
-	constexpr Vector4T<T> Vector4T<T>::SmoothStep(const Vector4T& aValue1, const Vector4T& aValue2, const T& anAmount)
+	constexpr Vector4<T> Vector4<T>::SmoothStep(const Vector4& aValue1, const Vector4& aValue2, const T& anAmount)
 	{
-		return Vector4T(
+		return Vector4(
 			ROSECOMMON_MATH_NAMESPACE::SmoothStep<T>(aValue1.X, aValue2.X, anAmount),
 			ROSECOMMON_MATH_NAMESPACE::SmoothStep<T>(aValue1.Y, aValue2.Y, anAmount),
 			ROSECOMMON_MATH_NAMESPACE::SmoothStep<T>(aValue1.Z, aValue2.Z, anAmount),
@@ -1425,10 +1425,10 @@ namespace ROSECOMMON_MATH_NAMESPACE
 	#pragma endregion
 
 	template <int N, typename T> struct Vector_T;
-	template <typename T> struct Vector_T<2, T> { using type = Vector2T<T>; };
-	template <typename T> struct Vector_T<3, T> { using type = Vector3T<T>; };
-	template <typename T> struct Vector_T<4, T> { using type = Vector4T<T>; };
+	template <typename T> struct Vector_T<2, T> { using type = Vector2<T>; };
+	template <typename T> struct Vector_T<3, T> { using type = Vector3<T>; };
+	template <typename T> struct Vector_T<4, T> { using type = Vector4<T>; };
 
 	template <int N, typename T>
-	using VectorNT = typename Vector_T<N, T>::type;
+	using VectorN = typename Vector_T<N, T>::type;
 }

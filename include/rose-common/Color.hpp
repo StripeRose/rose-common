@@ -15,7 +15,7 @@ namespace ROSECOMMON_NAMESPACE
 	 * @tparam T The type used for each color component.
 	 */
 	template <typename T>
-	class ColorT
+	class ColorARGB
 	{
 		static constexpr T ourWhitepoint = std::is_floating_point_v<T> ? static_cast<T>(1) : std::numeric_limits<T>::max();
 		static constexpr T ourPackedRangeRatio = ourWhitepoint / 0xFF;
@@ -39,13 +39,13 @@ namespace ROSECOMMON_NAMESPACE
 		/**
 		 * @brief Initialize to be transparent black.
 		 */
-		constexpr ColorT();
+		constexpr ColorARGB();
 
 		/**
 		 * @brief Initialize the color components based on the provided ARGB value.
 		 * @param aPackedArgbValue A 32-bit unsigned integer with the format 0xAARRGGBB.
 		 */
-		constexpr ColorT(const std::uint32_t aPackedArgbValue);
+		constexpr ColorARGB(const std::uint32_t aPackedArgbValue);
 
 		/**
 		 * @brief Initialize an opaque color with the provided component values.
@@ -53,7 +53,7 @@ namespace ROSECOMMON_NAMESPACE
 		 * @param aGreenValue A green component value.
 		 * @param aBlueValue A blue component value.
 		 */
-		constexpr ColorT(T aRedValue, T aGreenValue, T aBlueValue);
+		constexpr ColorARGB(T aRedValue, T aGreenValue, T aBlueValue);
 
 		/**
 		 * @brief Initialize a color with the provided color and alpha components.
@@ -62,7 +62,7 @@ namespace ROSECOMMON_NAMESPACE
 		 * @param aGreenValue A green component value.
 		 * @param aBlueValue A blue component value.
 		 */
-		constexpr ColorT(T anAlphaValue, T aRedValue, T aGreenValue, T aBlueValue);
+		constexpr ColorARGB(T anAlphaValue, T aRedValue, T aGreenValue, T aBlueValue);
 
 		#pragma endregion
 
@@ -120,7 +120,7 @@ namespace ROSECOMMON_NAMESPACE
 		 * @brief Limit the color components to their maximum SDR value. 255 for integers, 1 for decimal numbers.
 		 * @return The color with all its components limited to be within the 0 - 255 / 0 - 1 range.
 		 */
-		constexpr ColorT<T> Saturated() const;
+		constexpr ColorARGB<T> Saturated() const;
 
 		/**
 		 * @brief Pack the color into a single 32-bit unsigned integer, with 8 bits for each component.
@@ -136,34 +136,34 @@ namespace ROSECOMMON_NAMESPACE
 		//--------------------------------------------------
 		#pragma region Operators
 
-		constexpr ColorT& operator=(const ColorT& aColor);
+		constexpr ColorARGB& operator=(const ColorARGB& aColor);
 
-		constexpr ColorT operator+(const ColorT& aColor) const;
-		constexpr ColorT operator-(const ColorT& aColor) const;
-		constexpr ColorT operator*(const ColorT& aColor) const;
-		constexpr ColorT operator*(float aScalar) const;
+		constexpr ColorARGB operator+(const ColorARGB& aColor) const;
+		constexpr ColorARGB operator-(const ColorARGB& aColor) const;
+		constexpr ColorARGB operator*(const ColorARGB& aColor) const;
+		constexpr ColorARGB operator*(float aScalar) const;
 
-		constexpr void operator+=(const ColorT& aColor);
-		constexpr void operator-=(const ColorT& aColor);
-		constexpr void operator*=(const ColorT& aColor);
+		constexpr void operator+=(const ColorARGB& aColor);
+		constexpr void operator-=(const ColorARGB& aColor);
+		constexpr void operator*=(const ColorARGB& aColor);
 		constexpr void operator*=(float aScalar);
 
-		constexpr bool operator==(const ColorT& aColor) const;
-		constexpr bool operator!=(const ColorT& aColor) const;
+		constexpr bool operator==(const ColorARGB& aColor) const;
+		constexpr bool operator!=(const ColorARGB& aColor) const;
 
-		constexpr std::strong_ordering operator<=>(const ColorT& aColor) const;
+		constexpr std::strong_ordering operator<=>(const ColorARGB& aColor) const;
 
 		#pragma endregion
 	};
 
 	template<typename T>
-	constexpr ColorT<T>::ColorT()
+	constexpr ColorARGB<T>::ColorARGB()
 		: R(0), G(0), B(0), A(0)
 	{
 	}
 
 	template<typename T>
-	constexpr ColorT<T>::ColorT(const std::uint32_t aPackedArgbValue)
+	constexpr ColorARGB<T>::ColorARGB(const std::uint32_t aPackedArgbValue)
 	{
 		const std::uint8_t a = static_cast<std::uint8_t>((aPackedArgbValue >> 24) & 0xFF);
 		const std::uint8_t r = static_cast<std::uint8_t>((aPackedArgbValue >> 16) & 0xFF);
@@ -177,12 +177,12 @@ namespace ROSECOMMON_NAMESPACE
 	}
 
 	template <typename T>
-	constexpr ColorT<T>::ColorT(T aRedValue, T aGreenValue, T aBlueValue)
+	constexpr ColorARGB<T>::ColorARGB(T aRedValue, T aGreenValue, T aBlueValue)
 		: A(ourWhitepoint), R(aRedValue), G(aGreenValue), B(aBlueValue)
 	{ }
 
 	template<typename T>
-	constexpr ColorT<T>::ColorT(T anAlphaValue, T aRedValue, T aGreenValue, T aBlueValue)
+	constexpr ColorARGB<T>::ColorARGB(T anAlphaValue, T aRedValue, T aGreenValue, T aBlueValue)
 		: A(anAlphaValue)
 		, R(aRedValue)
 		, G(aGreenValue)
@@ -190,7 +190,7 @@ namespace ROSECOMMON_NAMESPACE
 	{ }
 
 	template<typename T>
-	constexpr float ColorT<T>::GetBrightness() const
+	constexpr float ColorARGB<T>::GetBrightness() const
 	{
 		const float r = static_cast<float>(R) / ourWhitepoint;
 		const float g = static_cast<float>(G) / ourWhitepoint;
@@ -200,7 +200,7 @@ namespace ROSECOMMON_NAMESPACE
 	}
 
 	template<typename T>
-	constexpr float ColorT<T>::GetHue() const
+	constexpr float ColorARGB<T>::GetHue() const
 	{
 		if (R == G && G == B)
 			return 0.f;
@@ -229,7 +229,7 @@ namespace ROSECOMMON_NAMESPACE
 	}
 
 	template<typename T>
-	constexpr float ColorT<T>::GetSaturation() const
+	constexpr float ColorARGB<T>::GetSaturation() const
 	{
 		const float r = static_cast<float>(R) / ourWhitepoint;
 		const float g = static_cast<float>(G) / ourWhitepoint;
@@ -246,9 +246,9 @@ namespace ROSECOMMON_NAMESPACE
 	}
 
 	template<typename T>
-	constexpr ColorT<T> ColorT<T>::Saturated() const
+	constexpr ColorARGB<T> ColorARGB<T>::Saturated() const
 	{
-		return ColorT<T>(
+		return ColorARGB<T>(
 			A,
 			ROSECOMMON_MATH_NAMESPACE::Clamp<T>(R, 0, ourWhitepoint),
 			ROSECOMMON_MATH_NAMESPACE::Clamp<T>(G, 0, ourWhitepoint),
@@ -257,7 +257,7 @@ namespace ROSECOMMON_NAMESPACE
 	}
 
 	template <typename T>
-	constexpr std::uint32_t ColorT<T>::ToARGB() const
+	constexpr std::uint32_t ColorARGB<T>::ToARGB() const
 	{
 		std::uint8_t a, r, g, b;
 
@@ -285,7 +285,7 @@ namespace ROSECOMMON_NAMESPACE
 	}
 
 	template <typename T>
-	constexpr ColorT<T>& ColorT<T>::operator=(const ColorT& aColor)
+	constexpr ColorARGB<T>& ColorARGB<T>::operator=(const ColorARGB& aColor)
 	{
 		A = aColor.A;
 		R = aColor.R;
@@ -295,39 +295,39 @@ namespace ROSECOMMON_NAMESPACE
 	}
 
 	template <typename T>
-	constexpr ColorT<T> ColorT<T>::operator+(const ColorT& aColor) const
+	constexpr ColorARGB<T> ColorARGB<T>::operator+(const ColorARGB& aColor) const
 	{
-		ColorT result(*this);
+		ColorARGB result(*this);
 		result += aColor;
 		return result;
 	}
 
 	template <typename T>
-	constexpr ColorT<T> ColorT<T>::operator-(const ColorT& aColor) const
+	constexpr ColorARGB<T> ColorARGB<T>::operator-(const ColorARGB& aColor) const
 	{
-		ColorT result(*this);
+		ColorARGB result(*this);
 		result -= aColor;
 		return result;
 	}
 
 	template <typename T>
-	constexpr ColorT<T> ColorT<T>::operator*(const ColorT& aColor) const
+	constexpr ColorARGB<T> ColorARGB<T>::operator*(const ColorARGB& aColor) const
 	{
-		ColorT result(*this);
+		ColorARGB result(*this);
 		result *= aColor;
 		return result;
 	}
 
 	template <typename T>
-	constexpr ColorT<T> ColorT<T>::operator*(float aScalar) const
+	constexpr ColorARGB<T> ColorARGB<T>::operator*(float aScalar) const
 	{
-		ColorT result(*this);
+		ColorARGB result(*this);
 		result *= aScalar;
 		return result;
 	}
 
 	template <typename T>
-	constexpr void ColorT<T>::operator+=(const ColorT& aColor)
+	constexpr void ColorARGB<T>::operator+=(const ColorARGB& aColor)
 	{
 		if constexpr (std::is_floating_point_v<T>)
 		{
@@ -353,7 +353,7 @@ namespace ROSECOMMON_NAMESPACE
 	}
 
 	template <typename T>
-	constexpr void ColorT<T>::operator-=(const ColorT& aColor)
+	constexpr void ColorARGB<T>::operator-=(const ColorARGB& aColor)
 	{
 		if constexpr (std::is_floating_point_v<T>)
 		{
@@ -379,7 +379,7 @@ namespace ROSECOMMON_NAMESPACE
 	}
 
 	template <typename T>
-	constexpr void ColorT<T>::operator*=(const ColorT& aColor)
+	constexpr void ColorARGB<T>::operator*=(const ColorARGB& aColor)
 	{
 		if constexpr (std::is_floating_point_v<T>)
 		{
@@ -398,17 +398,17 @@ namespace ROSECOMMON_NAMESPACE
 	}
 
 	template <typename T>
-	constexpr void ColorT<T>::operator*=(float aScalar)
+	constexpr void ColorARGB<T>::operator*=(float aScalar)
 	{
 		if constexpr (std::is_floating_point_v<T>)
-			operator*=(ColorT(
+			operator*=(ColorARGB(
 				aScalar,
 				aScalar,
 				aScalar,
 				aScalar
 			));
 		else
-			operator*=(ColorT(
+			operator*=(ColorARGB(
 				static_cast<std::uint8_t>(aScalar * ourWhitepoint),
 				static_cast<std::uint8_t>(aScalar * ourWhitepoint),
 				static_cast<std::uint8_t>(aScalar * ourWhitepoint),
@@ -417,19 +417,19 @@ namespace ROSECOMMON_NAMESPACE
 	}
 
 	template <typename T>
-	constexpr bool ColorT<T>::operator==(const ColorT& aColor) const
+	constexpr bool ColorARGB<T>::operator==(const ColorARGB& aColor) const
 	{
 		return operator<=>(aColor) == std::weak_ordering::equivalent;
 	}
 
 	template <typename T>
-	constexpr bool ColorT<T>::operator!=(const ColorT& aColor) const
+	constexpr bool ColorARGB<T>::operator!=(const ColorARGB& aColor) const
 	{
 		return operator<=>(aColor) != std::weak_ordering::equivalent;
 	}
 
 	template <typename T>
-	constexpr std::strong_ordering ColorT<T>::operator<=>(const ColorT& aColor) const
+	constexpr std::strong_ordering ColorARGB<T>::operator<=>(const ColorARGB& aColor) const
 	{
 		std::strong_ordering order;
 		order = std::strong_order(R, aColor.R);
@@ -449,148 +449,148 @@ namespace ROSECOMMON_NAMESPACE
 	 * @tparam T The type used for each color component.
 	 */
 	template <typename T>
-	struct ColorT<T>::Predefined
+	struct ColorARGB<T>::Predefined
 	{
-		static constexpr ColorT AliceBlue = 0xFFF0F8FF;
-		static constexpr ColorT AntiqueWhite = 0xFFFAEBD7;
-		static constexpr ColorT Aqua = 0xFF00FFFF;
-		static constexpr ColorT Aquamarine = 0xFF7FFFD4;
-		static constexpr ColorT Azure = 0xFFF0FFFF;
-		static constexpr ColorT Beige = 0xFFF5F5DC;
-		static constexpr ColorT Bisque = 0xFFFFE4C4;
-		static constexpr ColorT Black = 0xFF000000;
-		static constexpr ColorT BlanchedAlmond = 0xFFFFEBCD;
-		static constexpr ColorT Blue = 0xFF0000FF;
-		static constexpr ColorT BlueViolet = 0xFF8A2BE2;
-		static constexpr ColorT Brown = 0xFFA52A2A;
-		static constexpr ColorT BurlyWood = 0xFFDEB887;
-		static constexpr ColorT CadetBlue = 0xFF5F9EA0;
-		static constexpr ColorT Chartreuse = 0xFF7FFF00;
-		static constexpr ColorT Chocolate = 0xFFD2691E;
-		static constexpr ColorT Coral = 0xFFFF7F50;
-		static constexpr ColorT CornflowerBlue = 0xFF6495ED;
-		static constexpr ColorT Cornsilk = 0xFFFFF8DC;
-		static constexpr ColorT Crimson = 0xFFDC143C;
-		static constexpr ColorT Cyan = 0xFF00FFFF;
-		static constexpr ColorT DarkBlue = 0xFF00008B;
-		static constexpr ColorT DarkCyan = 0xFF008B8B;
-		static constexpr ColorT DarkGoldenrod = 0xFFB8860B;
-		static constexpr ColorT DarkGray = 0xFFA9A9A9;
-		static constexpr ColorT DarkGreen = 0xFF006400;
-		static constexpr ColorT DarkKhaki = 0xFFBDB76B;
-		static constexpr ColorT DarkMagenta = 0xFF8B008B;
-		static constexpr ColorT DarkOliveGreen = 0xFF556B2F;
-		static constexpr ColorT DarkOrange = 0xFFFF8C00;
-		static constexpr ColorT DarkOrchid = 0xFF9932CC;
-		static constexpr ColorT DarkRed = 0xFF8B0000;
-		static constexpr ColorT DarkSalmon = 0xFFE9967A;
-		static constexpr ColorT DarkSeaGreen = 0xFF8FBC8B;
-		static constexpr ColorT DarkSlateBlue = 0xFF483D8B;
-		static constexpr ColorT DarkSlateGray = 0xFF2F4F4F;
-		static constexpr ColorT DarkTurquoise = 0xFF9400D3;
-		static constexpr ColorT DarkViolet = 0xFFFF1493;
-		static constexpr ColorT DeepPink = 0xFF00BFFF;
-		static constexpr ColorT DeepSkyBlue = 0xFF00BFFF;
-		static constexpr ColorT DimGray = 0xFF696969;
-		static constexpr ColorT DodgerBlue = 0xFF1E90FF;
-		static constexpr ColorT Firebrick = 0xFFB22222;
-		static constexpr ColorT FloralWhite = 0xFFFFFAF0;
-		static constexpr ColorT ForestGreen = 0xFF228B22;
-		static constexpr ColorT Fuchsia = 0xFFFF00FF;
-		static constexpr ColorT Gainsboro = 0xFFDCDCDC;
-		static constexpr ColorT GhostWhite = 0xFFF8F8FF;
-		static constexpr ColorT Gold = 0xFFFFD700;
-		static constexpr ColorT Goldenrod = 0xFFDAA520;
-		static constexpr ColorT Gray = 0xFF808080;
-		static constexpr ColorT Green = 0xFF008000;
-		static constexpr ColorT GreenYellow = 0xFFADFF2F;
-		static constexpr ColorT Honeydew = 0xFFF0FFF0;
-		static constexpr ColorT HotPink = 0xFFFF69B4;
-		static constexpr ColorT IndianRed = 0xFFCD5C5C;
-		static constexpr ColorT Indigo = 0xFF4B0082;
-		static constexpr ColorT Ivory = 0xFFFFFFF0;
-		static constexpr ColorT Khaki = 0xFFF0E68C;
-		static constexpr ColorT Lavender = 0xFFE6E6FA;
-		static constexpr ColorT LavenderBlush = 0xFFFFF0F5;
-		static constexpr ColorT LawnGreen = 0xFF7CFC00;
-		static constexpr ColorT LemonChiffon = 0xFFFFFACD;
-		static constexpr ColorT LightBlue = 0xFFADD8E6;
-		static constexpr ColorT LightCoral = 0xFFF08080;
-		static constexpr ColorT LightCyan = 0xFFE0FFFF;
-		static constexpr ColorT LightGoldenrodYellow = 0xFFFAFAD2;
-		static constexpr ColorT LightGray = 0xFFD3D3D3;
-		static constexpr ColorT LightGreen = 0xFF90EE90;
-		static constexpr ColorT LightPink = 0xFFFFB6C1;
-		static constexpr ColorT LightSalmon = 0xFFFFA07A;
-		static constexpr ColorT LightSeaGreen = 0xFF20B2AA;
-		static constexpr ColorT LightSkyBlue = 0xFF87CEFA;
-		static constexpr ColorT LightSlateGray = 0xFF778899;
-		static constexpr ColorT LightSteelBlue = 0xFFB0C4DE;
-		static constexpr ColorT LightYellow = 0xFFFFFFE0;
-		static constexpr ColorT Lime = 0xFF00FF00;
-		static constexpr ColorT LimeGreen = 0xFF32CD32;
-		static constexpr ColorT Linen = 0xFFFAF0E6;
-		static constexpr ColorT Magenta = 0xFFFF00FF;
-		static constexpr ColorT Maroon = 0xFF800000;
-		static constexpr ColorT MediumAquamarine = 0xFF66CDAA;
-		static constexpr ColorT MediumBlue = 0xFF0000CD;
-		static constexpr ColorT MediumOrchid = 0xFFBA55D3;
-		static constexpr ColorT MediumPurple = 0xFF9370DB;
-		static constexpr ColorT MediumSeaGreen = 0xFF3CB371;
-		static constexpr ColorT MediumSlateBlue = 0xFF7B68EE;
-		static constexpr ColorT MediumSpringGreen = 0xFF00FA9A;
-		static constexpr ColorT MediumTurquoise = 0xFF48D1CC;
-		static constexpr ColorT MediumVioletRed = 0xFFC71585;
-		static constexpr ColorT MidnightBlue = 0xFF191970;
-		static constexpr ColorT MintCream = 0xFFF5FFFA;
-		static constexpr ColorT MistyRose = 0xFFFFE4E1;
-		static constexpr ColorT Moccasin = 0xFFFFE4B5;
-		static constexpr ColorT NavajoWhite = 0xFFFFDEAD;
-		static constexpr ColorT Navy = 0xFF000080;
-		static constexpr ColorT OldLace = 0xFFFDF5E6;
-		static constexpr ColorT Olive = 0xFF808000;
-		static constexpr ColorT OliveDrab = 0xFF6B8E23;
-		static constexpr ColorT Orange = 0xFFFFA500;
-		static constexpr ColorT OrangeRed = 0xFFFF4500;
-		static constexpr ColorT Orchid = 0xFFDA70D6;
-		static constexpr ColorT PaleGoldenrod = 0xFFEEE8AA;
-		static constexpr ColorT PaleGreen = 0xFF98FB98;
-		static constexpr ColorT PaleTurquoise = 0xFFAFEEEE;
-		static constexpr ColorT PaleVioletRed = 0xFFDB7093;
-		static constexpr ColorT PapayaWhip = 0xFFFFEFD5;
-		static constexpr ColorT PeachPuff = 0xFFFFDAB9;
-		static constexpr ColorT Peru = 0xFFCD853F;
-		static constexpr ColorT Pink = 0xFFFFC0CB;
-		static constexpr ColorT Plum = 0xFFDDA0DD;
-		static constexpr ColorT PowderBlue = 0xFFB0E0E6;
-		static constexpr ColorT Purple = 0xFF800080;
-		static constexpr ColorT Red = 0xFFFF0000;
-		static constexpr ColorT RosyBrown = 0xFFBC8F8F;
-		static constexpr ColorT RoyalBlue = 0xFF4169E1;
-		static constexpr ColorT SaddleBrown = 0xFF8B4513;
-		static constexpr ColorT Salmon = 0xFFFA8072;
-		static constexpr ColorT SandyBrown = 0xFFF4A460;
-		static constexpr ColorT SeaGreen = 0xFF2E8B57;
-		static constexpr ColorT SeaShell = 0xFFFFF5EE;
-		static constexpr ColorT Sienna = 0xFFA0522D;
-		static constexpr ColorT Silver = 0xFFC0C0C0;
-		static constexpr ColorT SkyBlue = 0xFF87CEEB;
-		static constexpr ColorT SlateBlue = 0xFF6A5ACD;
-		static constexpr ColorT SlateGray = 0xFF708090;
-		static constexpr ColorT Snow = 0xFFFFFAFA;
-		static constexpr ColorT SpringGreen = 0xFF00FF7F;
-		static constexpr ColorT SteelBlue = 0xFF4682B4;
-		static constexpr ColorT Tan = 0xFFD2B48C;
-		static constexpr ColorT Teal = 0xFF008080;
-		static constexpr ColorT Thistle = 0xFFD8BFD8;
-		static constexpr ColorT Tomato = 0xFFFF6347;
-		static constexpr ColorT Transparent = 0x00000000;
-		static constexpr ColorT Turquoise = 0xFF40E0D0;
-		static constexpr ColorT Violet = 0xFFEE82EE;
-		static constexpr ColorT Wheat = 0xFFF5DEB3;
-		static constexpr ColorT White = 0xFFFFFFFF;
-		static constexpr ColorT WhiteSmoke = 0xFFF5F5F5;
-		static constexpr ColorT Yellow = 0xFFFFFF00;
-		static constexpr ColorT YellowGreen = 0xFF9ACD32;
+		static constexpr ColorARGB AliceBlue = 0xFFF0F8FF;
+		static constexpr ColorARGB AntiqueWhite = 0xFFFAEBD7;
+		static constexpr ColorARGB Aqua = 0xFF00FFFF;
+		static constexpr ColorARGB Aquamarine = 0xFF7FFFD4;
+		static constexpr ColorARGB Azure = 0xFFF0FFFF;
+		static constexpr ColorARGB Beige = 0xFFF5F5DC;
+		static constexpr ColorARGB Bisque = 0xFFFFE4C4;
+		static constexpr ColorARGB Black = 0xFF000000;
+		static constexpr ColorARGB BlanchedAlmond = 0xFFFFEBCD;
+		static constexpr ColorARGB Blue = 0xFF0000FF;
+		static constexpr ColorARGB BlueViolet = 0xFF8A2BE2;
+		static constexpr ColorARGB Brown = 0xFFA52A2A;
+		static constexpr ColorARGB BurlyWood = 0xFFDEB887;
+		static constexpr ColorARGB CadetBlue = 0xFF5F9EA0;
+		static constexpr ColorARGB Chartreuse = 0xFF7FFF00;
+		static constexpr ColorARGB Chocolate = 0xFFD2691E;
+		static constexpr ColorARGB Coral = 0xFFFF7F50;
+		static constexpr ColorARGB CornflowerBlue = 0xFF6495ED;
+		static constexpr ColorARGB Cornsilk = 0xFFFFF8DC;
+		static constexpr ColorARGB Crimson = 0xFFDC143C;
+		static constexpr ColorARGB Cyan = 0xFF00FFFF;
+		static constexpr ColorARGB DarkBlue = 0xFF00008B;
+		static constexpr ColorARGB DarkCyan = 0xFF008B8B;
+		static constexpr ColorARGB DarkGoldenrod = 0xFFB8860B;
+		static constexpr ColorARGB DarkGray = 0xFFA9A9A9;
+		static constexpr ColorARGB DarkGreen = 0xFF006400;
+		static constexpr ColorARGB DarkKhaki = 0xFFBDB76B;
+		static constexpr ColorARGB DarkMagenta = 0xFF8B008B;
+		static constexpr ColorARGB DarkOliveGreen = 0xFF556B2F;
+		static constexpr ColorARGB DarkOrange = 0xFFFF8C00;
+		static constexpr ColorARGB DarkOrchid = 0xFF9932CC;
+		static constexpr ColorARGB DarkRed = 0xFF8B0000;
+		static constexpr ColorARGB DarkSalmon = 0xFFE9967A;
+		static constexpr ColorARGB DarkSeaGreen = 0xFF8FBC8B;
+		static constexpr ColorARGB DarkSlateBlue = 0xFF483D8B;
+		static constexpr ColorARGB DarkSlateGray = 0xFF2F4F4F;
+		static constexpr ColorARGB DarkTurquoise = 0xFF9400D3;
+		static constexpr ColorARGB DarkViolet = 0xFFFF1493;
+		static constexpr ColorARGB DeepPink = 0xFF00BFFF;
+		static constexpr ColorARGB DeepSkyBlue = 0xFF00BFFF;
+		static constexpr ColorARGB DimGray = 0xFF696969;
+		static constexpr ColorARGB DodgerBlue = 0xFF1E90FF;
+		static constexpr ColorARGB Firebrick = 0xFFB22222;
+		static constexpr ColorARGB FloralWhite = 0xFFFFFAF0;
+		static constexpr ColorARGB ForestGreen = 0xFF228B22;
+		static constexpr ColorARGB Fuchsia = 0xFFFF00FF;
+		static constexpr ColorARGB Gainsboro = 0xFFDCDCDC;
+		static constexpr ColorARGB GhostWhite = 0xFFF8F8FF;
+		static constexpr ColorARGB Gold = 0xFFFFD700;
+		static constexpr ColorARGB Goldenrod = 0xFFDAA520;
+		static constexpr ColorARGB Gray = 0xFF808080;
+		static constexpr ColorARGB Green = 0xFF008000;
+		static constexpr ColorARGB GreenYellow = 0xFFADFF2F;
+		static constexpr ColorARGB Honeydew = 0xFFF0FFF0;
+		static constexpr ColorARGB HotPink = 0xFFFF69B4;
+		static constexpr ColorARGB IndianRed = 0xFFCD5C5C;
+		static constexpr ColorARGB Indigo = 0xFF4B0082;
+		static constexpr ColorARGB Ivory = 0xFFFFFFF0;
+		static constexpr ColorARGB Khaki = 0xFFF0E68C;
+		static constexpr ColorARGB Lavender = 0xFFE6E6FA;
+		static constexpr ColorARGB LavenderBlush = 0xFFFFF0F5;
+		static constexpr ColorARGB LawnGreen = 0xFF7CFC00;
+		static constexpr ColorARGB LemonChiffon = 0xFFFFFACD;
+		static constexpr ColorARGB LightBlue = 0xFFADD8E6;
+		static constexpr ColorARGB LightCoral = 0xFFF08080;
+		static constexpr ColorARGB LightCyan = 0xFFE0FFFF;
+		static constexpr ColorARGB LightGoldenrodYellow = 0xFFFAFAD2;
+		static constexpr ColorARGB LightGray = 0xFFD3D3D3;
+		static constexpr ColorARGB LightGreen = 0xFF90EE90;
+		static constexpr ColorARGB LightPink = 0xFFFFB6C1;
+		static constexpr ColorARGB LightSalmon = 0xFFFFA07A;
+		static constexpr ColorARGB LightSeaGreen = 0xFF20B2AA;
+		static constexpr ColorARGB LightSkyBlue = 0xFF87CEFA;
+		static constexpr ColorARGB LightSlateGray = 0xFF778899;
+		static constexpr ColorARGB LightSteelBlue = 0xFFB0C4DE;
+		static constexpr ColorARGB LightYellow = 0xFFFFFFE0;
+		static constexpr ColorARGB Lime = 0xFF00FF00;
+		static constexpr ColorARGB LimeGreen = 0xFF32CD32;
+		static constexpr ColorARGB Linen = 0xFFFAF0E6;
+		static constexpr ColorARGB Magenta = 0xFFFF00FF;
+		static constexpr ColorARGB Maroon = 0xFF800000;
+		static constexpr ColorARGB MediumAquamarine = 0xFF66CDAA;
+		static constexpr ColorARGB MediumBlue = 0xFF0000CD;
+		static constexpr ColorARGB MediumOrchid = 0xFFBA55D3;
+		static constexpr ColorARGB MediumPurple = 0xFF9370DB;
+		static constexpr ColorARGB MediumSeaGreen = 0xFF3CB371;
+		static constexpr ColorARGB MediumSlateBlue = 0xFF7B68EE;
+		static constexpr ColorARGB MediumSpringGreen = 0xFF00FA9A;
+		static constexpr ColorARGB MediumTurquoise = 0xFF48D1CC;
+		static constexpr ColorARGB MediumVioletRed = 0xFFC71585;
+		static constexpr ColorARGB MidnightBlue = 0xFF191970;
+		static constexpr ColorARGB MintCream = 0xFFF5FFFA;
+		static constexpr ColorARGB MistyRose = 0xFFFFE4E1;
+		static constexpr ColorARGB Moccasin = 0xFFFFE4B5;
+		static constexpr ColorARGB NavajoWhite = 0xFFFFDEAD;
+		static constexpr ColorARGB Navy = 0xFF000080;
+		static constexpr ColorARGB OldLace = 0xFFFDF5E6;
+		static constexpr ColorARGB Olive = 0xFF808000;
+		static constexpr ColorARGB OliveDrab = 0xFF6B8E23;
+		static constexpr ColorARGB Orange = 0xFFFFA500;
+		static constexpr ColorARGB OrangeRed = 0xFFFF4500;
+		static constexpr ColorARGB Orchid = 0xFFDA70D6;
+		static constexpr ColorARGB PaleGoldenrod = 0xFFEEE8AA;
+		static constexpr ColorARGB PaleGreen = 0xFF98FB98;
+		static constexpr ColorARGB PaleTurquoise = 0xFFAFEEEE;
+		static constexpr ColorARGB PaleVioletRed = 0xFFDB7093;
+		static constexpr ColorARGB PapayaWhip = 0xFFFFEFD5;
+		static constexpr ColorARGB PeachPuff = 0xFFFFDAB9;
+		static constexpr ColorARGB Peru = 0xFFCD853F;
+		static constexpr ColorARGB Pink = 0xFFFFC0CB;
+		static constexpr ColorARGB Plum = 0xFFDDA0DD;
+		static constexpr ColorARGB PowderBlue = 0xFFB0E0E6;
+		static constexpr ColorARGB Purple = 0xFF800080;
+		static constexpr ColorARGB Red = 0xFFFF0000;
+		static constexpr ColorARGB RosyBrown = 0xFFBC8F8F;
+		static constexpr ColorARGB RoyalBlue = 0xFF4169E1;
+		static constexpr ColorARGB SaddleBrown = 0xFF8B4513;
+		static constexpr ColorARGB Salmon = 0xFFFA8072;
+		static constexpr ColorARGB SandyBrown = 0xFFF4A460;
+		static constexpr ColorARGB SeaGreen = 0xFF2E8B57;
+		static constexpr ColorARGB SeaShell = 0xFFFFF5EE;
+		static constexpr ColorARGB Sienna = 0xFFA0522D;
+		static constexpr ColorARGB Silver = 0xFFC0C0C0;
+		static constexpr ColorARGB SkyBlue = 0xFF87CEEB;
+		static constexpr ColorARGB SlateBlue = 0xFF6A5ACD;
+		static constexpr ColorARGB SlateGray = 0xFF708090;
+		static constexpr ColorARGB Snow = 0xFFFFFAFA;
+		static constexpr ColorARGB SpringGreen = 0xFF00FF7F;
+		static constexpr ColorARGB SteelBlue = 0xFF4682B4;
+		static constexpr ColorARGB Tan = 0xFFD2B48C;
+		static constexpr ColorARGB Teal = 0xFF008080;
+		static constexpr ColorARGB Thistle = 0xFFD8BFD8;
+		static constexpr ColorARGB Tomato = 0xFFFF6347;
+		static constexpr ColorARGB Transparent = 0x00000000;
+		static constexpr ColorARGB Turquoise = 0xFF40E0D0;
+		static constexpr ColorARGB Violet = 0xFFEE82EE;
+		static constexpr ColorARGB Wheat = 0xFFF5DEB3;
+		static constexpr ColorARGB White = 0xFFFFFFFF;
+		static constexpr ColorARGB WhiteSmoke = 0xFFF5F5F5;
+		static constexpr ColorARGB Yellow = 0xFFFFFF00;
+		static constexpr ColorARGB YellowGreen = 0xFF9ACD32;
 	};
 }

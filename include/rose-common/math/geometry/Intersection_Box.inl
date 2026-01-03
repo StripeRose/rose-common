@@ -1,5 +1,5 @@
 template<typename T, int N>
-bool ROSECOMMON_MATH_NAMESPACE::Intersects(const BoxNT<N, T>& aBox, const BoxNT<N, T>& aBoxB)
+bool ROSECOMMON_MATH_NAMESPACE::Intersects(const Box<N, T>& aBox, const Box<N, T>& aBoxB)
 {
 	bool intersects = true;
 	intersects &= (Max(aBox.Max.X, aBoxB.Max.X) - Min(aBox.Min.X, aBoxB.Min.X)) <= ((aBox.Max.X - aBox.Min.X) + (aBoxB.Max.X - aBoxB.Min.X));
@@ -14,7 +14,7 @@ bool ROSECOMMON_MATH_NAMESPACE::Intersects(const BoxNT<N, T>& aBox, const BoxNT<
 }
 
 template <typename T, int N>
-bool ROSECOMMON_MATH_NAMESPACE::Intersects(const BoxNT<N, T>& aBox, const VectorNT<N, T>& aPoint)
+bool ROSECOMMON_MATH_NAMESPACE::Intersects(const Box<N, T>& aBox, const VectorN<N, T>& aPoint)
 {
 	bool intersects = true;
 	intersects &= aPoint.X >= aBox.Min.X && aPoint.X <= aBox.Max.X;
@@ -29,7 +29,7 @@ bool ROSECOMMON_MATH_NAMESPACE::Intersects(const BoxNT<N, T>& aBox, const Vector
 }
 
 template<typename T, int N>
-bool ROSECOMMON_MATH_NAMESPACE::Intersects(const BoxNT<N, T>& aBox, const RadiusNT<N, T>& aRadius)
+bool ROSECOMMON_MATH_NAMESPACE::Intersects(const Box<N, T>& aBox, const Radius<N, T>& aRadius)
 {
 	auto square = [](auto v) { return v * v; };
 

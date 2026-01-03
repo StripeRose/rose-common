@@ -1,7 +1,7 @@
 
 ANY_COMPONENT_COUNT_TYPE("Point intersection", "[geometry]")
 {
-	using Vector = ROSECOMMON_MATH_NAMESPACE::VectorNT<N, T>;
+	using Vector = ROSECOMMON_MATH_NAMESPACE::VectorN<N, T>;
 
 	// Point vs Box in Test_Intersection_Box.inl
 

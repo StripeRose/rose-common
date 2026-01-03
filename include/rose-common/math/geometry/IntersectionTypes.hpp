@@ -13,50 +13,50 @@ namespace ROSECOMMON_MATH_NAMESPACE
 	// should be removed from here.
 
 	template <int N, typename T>
-	struct BoxNT
+	struct Box
 	{
-		VectorNT<N, T> Min;
-		VectorNT<N, T> Max;
+		VectorN<N, T> Min;
+		VectorN<N, T> Max;
 	};
 
 	template <int N, typename T>
-	struct CapsuleNT
+	struct Capsule
 	{
-		VectorNT<N, T> A;
-		VectorNT<N, T> B;
+		VectorN<N, T> A;
+		VectorN<N, T> B;
 		T Radius;
 	};
 
 	template <typename T>
-	struct Cone3T
+	struct Cone
 	{
-		Vector3T<T> Origin;
-		Vector3T<T> Direction;
+		Vector3<T> Origin;
+		Vector3<T> Direction;
 		T Height;
 		T RadianAngle;
 	};
 
 	template <typename T>
-	struct Disc3T
+	struct Disc
 	{
-		Vector3T<T> Center;
-		Vector3T<T> Normal;
+		Vector3<T> Center;
+		Vector3<T> Normal;
 		T Radius;
 	};
 
 	template <int N, typename T>
-	struct EllipsoidNT
+	struct Ellipsoid
 	{
-		VectorNT<N, T> Center;
-		VectorNT<N, T> Radii;
+		VectorN<N, T> Center;
+		VectorN<N, T> Radii;
 	};
 
 	template <typename T>
 	struct Frustrum
 	{
-		Vector3T<T> Apex;
-		Vector3T<T> Up;
-		Vector3T<T> Direction;
+		Vector3<T> Apex;
+		Vector3<T> Up;
+		Vector3<T> Direction;
 
 		T Left;
 		T Right;
@@ -67,38 +67,38 @@ namespace ROSECOMMON_MATH_NAMESPACE
 	};
 
 	template <int N, typename T>
-	struct LineSegmentNT
+	struct LineSegment
 	{
-		VectorNT<N, T> A;
-		VectorNT<N, T> B;
+		VectorN<N, T> A;
+		VectorN<N, T> B;
 	};
 
 	template <typename T>
-	struct Plane3T
+	struct Plane
 	{
-		Vector3T<T> Normal;
+		Vector3<T> Normal;
 		T Distance;
 	};
 
 	template <int N, typename T>
-	struct RadiusNT
+	struct Radius
 	{
-		VectorNT<N, T> Center;
+		VectorN<N, T> Center;
 		T Radius;
 	};
 
 	template <int N, typename T>
-	struct RayNT
+	struct Ray
 	{
-		VectorNT<N, T> Origin;
-		VectorNT<N, T> Direction;
+		VectorN<N, T> Origin;
+		VectorN<N, T> Direction;
 	};
 
 	template <int N, typename T>
-	struct TriangleNT
+	struct Triangle
 	{
-		VectorNT<N, T> A;
-		VectorNT<N, T> B;
-		VectorNT<N, T> C;
+		VectorN<N, T> A;
+		VectorN<N, T> B;
+		VectorN<N, T> C;
 	};
 }

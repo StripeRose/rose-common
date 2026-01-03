@@ -1,21 +1,21 @@
 template<typename T, int N>
-bool ROSECOMMON_MATH_NAMESPACE::Intersects(const RadiusNT<N, T>& aRadius, const BoxNT<N, T>& aBox)
+bool ROSECOMMON_MATH_NAMESPACE::Intersects(const Radius<N, T>& aRadius, const Box<N, T>& aBox)
 {
 	return Intersects(aBox, aRadius);
 }
 
 template <typename T, int N>
-bool ROSECOMMON_MATH_NAMESPACE::Intersects(const RadiusNT<N, T>& aRadius, const VectorNT<N, T>& aPoint)
+bool ROSECOMMON_MATH_NAMESPACE::Intersects(const Radius<N, T>& aRadius, const VectorN<N, T>& aPoint)
 {
 	return
-		VectorNT<N, T>::DistanceSquared(aRadius.Center, aPoint)
+		VectorN<N, T>::DistanceSquared(aRadius.Center, aPoint)
 		<= (aRadius.Radius * aRadius.Radius);
 }
 
 template<typename T, int N>
-bool ROSECOMMON_MATH_NAMESPACE::Intersects(const RadiusNT<N, T>& aRadius, const RadiusNT<N, T>& aRadiusB)
+bool ROSECOMMON_MATH_NAMESPACE::Intersects(const Radius<N, T>& aRadius, const Radius<N, T>& aRadiusB)
 {
 	return
-		VectorNT<N, T>::DistanceSquared(aRadius.Center, aRadiusB.Center)
+		VectorN<N, T>::DistanceSquared(aRadius.Center, aRadiusB.Center)
 		<= (aRadius.Radius + aRadiusB.Radius) * (aRadius.Radius + aRadiusB.Radius);
 }

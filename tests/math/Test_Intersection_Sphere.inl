@@ -1,7 +1,7 @@
 ANY_COMPONENT_COUNT_TYPE("Sphere intersection", "[geometry]")
 {
-	using Geometry = ROSECOMMON_MATH_NAMESPACE::RadiusNT<N, T>;
-	using Vector = ROSECOMMON_MATH_NAMESPACE::VectorNT<N, T>;
+	using Geometry = ROSECOMMON_MATH_NAMESPACE::Radius<N, T>;
+	using Vector = ROSECOMMON_MATH_NAMESPACE::VectorN<N, T>;
 
 	static constexpr T Range = std::is_floating_point_v<T> ? 1 : 1000;
 

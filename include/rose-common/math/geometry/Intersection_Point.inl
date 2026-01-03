@@ -1,17 +1,17 @@
 template <typename T, int N>
-bool ROSECOMMON_MATH_NAMESPACE::Intersects(const VectorNT<N, T>& aPoint, const BoxNT<N, T>& aBox)
+bool ROSECOMMON_MATH_NAMESPACE::Intersects(const VectorN<N, T>& aPoint, const Box<N, T>& aBox)
 {
 	return Intersects(aBox, aPoint);
 }
 
 template <typename T, int N>
-bool ROSECOMMON_MATH_NAMESPACE::Intersects(const VectorNT<N, T>& aPoint, const VectorNT<N, T>& aPointB)
+bool ROSECOMMON_MATH_NAMESPACE::Intersects(const VectorN<N, T>& aPoint, const VectorN<N, T>& aPointB)
 {
 	return aPoint == aPointB;
 }
 
 template <typename T, int N>
-bool ROSECOMMON_MATH_NAMESPACE::Intersects(const VectorNT<N, T>& aPoint, const RadiusNT<N, T>& aRadius)
+bool ROSECOMMON_MATH_NAMESPACE::Intersects(const VectorN<N, T>& aPoint, const Radius<N, T>& aRadius)
 {
 	return Intersects(aRadius, aPoint);
 }

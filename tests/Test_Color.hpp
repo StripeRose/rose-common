@@ -26,11 +26,11 @@ namespace
 
 #pragma region Construction
 
-	TEMPLATE_LIST_SCENARIO("ColorT<> is zeroed-out when default-constructed", "[color]", ColorComponentTypes)
+	TEMPLATE_LIST_SCENARIO("ColorARGB<> is zeroed-out when default-constructed", "[color]", ColorComponentTypes)
 	{
-		GIVEN("A default-constructed ColorT<>")
+		GIVEN("A default-constructed ColorARGB<>")
 		{
-			static constexpr ColorT<TestType> Color;
+			static constexpr ColorARGB<TestType> Color;
 
 			THEN("Each color component is zeroed out")
 			{
@@ -42,11 +42,11 @@ namespace
 		}
 	}
 
-	TEMPLATE_LIST_SCENARIO("ColorT<> can unpack a UInt32 ARGB color value", "[color]", ColorComponentTypes)
+	TEMPLATE_LIST_SCENARIO("ColorARGB<> can unpack a UInt32 ARGB color value", "[color]", ColorComponentTypes)
 	{
 		GIVEN("A color with unique values in each component")
 		{
-			static constexpr ColorT<TestType> Color(0x12345678);
+			static constexpr ColorARGB<TestType> Color(0x12345678);
 
 			THEN("Each color component is extracted into the correct variable")
 			{
@@ -68,11 +68,11 @@ namespace
 		}
 	}
 
-	TEMPLATE_LIST_SCENARIO("ColorT<> can be initialized as a solid color by defining RGB values", "[color]", ColorComponentTypes)
+	TEMPLATE_LIST_SCENARIO("ColorARGB<> can be initialized as a solid color by defining RGB values", "[color]", ColorComponentTypes)
 	{
 		GIVEN("A color with unique values in each Red, Green, and Blue components")
 		{
-			static constexpr ColorT<TestType> Color(
+			static constexpr ColorARGB<TestType> Color(
 				static_cast<TestType>(12),
 				static_cast<TestType>(34),
 				static_cast<TestType>(56));
@@ -87,11 +87,11 @@ namespace
 		}
 	}
 
-	TEMPLATE_LIST_SCENARIO("ColorT<> can be initialized by defining ARGB values", "[color]", ColorComponentTypes)
+	TEMPLATE_LIST_SCENARIO("ColorARGB<> can be initialized by defining ARGB values", "[color]", ColorComponentTypes)
 	{
 		GIVEN("A color with unique values in each Alpha, Red, Green, and Blue components")
 		{
-			static constexpr ColorT<TestType> Color(
+			static constexpr ColorARGB<TestType> Color(
 				static_cast<TestType>(12),
 				static_cast<TestType>(34),
 				static_cast<TestType>(56),
