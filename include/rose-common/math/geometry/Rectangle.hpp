@@ -200,8 +200,8 @@ namespace ROSECOMMON_MATH_NAMESPACE
 	constexpr Rectangle<T>::Rectangle(const Vector2<T>& aPoint, const Vector2<T>& aSize) noexcept
 		: X(aPoint.X)
 		, Y(aPoint.Y)
-		, Width(aSize.Width)
-		, Height(aSize.Height)
+		, Width(aSize.X)
+		, Height(aSize.Y)
 	{
 
 	}
@@ -318,7 +318,7 @@ namespace ROSECOMMON_MATH_NAMESPACE
 	template <typename T>
 	void Rectangle<T>::Inflate(const Vector2<T>& aSize)
 	{
-		Inflate(aSize.Width, aSize.Height);
+		Inflate(aSize.X, aSize.Y);
 	}
 
 	template <typename T>
@@ -332,7 +332,7 @@ namespace ROSECOMMON_MATH_NAMESPACE
 		if (bottom <= top || right <= left)
 			return { };
 
-		return Rectangle<T>(PointT(left, top), PointT(right, bottom));
+		return Rectangle<T>(Vector2(left, top), Vector2(right, bottom));
 	}
 
 	template <typename T>
