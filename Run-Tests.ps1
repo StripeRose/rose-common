@@ -1,5 +1,5 @@
 $sharpmakecs = "$PSScriptRoot/tests/sharpmake.cs".Replace('\', '/')
-& "$PSScriptRoot/tools/Sharpmake/Sharpmake.Application/bin/Release/net6.0/Sharpmake.Application.exe" "/sources('$sharpmakecs')"
+& "$PSScriptRoot/tools/Sharpmake/Sharpmake.Application/bin/Release/net8.0/Sharpmake.Application.exe" "/sources('$sharpmakecs')"
 
 if ($LASTEXITCODE -ne 0) {
 	Exit($LASTEXITCODE)

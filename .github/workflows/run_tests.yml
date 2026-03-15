@@ -19,7 +19,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [windows-2022]
-        framework: [net6.0]
+        framework: [net8.0]
         configuration: [Release]
     uses: ./.github/workflows/build_sharpmake.yml
     with:
@@ -47,7 +47,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [windows-2022]
-        sharpmake-framework: [net6.0]
+        sharpmake-framework: [net8.0]
         tests-configuration: [Release]
     
     steps:
