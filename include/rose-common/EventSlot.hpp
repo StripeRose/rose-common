@@ -4,6 +4,7 @@
 
 #include <functional>
 #include <map>
+#include <vector>
 
 namespace ROSECOMMON_NAMESPACE
 {
@@ -46,11 +47,17 @@ namespace ROSECOMMON_NAMESPACE
 		 */
 		void Invoke(CallbackArguments... someArguments) const
 		{
+			std::vector<std::function<void(CallbackArguments...)>> callbacksToExecute;
+			callbacksToExecute.reserve(myCallbacks.size());
+
 			for (auto it : myCallbacks)
 			{
 				if (it.second)
-					it.second(someArguments...);
+					callbacksToExecute.emplace_back(it.second);
 			}
+
+			for (auto it : callbacksToExecute)
+				it(someArguments...);
 		}
 
 		/**
@@ -103,6 +110,15 @@ namespace ROSECOMMON_NAMESPACE
 			myRegistrarCallbacks.erase(aRegistrar);
 		}
 
+		/**
+		 * @brief Unregister all functions without reusing IDs.
+		 */
+		void DisconnectAll()
+		{
+			myCallbacks.clear();
+			myRegistrarCallbacks.clear();
+		}
+
 		void operator()(CallbackArguments... someArguments) const
 		{
 			Invoke(someArguments...);
@@ -137,11 +153,17 @@ namespace ROSECOMMON_NAMESPACE
 		 */
 		void Invoke() const
 		{
+			std::vector<std::function<void()>> callbacksToExecute;
+			callbacksToExecute.reserve(myCallbacks.size());
+
 			for (auto it : myCallbacks)
 			{
 				if (it.second)
-					it.second();
+					callbacksToExecute.emplace_back(it.second);
 			}
+
+			for (auto it : callbacksToExecute)
+				it();
 		}
 
 		/**
@@ -192,6 +214,15 @@ namespace ROSECOMMON_NAMESPACE
 				myCallbacks.erase(id);
 
 			myRegistrarCallbacks.erase(aRegistrar);
+		}
+
+		/**
+		 * @brief Unregister all functions without reusing IDs.
+		 */
+		void DisconnectAll()
+		{
+			myCallbacks.clear();
+			myRegistrarCallbacks.clear();
 		}
 
 		void operator()() const
