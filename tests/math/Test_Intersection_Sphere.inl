@@ -71,12 +71,12 @@ ANY_COMPONENT_COUNT_TYPE("Sphere intersection", "[geometry]")
 
 		SECTION("Inside")
 		{
-			static constexpr Vector insideA = Vector::UnitX() * -(Range * 0.1f);
+			static constexpr Vector insideA = Vector::UnitX() * -(Range / 2);
 			INFO("Test point: " << insideA.X << ", " << insideA.Y);
 			CHECK(Intersects(sphere, insideA));
 			CHECK(Intersects(insideA, sphere));
 
-			static constexpr Vector insideB = (Vector::UnitX() * -(Range * 0.2f)) + (Vector::UnitY() * -(Range * 0.05f));
+			static constexpr Vector insideB = (Vector::UnitX() * -(Range / 2)) + (Vector::UnitY() * -(Range / 4));
 			INFO("Test point: " << insideB.X << ", " << insideB.Y);
 			CHECK(Intersects(sphere, insideB));
 			CHECK(Intersects(insideB, sphere));
@@ -84,12 +84,12 @@ ANY_COMPONENT_COUNT_TYPE("Sphere intersection", "[geometry]")
 
 		SECTION("Outside")
 		{
-			static constexpr Vector outsideA = Vector::UnitX() * (Range * 1.6f);
+			static constexpr Vector outsideA = Vector::UnitX() * (Range + (Range / 2));
 			INFO("Test point: " << outsideA.X << ", " << outsideA.Y);
 			CHECK(!Intersects(sphere, outsideA));
 			CHECK(!Intersects(outsideA, sphere));
 
-			static constexpr Vector outsideB = Vector::UnitY() * -(Range * 1.6f);
+			static constexpr Vector outsideB = Vector::UnitY() * -(Range + (Range / 2));
 			INFO("Test point: " << outsideB.X << ", " << outsideB.Y);
 			CHECK(!Intersects(sphere, outsideB));
 			CHECK(!Intersects(outsideB, sphere));
