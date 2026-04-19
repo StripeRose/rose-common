@@ -44,7 +44,7 @@ jobs:
         run: |
           $slnlist = Get-ChildItem "./build/" -Filter "*.sln"
           foreach ($sln in $slnlist) {
-            msbuild -t:rebuild -restore $sln.FullName /verbosity:normal /p:Configuration=Release /maxcpucount
+            msbuild -t:rebuild -restore $sln.FullName /verbosity:normal /p:Configuration=${{ runner.tests-configuration }} /maxcpucount
           }
 
       - name: Execute built executables - Windows
