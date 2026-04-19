@@ -1,166 +1,110 @@
-using System.IO;
 using Sharpmake;
 
-public static class Settings
+[module: Include("../sharpmake.cs")]
+[module: Include("../tools/ExternalProject.sharpmake.cs")]
+
+namespace RoseCommonTest
 {
-	public static Platform GetDefaultPlatform()
+	[Generate]
+	public class Catch2 : Project
 	{
-		switch (Util.GetExecutingPlatform())
+		public Catch2()
 		{
-			case Platform.win32:
-				return Platform.win32;
-			case Platform.win64:
-				return Platform.win64;
-			case Platform.mac:
-				return Platform.mac;
-			case Platform.linux:
-				return Platform.linux;
-			default:
-				throw new System.NotSupportedException("Unknown platform.");
+			Name = "Catch2";
+
+			string repositoryPath = ExternalProject.Git(
+				"Catch2",
+				"https://github.com/catchorg/Catch2.git",
+				"v3.14.0"
+			);
+
+			SourceRootPath = $"{repositoryPath}/src";
+
+			AddTargets(new Target(
+				Util.GetExecutingPlatform(),
+				Util.AllFlags<DevEnv>(),
+				Optimization.Debug | Optimization.Release
+			));
+		}
+
+		[Configure]
+		public void ConfigureAll(Configuration conf, Target target)
+		{
+			conf.IncludePaths.Add("[project.SourceRootPath]");
+
+			// Use premade Catch2 config, instead of needing CMake to generate one.
+			conf.IncludePaths.Add("[project.SharpmakeCsPath]/../tools/catch2_config");
+
+			Util.SetDefaultBuildArguments(conf, target);
+			conf.Options.Add(Sharpmake.Options.Vc.General.WarningLevel.Level0); // Don't care about any Catch2 issues.
+
+			conf.Output = Sharpmake.Project.Configuration.OutputType.Lib;
+
+			conf.ProjectFileName = "[project.Name] [target.Platform] [target.DevEnv]";
+			conf.ProjectPath = Util.BuildPath;
 		}
 	}
 
-	public static DevEnv GetDefaultDevEnvs()
+	[Generate]
+	public class TestsExecutable : Project
 	{
-		switch (Util.GetExecutingPlatform())
+		public TestsExecutable()
 		{
-			case Platform.win32:
-			case Platform.win64:
-				return DevEnv.vs2022;
-			case Platform.mac:
-				return DevEnv.xcode;
-			case Platform.linux:
-				return DevEnv.make;
-			default:
-				throw new System.NotSupportedException("Unknown platform.");
+			Name = "rose-common-tests";
+			SourceRootPath = "[project.SharpmakeCsPath]";
+
+			AddTargets(new Target(
+				Util.GetExecutingPlatform(),
+				Util.AllFlags<DevEnv>(),
+				Optimization.Debug | Optimization.Release
+			));
+		}
+		
+		[Configure]
+		public void ConfigureAll(Configuration conf, Target target)
+		{
+			conf.IncludePaths.Add("[project.SourceRootPath]");
+			
+			conf.AddPrivateDependency<Catch2>(target);
+			conf.AddPrivateDependency<RoseCommon>(target);
+
+			Util.SetDefaultBuildArguments(conf, target);
+			conf.ProjectFileName = "[project.Name] [target.Platform] [target.DevEnv]";
+			conf.ProjectPath = Util.BuildPath;
 		}
 	}
-}
 
-public class BasicProject : Project
-{
-	public BasicProject()
+	[Generate]
+	public class TestsSolution : Solution
 	{
-		AddTargets(new Target(
-			Settings.GetDefaultPlatform(),
-			Settings.GetDefaultDevEnvs(),
-			Optimization.Debug | Optimization.Release
-		));
+		public TestsSolution()
+		{
+			Name = "rose-common-tests";
+
+			AddTargets(new Target(
+				Util.GetExecutingPlatform(),
+				DevEnv.vs2022,
+				Optimization.Debug | Optimization.Release
+			));
+		}
+
+		[Configure]
+		public void ConfigureAll(Solution.Configuration conf, Target target)
+		{
+			conf.Options.Add(Sharpmake.Options.Vc.General.WindowsTargetPlatformVersion.Latest);
+
+			conf.AddProject<TestsExecutable>(target);
+			
+			Util.SetDefaultBuildArguments(conf, target);
+		}
 	}
 
-	[Configure]
-	public virtual void ConfigureAll(Configuration conf, Target target)
+	public static class Main
 	{
-		conf.Name = "[project.Name]_[target.Optimization]_[target.Platform]";
-
-		conf.ProjectFileName = "[project.Name]_[target.DevEnv]_[target.Platform]";
-		conf.ProjectPath = "[project.SharpmakeCsPath]/../generated";
-
-		conf.IntermediatePath = Path.Combine(conf.IntermediatePath, "[project.Name]");
-		conf.TargetFileName = @"[conf.Name]";
-
-		conf.Options.Add(Sharpmake.Options.Vc.General.WindowsTargetPlatformVersion.Latest);
-
-		conf.Options.Add(Sharpmake.Options.Vc.Compiler.CppLanguageStandard.Latest);
-		conf.Options.Add(Sharpmake.Options.Vc.Compiler.MultiProcessorCompilation.Enable);
-
-		conf.Options.Add(Sharpmake.Options.Vc.Compiler.Exceptions.Enable);
-
-	}
-}
-
-[Generate]
-public class Catch2 : BasicProject
-{
-	public Catch2()
-	{
-		Name = "Catch2";
-		SourceRootPath = "[project.SharpmakeCsPath]/../tools/Catch2/src";
-		AdditionalSourceRootPaths.Add("[project.SharpmakeCsPath]/../tools/Catch2_build/generated-includes/");
-	}
-
-	public override void ConfigureAll(Configuration conf, Target target)
-	{
-		base.ConfigureAll(conf, target);
-		conf.Output = Sharpmake.Project.Configuration.OutputType.Lib;
-		conf.Options.Add(Sharpmake.Options.Vc.General.WarningLevel.Level0);
-
-		conf.IncludePaths.Add("[project.SourceRootPath]");
-		conf.IncludePaths.Add("[project.SharpmakeCsPath]/../tools/Catch2_build/generated-includes/");
-	}
-}
-
-[Generate]
-public class RoseCommon : BasicProject
-{
-	public RoseCommon()
-	{
-		Name = "RoseCommon";
-		SourceRootPath = "[project.SharpmakeCsPath]/../include/";
-		AdditionalSourceRootPaths.Add("[project.SharpmakeCsPath]/../source");
-	}
-
-	public override void ConfigureAll(Configuration conf, Target target)
-	{
-		base.ConfigureAll(conf, target);
-		conf.Output = Sharpmake.Project.Configuration.OutputType.Lib;
-
-		conf.Options.Add(Sharpmake.Options.Vc.General.TreatWarningsAsErrors.Enable);
-		conf.Options.Add(Sharpmake.Options.Vc.General.WarningLevel.Level4);
-
-		conf.IncludePaths.Add("[project.SourceRootPath]");
-	}
-}
-
-[Generate]
-public class TestsExecutable : BasicProject
-{
-	public TestsExecutable()
-	{
-		Name = "Tests";
-		SourceRootPath = "[project.SharpmakeCsPath]/";
-		AdditionalSourceRootPaths.Add("[project.SharpmakeCsPath]/tests");
-	}
-
-	public override void ConfigureAll(Configuration conf, Target target)
-	{
-		base.ConfigureAll(conf, target);
-
-		conf.AddPrivateDependency<Catch2>(target);
-		conf.AddPrivateDependency<RoseCommon>(target);
-
-		conf.IncludePaths.Add("[project.SourceRootPath]");
-	}
-}
-
-[Generate]
-public class TestsSolution : Solution
-{
-	public TestsSolution()
-	{
-		Name = "rosecommon_tests";
-
-		AddTargets(new Target(
-			Settings.GetDefaultPlatform(),
-			Settings.GetDefaultDevEnvs(),
-			Optimization.Debug | Optimization.Release
-		));
-	}
-
-	[Configure]
-	public void ConfigureAll(Solution.Configuration conf, Target target)
-	{
-		conf.SolutionFileName = "[solution.Name]_[target.DevEnv]_[target.Platform]";
-		conf.SolutionPath = "[solution.SharpmakeCsPath]/../generated";
-		conf.AddProject<TestsExecutable>(target);
-	}
-}
-
-public static class Main
-{
-	[Sharpmake.Main]
-	public static void SharpmakeMain(Arguments someArguments)
-	{
-		someArguments.Generate<TestsSolution>();
+		[Sharpmake.Main]
+		public static void SharpmakeMain(Arguments someArguments)
+		{
+			someArguments.Generate<TestsSolution>();
+		}
 	}
 }
