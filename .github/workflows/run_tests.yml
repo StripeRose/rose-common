@@ -50,7 +50,7 @@ jobs:
       - name: Execute built executables - Windows
         shell: pwsh
         run: |
-          $exelist = Get-ChildItem "./generated/output" -Filter "*.exe" -Recurse
+          $exelist = Get-ChildItem "./build/output" -Filter "*.exe" -Recurse
           foreach ($exe in $exelist) {
             & $exe.FullName
           }
