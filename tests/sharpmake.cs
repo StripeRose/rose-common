@@ -23,7 +23,7 @@ namespace RoseCommonTest
 			AddTargets(new Target(
 				Util.GetExecutingPlatform(),
 				Util.AllFlags<DevEnv>(),
-				Optimization.Debug | Optimization.Release
+				Optimization.Release
 			));
 		}
 
@@ -65,7 +65,7 @@ namespace RoseCommonTest
 		{
 			conf.IncludePaths.Add("[project.SourceRootPath]");
 			
-			conf.AddPrivateDependency<Catch2>(target);
+			conf.AddPrivateDependency<Catch2>(target.Clone(Optimization.Release));
 			conf.AddPrivateDependency<RoseCommon>(target);
 
 			Util.SetDefaultBuildArguments(conf, target);
