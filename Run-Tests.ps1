@@ -11,7 +11,7 @@ if (Test-Path "./output") {
 & "./tools/Launch-VsDevShell.ps1" -Lates
 # Launching VsDevShell loses the working directory, so set it back to the script location.
 Push-Location -Path $PSScriptRoot
-$slnlist = Get-ChildItem "./build/" -Filter "*.sln"
+$slnlist = Get-ChildItem "./" -Filter "*.sln"
 foreach ($sln in $slnlist) {
 	msbuild $sln.FullName /verbosity:m /p:Configuration="Release" /maxcpucount
 }

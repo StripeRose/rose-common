@@ -69,8 +69,6 @@ namespace RoseCommonTest
 			conf.AddPrivateDependency<RoseCommon>(target);
 
 			Util.SetDefaultBuildArguments(conf, target);
-			conf.ProjectFileName = "[project.Name] [target.Platform] [target.DevEnv]";
-			conf.ProjectPath = Util.BuildPath;
 		}
 	}
 

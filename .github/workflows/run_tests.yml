@@ -42,7 +42,7 @@ jobs:
         if: runner.os == 'Windows'
         shell: pwsh
         run: |
-          $slnlist = Get-ChildItem "./build/" -Filter "*.sln"
+          $slnlist = Get-ChildItem "./" -Filter "*.sln"
           foreach ($sln in $slnlist) {
             msbuild -t:rebuild -restore $sln.FullName /verbosity:normal /p:Configuration=${{ matrix.tests-configuration }} /maxcpucount
           }

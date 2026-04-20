@@ -47,11 +47,11 @@ public static partial class Util
 		conf.Options.Add(Options.Vc.General.WarningLevel.Level4);
 		conf.Options.Add(Options.Vc.General.WindowsTargetPlatformVersion.Latest);
 
-		conf.ProjectPath = BuildPath;
+		conf.ProjectPath = "[project.SharpmakeCsPath]";
 		conf.ProjectFileName = "[project.Name] [target.Platform] [target.DevEnv]";
 
 		conf.IntermediatePath = $"{BuildPath}/intermediate/{conf.ProjectFileName}";
-		conf.TargetPath = $"{BuildPath}/output";
+		conf.TargetPath = OutputPath;
 		conf.TargetLibraryPath = $"{BuildPath}/lib";
 		conf.TargetFileName = "[project.Name] [target.Optimization] [target.DevEnv]";
 	}
@@ -59,7 +59,7 @@ public static partial class Util
 	public static void SetDefaultBuildArguments(Solution.Configuration conf, Target target)
 	{
 		conf.SolutionFileName = "[solution.Name] [target.DevEnv]";
-		conf.SolutionPath = Util.BuildPath;
+		conf.SolutionPath = RootPath;
 	}
 
 	public static bool ResolveFilterPathForFile(string aFilePath, out string outFilterPath)
