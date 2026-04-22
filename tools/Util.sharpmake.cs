@@ -40,6 +40,10 @@ public static partial class Util
 	public static void SetDefaultBuildArguments(Project.Configuration conf, Target target)
 	{
 		conf.IncludePaths.Add("[project.SourceRootPath]");
+
+		// Remove min and max macros, opting to use std::min and std::max instead.
+		if (target.Platform == Platform.win32 || target.Platform == Platform.win64)
+			conf.Defines.Add("NOMINMAX");
 		
 		conf.Options.Add(Options.Vc.Compiler.CppLanguageStandard.Latest);
 		conf.Options.Add(Options.Vc.Compiler.Exceptions.Enable);
