@@ -54,6 +54,8 @@ public static partial class Util
 		conf.TargetPath = OutputPath;
 		conf.TargetLibraryPath = $"{BuildPath}/lib";
 		conf.TargetFileName = "[project.Name] [target.Optimization] [target.DevEnv]";
+
+		conf.Output = Project.Configuration.OutputType.Lib;
 	}
 
 	public static void SetDefaultBuildArguments(Solution.Configuration conf, Target target)
