@@ -12,7 +12,7 @@ public class RoseCommon : Sharpmake.Project
 		AdditionalSourceRootPaths.Add("[project.SharpmakeCsPath]/source");
 
 		AddTargets(new Target(
-			Util.GetExecutingPlatform(),
+			Platform.win32 | Platform.win64,
 			Util.AllFlags<DevEnv>(),
 			Util.AllFlags<Optimization>()
 		));
