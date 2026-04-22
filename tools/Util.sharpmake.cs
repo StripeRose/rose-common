@@ -39,6 +39,8 @@ public static partial class Util
 
 	public static void SetDefaultBuildArguments(Project.Configuration conf, Target target)
 	{
+		conf.IncludePaths.Add("[project.SourceRootPath]");
+		
 		conf.Options.Add(Options.Vc.Compiler.CppLanguageStandard.Latest);
 		conf.Options.Add(Options.Vc.Compiler.Exceptions.Enable);
 		conf.Options.Add(Options.Vc.Compiler.MultiProcessorCompilation.Enable);
