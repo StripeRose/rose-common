@@ -4,6 +4,7 @@
 
 #include <sstream>
 #include <string>
+#include <string_view>
 #include <vector>
 
 namespace ROSECOMMON_NAMESPACE
@@ -35,27 +36,27 @@ namespace ROSECOMMON_NAMESPACE
 		 * @param aPatch A patch version.
 		 * @param aPrerelease A prerelease version.
 		 */
-		SemanticVersion(std::uint64_t aMajor, std::uint64_t aMinor, std::uint64_t aPatch, const std::string& aPrerelease);
+		SemanticVersion(std::uint64_t aMajor, std::uint64_t aMinor, std::uint64_t aPatch, std::string_view aPrerelease);
 
 		/**
 		 * @brief Initialize a version from a string.
 		 * @param aSemanticVersion A valid SemVer string.
 		 */
-		SemanticVersion(std::string aSemanticVersion);
+		SemanticVersion(std::string_view aSemanticVersion);
 
 		/**
 		 * @brief Add prerelease versions.
 		 * @param aString A dot-separated string of versions to add.
 		 * @return This object, to allow chained function calls.
 		 */
-		SemanticVersion& AddPrerelease(const std::string& aString);
+		SemanticVersion& AddPrerelease(std::string_view aString);
 
 		/**
 		 * @brief Add metadata to the version.
 		 * @param aString A dot-separated metadata string to add.
 		 * @return This object, to allow chained function calls.
 		 */
-		SemanticVersion& AddMetadata(const std::string& aString);
+		SemanticVersion& AddMetadata(std::string_view aString);
 
 		/**
 		 * @brief Check if the version is stable, meaning it has a non-zero major version, and is not a prerelease version.
@@ -90,13 +91,13 @@ namespace ROSECOMMON_NAMESPACE
 		 * @param aString A dot-separated string containing identifier information.
 		 * @param aTargetList An identifier list to add the identifiers to.
 		 */
-		static void FromString(const std::string& aString, std::vector<Identifier>& aTargetList);
+		static void FromString(std::string_view aString, std::vector<Identifier>& aTargetList);
 
 		/**
 		 * @brief Initialize a version identifier with a specified string.
 		 * @param aString An identifier string.
 		 */
-		Identifier(const std::string& aString);
+		Identifier(std::string_view aString);
 
 		/**
 		 * @brief Creates a string from the version identifier.
@@ -125,7 +126,7 @@ namespace ROSECOMMON_NAMESPACE
 		, Patch(aPatch)
 	{ }
 
-	inline SemanticVersion::SemanticVersion(std::uint64_t aMajor, std::uint64_t aMinor, std::uint64_t aPatch, const std::string& aPrerelease)
+	inline SemanticVersion::SemanticVersion(std::uint64_t aMajor, std::uint64_t aMinor, std::uint64_t aPatch, std::string_view aPrerelease)
 		: Major(aMajor)
 		, Minor(aMinor)
 		, Patch(aPatch)
@@ -133,38 +134,34 @@ namespace ROSECOMMON_NAMESPACE
 		Identifier::FromString(aPrerelease, Prerelease);
 	}
 
-	inline SemanticVersion::SemanticVersion(std::string aSemanticVersion)
+	inline SemanticVersion::SemanticVersion(std::string_view aSemanticVersion)
 		: Major(0)
 		, Minor(0)
 		, Patch(0)
 	{
-		std::string preReleaseString;
-		std::string metadataString;
+		std::string_view mainVersionString;
+		std::string_view preReleaseString;
+		std::string_view metadataString;
 
 		const size_t metadataIndex = aSemanticVersion.find('+');
-		if (metadataIndex != std::string::npos)
-		{
-			metadataString = aSemanticVersion.substr(metadataIndex + 1);
-			aSemanticVersion.erase(metadataIndex);
-		}
-
 		const size_t preReleaseIndex = aSemanticVersion.find('-');
+
+		mainVersionString = aSemanticVersion.substr(0, preReleaseIndex);
+
 		if (preReleaseIndex != std::string::npos)
-		{
-			preReleaseString = aSemanticVersion.substr(preReleaseIndex + 1);
-			aSemanticVersion.erase(preReleaseIndex);
-		}
+			preReleaseString = aSemanticVersion.substr(preReleaseIndex + 1, metadataIndex - (preReleaseIndex + 1));
+
+		if (metadataIndex != std::string::npos)
+			metadataString = aSemanticVersion.substr(metadataIndex + 1);
 
 		std::vector<Identifier> mainVersionIdentifiers;
-		Identifier::FromString(aSemanticVersion, mainVersionIdentifiers);
+		Identifier::FromString(mainVersionString, mainVersionIdentifiers);
 
-		// Semantic version does not follow the pattern 'MAJOR.MINOR.PATCH'.
 		if (mainVersionIdentifiers.size() != 3)
-			return;
+			throw std::invalid_argument("There must be exactly 3 version identifiers.");
 
-		// Main version identifiers cannot be alphanumeric.
 		if (mainVersionIdentifiers[0].IsAlphanumeric || mainVersionIdentifiers[1].IsAlphanumeric || mainVersionIdentifiers[2].IsAlphanumeric)
-			return;
+			throw std::invalid_argument("Version identifiers cannot be alphanumeric.");
 
 		Major = mainVersionIdentifiers[0].Numeric;
 		Minor = mainVersionIdentifiers[1].Numeric;
@@ -174,13 +171,13 @@ namespace ROSECOMMON_NAMESPACE
 		Identifier::FromString(metadataString, Metadata);
 	}
 
-	inline SemanticVersion& SemanticVersion::AddPrerelease(const std::string& aString)
+	inline SemanticVersion& SemanticVersion::AddPrerelease(std::string_view aString)
 	{
 		Identifier::FromString(aString, Prerelease);
 		return *this;
 	}
 
-	inline SemanticVersion& SemanticVersion::AddMetadata(const std::string& aString)
+	inline SemanticVersion& SemanticVersion::AddMetadata(std::string_view aString)
 	{
 		Identifier::FromString(aString, Metadata);
 		return *this;
@@ -269,21 +266,25 @@ namespace ROSECOMMON_NAMESPACE
 		return std::strong_order(a.size(), b.size());
 	}
 
-	inline void SemanticVersion::Identifier::FromString(const std::string& aString, std::vector<Identifier>& outIdentifiers)
+	inline void SemanticVersion::Identifier::FromString(std::string_view aString, std::vector<Identifier>& outIdentifiers)
 	{
-		std::istringstream ss(aString);
-		std::string subString;
-		while (std::getline(ss, subString, '.'))
-			outIdentifiers.push_back(Identifier(subString));
+		while (!aString.empty())
+		{
+			const size_t nextSeparator = aString.find('.');
+			outIdentifiers.push_back(Identifier(aString.substr(0, nextSeparator)));
+			if (nextSeparator == std::string_view::npos)
+				return;
+			aString = aString.substr(nextSeparator + 1);
+		}
 	}
 
-	inline SemanticVersion::Identifier::Identifier(const std::string& aString)
+	inline SemanticVersion::Identifier::Identifier(std::string_view aString)
 		: Alphanumeric(aString)
 		, IsAlphanumeric(true)
 	{
 		try
 		{
-			Numeric = std::stoull(aString);
+			Numeric = std::stoull(Alphanumeric);
 			IsAlphanumeric = false;
 		}
 		catch (...)
