@@ -38,8 +38,6 @@ namespace RoseCommonTest
 			Util.SetDefaultBuildArguments(conf, target);
 			conf.Options.Add(Sharpmake.Options.Vc.General.WarningLevel.Level0); // Don't care about any Catch2 issues.
 
-			conf.Output = Sharpmake.Project.Configuration.OutputType.Lib;
-
 			conf.ProjectFileName = "[project.Name] [target.Platform] [target.DevEnv]";
 			conf.ProjectPath = Util.BuildPath;
 		}
@@ -69,6 +67,8 @@ namespace RoseCommonTest
 			conf.AddPrivateDependency<RoseCommon>(target);
 
 			Util.SetDefaultBuildArguments(conf, target);
+
+			conf.Output = Sharpmake.Project.Configuration.OutputType.Exe;
 		}
 	}
 
