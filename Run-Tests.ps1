@@ -14,9 +14,19 @@ Push-Location -Path $PSScriptRoot
 $slnlist = Get-ChildItem "./" -Filter "*.sln"
 foreach ($sln in $slnlist) {
 	msbuild $sln.FullName /verbosity:m /p:Configuration="Release" /maxcpucount
+
+	if ($LASTEXITCODE -ne 0) {
+		Exit($LASTEXITCODE)
+	}
 }
 
 $exelist = Get-ChildItem "./build/output" -Filter "*.exe" -Recurse
+
+if ($exelist.Length -eq 0) {
+	Write-Error "No executables available to run"
+	Exit(1)
+}
+
 foreach ($exe in $exelist) {
 	& $exe.FullName
 }

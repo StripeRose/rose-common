@@ -45,12 +45,21 @@ jobs:
           $slnlist = Get-ChildItem "./" -Filter "*.sln"
           foreach ($sln in $slnlist) {
             msbuild -t:rebuild -restore $sln.FullName /verbosity:normal /p:Configuration=${{ matrix.tests-configuration }} /maxcpucount
+            if ($LASTEXITCODE -ne 0) {
+              Exit($LASTEXITCODE)
+            }
           }
 
       - name: Execute built executables - Windows
         shell: pwsh
         run: |
           $exelist = Get-ChildItem "./build/output" -Filter "*.exe" -Recurse
+          
+          if ($exelist.Length -eq 0) {
+            Write-Error "No executables available to run"
+            Exit(1)
+          }
+
           foreach ($exe in $exelist) {
             & $exe.FullName
           }
