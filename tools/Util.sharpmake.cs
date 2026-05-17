@@ -56,7 +56,7 @@ public static partial class Util
 		conf.ProjectPath = "[project.SharpmakeCsPath]";
 		conf.ProjectFileName = "[project.Name] [target.Platform] [target.DevEnv]";
 
-		conf.IntermediatePath = $"{BuildPath}/intermediate/{conf.ProjectFileName}";
+		conf.IntermediatePath = $"{BuildPath}/intermediate/{conf.ProjectFileName} [target.Optimization]";
 		conf.TargetPath = OutputPath;
 		conf.TargetLibraryPath = $"{BuildPath}/lib";
 		conf.TargetFileName = "[project.Name] [target.Optimization] [target.DevEnv]";
