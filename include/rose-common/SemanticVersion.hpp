@@ -27,7 +27,7 @@ namespace ROSECOMMON_NAMESPACE
 		 * @param aMinor A minor version.
 		 * @param aPatch A patch version.
 		 */
-		SemanticVersion(std::uint64_t aMajor, std::uint64_t aMinor, std::uint64_t aPatch);
+		SemanticVersion(std::uint32_t aMajor, std::uint32_t aMinor, std::uint32_t aPatch);
 
 		/**
 		 * @brief Initialize a specified prerelease version. 
@@ -36,7 +36,7 @@ namespace ROSECOMMON_NAMESPACE
 		 * @param aPatch A patch version.
 		 * @param aPrerelease A prerelease version.
 		 */
-		SemanticVersion(std::uint64_t aMajor, std::uint64_t aMinor, std::uint64_t aPatch, std::string_view aPrerelease);
+		SemanticVersion(std::uint32_t aMajor, std::uint32_t aMinor, std::uint32_t aPatch, std::string_view aPrerelease);
 
 		/**
 		 * @brief Initialize a version from a string.
@@ -74,9 +74,9 @@ namespace ROSECOMMON_NAMESPACE
 
 		std::partial_ordering operator<=>(const SemanticVersion& b) const;
 
-		std::uint64_t Major;
-		std::uint64_t Minor;
-		std::uint64_t Patch;
+		std::uint32_t Major;
+		std::uint32_t Minor;
+		std::uint32_t Patch;
 		std::vector<Identifier> Prerelease;
 		std::vector<Identifier> Metadata;
 
@@ -111,7 +111,7 @@ namespace ROSECOMMON_NAMESPACE
 
 		bool IsAlphanumeric = false;
 		std::string Alphanumeric;
-		std::uint64_t Numeric = 0;
+		std::uint32_t Numeric = 0;
 	};
 
 	inline SemanticVersion::SemanticVersion()
@@ -120,13 +120,13 @@ namespace ROSECOMMON_NAMESPACE
 		, Patch(0)
 	{ }
 
-	inline SemanticVersion::SemanticVersion(std::uint64_t aMajor, std::uint64_t aMinor, std::uint64_t aPatch)
+	inline SemanticVersion::SemanticVersion(std::uint32_t aMajor, std::uint32_t aMinor, std::uint32_t aPatch)
 		: Major(aMajor)
 		, Minor(aMinor)
 		, Patch(aPatch)
 	{ }
 
-	inline SemanticVersion::SemanticVersion(std::uint64_t aMajor, std::uint64_t aMinor, std::uint64_t aPatch, std::string_view aPrerelease)
+	inline SemanticVersion::SemanticVersion(std::uint32_t aMajor, std::uint32_t aMinor, std::uint32_t aPatch, std::string_view aPrerelease)
 		: Major(aMajor)
 		, Minor(aMinor)
 		, Patch(aPatch)
@@ -284,7 +284,7 @@ namespace ROSECOMMON_NAMESPACE
 	{
 		try
 		{
-			Numeric = std::stoull(Alphanumeric);
+			Numeric = std::stoul(Alphanumeric);
 			IsAlphanumeric = false;
 		}
 		catch (...)
