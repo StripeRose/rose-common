@@ -1,6 +1,9 @@
 using Sharpmake;
 using System;
 using System.Diagnostics;
+using System.IO;
+using System.IO.Compression;
+using System.Threading.Tasks;
 
 [module: Include("Util.sharpmake.cs")]
 
@@ -34,7 +37,7 @@ public static class ExternalProject
 
 		string sourceDirectory = $"{DependenciesPath}/{Name}_{Tag}";
 
-		if (System.IO.Directory.Exists(sourceDirectory))
+		if (Directory.Exists(sourceDirectory))
 		{
 			if (ExecuteGit(Name, sourceDirectory, "fetch") &&
 				ExecuteGit(Name, sourceDirectory, $"-c advice.detachedHead=false checkout {Tag}") &&
@@ -71,8 +74,8 @@ public static class ExternalProject
 
 		try
 		{
-			if (!System.IO.Directory.Exists(aWorkingDirectory))
-				System.IO.Directory.CreateDirectory(aWorkingDirectory);
+			if (!Directory.Exists(aWorkingDirectory))
+				Directory.CreateDirectory(aWorkingDirectory);
 
 			ProcessStartInfo startInfo = GetGitProcessInfo(aWorkingDirectory, someArguments);
 			using var process = new Process { StartInfo = startInfo };
@@ -84,5 +87,45 @@ public static class ExternalProject
 		{
 			throw new ApplicationException($"Failed to execute git command \"{someArguments}\"", ex);
 		}
+	}
+
+	public static string NuGet(string Name, string Version)
+	{
+		string nupkgPath = $"{DependenciesPath}/{Name}_{Version}.nupkg";
+		string sourceDirectory = $"{DependenciesPath}/{Name}_{Version}";
+
+		if (Directory.Exists(sourceDirectory))
+			return sourceDirectory;
+
+		Directory.CreateDirectory(sourceDirectory);
+
+		Console.WriteLine($"Downloading {Name} {Version}..");
+		var task = Task.Run(async () =>
+		{
+			using (System.Net.Http.HttpClient client = new System.Net.Http.HttpClient())
+			{
+				try
+				{
+					string url = $"https://www.nuget.org/api/v2/package/{Name}/{Version}";
+					byte[] fileBytes = await client.GetByteArrayAsync(url);
+					await File.WriteAllBytesAsync(nupkgPath, fileBytes);
+					return true;
+				}
+				catch (Exception ex)
+				{
+					Console.WriteLine("Error: " + ex.Message);
+					return false;
+				}
+			}
+		});
+
+		task.Wait();
+
+		if (!task.Result)
+			return "";
+		
+		ZipFile.ExtractToDirectory(nupkgPath, sourceDirectory);
+
+		return sourceDirectory;
 	}
 }
